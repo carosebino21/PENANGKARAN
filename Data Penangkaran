@@ -1,11 +1,151 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Website Belajar Tsugiono-Sama</title>
+    <meta charset="UTF-8">
+    <title>Basis Data Penangkaran – Tsugiono-Sama</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Gaya sederhana agar tabel lebih enak dibaca -->
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 24px 16px 40px;
+            line-height: 1.5;
+        }
+        header {
+            margin-bottom: 24px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 8px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        h2 {
+            margin-top: 32px;
+            font-size: 1.4rem;
+        }
+        p {
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 12px;
+            font-size: 0.95rem;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 6px 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f3f3f3;
+        }
+        tfoot td {
+            font-style: italic;
+            background-color: #fafafa;
+        }
+        .small-note {
+            font-size: 0.85rem;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
-  <h1>Selamat datang di website pertama saya!</h1>
-  <p>Website ini dibuat menggunakan GitHub Pages.</p>
+    <header>
+        <h1>Basis Data Penangkaran</h1>
+        <p>
+            Halaman ini digunakan untuk menampilkan data penangkaran satwa liar
+            yang dikelola oleh Tsugiono-Sama. Data disusun berdasarkan 
+            informasi penangkaran dan komoditas (taxa) yang pernah dirancang 
+            sebelumnya.
+        </p>
+        <p class="small-note">
+            Catatan: untuk menambah atau mengedit data, silakan ubah langsung
+            isi tabel di berkas <code>index.html</code> di GitHub (atau 
+            melalui file sumber yang dikloning di komputer).
+        </p>
+    </header>
+
+    <main>
+        <section>
+            <h2>Ringkasan Data Penangkaran</h2>
+            <p>
+                Tabel berikut berisi data dasar penangkaran: nama penangkaran,
+                taxa/komoditas yang dikelola, lokasi, status perizinan,
+                dan informasi singkat lainnya. Struktur kolom disesuaikan
+                dengan rancangan data yang sudah pernah dibuat untuk Google Sheet.
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Nama Penangkaran</th>
+                        <th>Taxa Komoditas</th>
+                        <th>Lokasi (Kab/Kota, Provinsi)</th>
+                        <th>No. Izin / SK</th>
+                        <th>Masa Berlaku Izin</th>
+                        <th>Jumlah Individu (±)</th>
+                        <th>Status Operasional</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Contoh baris data 1 -->
+                    <tr>
+                        <td>1</td>
+                        <td>CV Contoh Penangkaran Lestari</td>
+                        <td>Psittaciformes (Burung Paruh Bengkok)</td>
+                        <td>Sanggau Regency, Kalimantan Barat</td>
+                        <td>SK.1234/MENLHK/2025</td>
+                        <td>2025–2030</td>
+                        <td>45</td>
+                        <td>Aktif</td>
+                        <td>Fokus penangkaran burung lokal sesuai izin.</td>
+                    </tr>
+
+                    <!-- Contoh baris data 2 -->
+                    <tr>
+                        <td>2</td>
+                        <td>UD Penangkaran Satwa Contoh</td>
+                        <td>Testudines (Kura-kura & Labi-labi)</td>
+                        <td>Kabupaten X, Provinsi Y</td>
+                        <td>SK.5678/MENLHK/2024</td>
+                        <td>2024–2029</td>
+                        <td>30</td>
+                        <td>Aktif</td>
+                        <td>Program penguatan populasi ex-situ.</td>
+                    </tr>
+
+                    <!-- Tambahkan baris baru di bawah ini untuk penangkaran lain -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="9">
+                            Untuk menambah data, duplikasi baris <code>&lt;tr&gt;...&lt;/tr&gt;</code>
+                            pada bagian <strong>&lt;tbody&gt;</strong> dan sesuaikan isi sel
+                            (<code>&lt;td&gt;</code>) dengan data penangkaran yang dimiliki.
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+
+        <section>
+            <h2>Catatan Pengelolaan Data</h2>
+            <p>
+                Ke depan, struktur data di halaman ini dapat dikembangkan agar
+                terhubung dengan Google Sheet atau basis data lain yang sudah
+                disiapkan. Untuk sementara, halaman ini berfungsi sebagai
+                dokumentasi statis yang mudah dibaca dan dibagikan melalui
+                GitHub Pages.
+            </p>
+        </section>
+    </main>
 </body>
 </html>
