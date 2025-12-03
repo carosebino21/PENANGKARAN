@@ -161,6 +161,15 @@
             color: #6b7280;
         }
 
+        /* Section per halaman */
+        .page-section {
+            display: none;
+        }
+
+        .page-section.is-active {
+            display: block;
+        }
+
         .placeholder-box {
             background: #ffffff;
             border-radius: 16px;
@@ -176,13 +185,125 @@
             color: #111827;
         }
 
-        /* Section per halaman */
-        .page-section {
-            display: none;
+        /* CARD RINGKASAN */
+        .cards-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
-        .page-section.is-active {
-            display: block;
+        .stat-card {
+            flex: 1;
+            min-width: 220px;
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            padding: 16px 18px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .stat-footnote {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        /* CHART CARD */
+        .chart-card {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            padding: 18px 20px;
+            margin-bottom: 24px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .chart-header h2 {
+            font-size: 1rem;
+        }
+
+        .year-select {
+            font-size: 0.85rem;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid #d1d5db;
+            background: #f9fafb;
+        }
+
+        /* TABEL DATA */
+        .table-card {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            padding: 18px 20px;
+            margin-bottom: 24px;
+        }
+
+        .table-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .table-card-header h2 {
+            font-size: 1rem;
+        }
+
+        .table-wrapper {
+            max-height: 380px;
+            overflow: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        thead {
+            background: #f3f4f6;
+        }
+
+        th, td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        th {
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 0.75rem;
         }
 
         @media (max-width: 800px) {
@@ -221,6 +342,10 @@
 
             .nav-link {
                 white-space: nowrap;
+            }
+
+            .content {
+                padding: 16px;
             }
         }
     </style>
@@ -303,62 +428,188 @@
         <div class="content-header">
             <h1 id="page-title">Data Satwa</h1>
             <p id="page-subtitle">
-                Halaman untuk menampilkan data satwa yang ditangkar.
+                Dashboard ringkasan nasional data penangkaran satwa (natalitas, mortalitas, dan data jenis).
             </p>
         </div>
 
-        <!-- Setiap section adalah "halaman" berbeda -->
+        <!-- SECTION: DATA SATWA / DASHBOARD -->
         <section id="section-data-satwa" class="page-section is-active">
-            <div class="placeholder-box">
-                <strong>Data Satwa</strong>
-                Di sini nanti bisa diisi tabel penangkaran per jenis satwa,
-                jumlah individu, status perlindungan, dan informasi lainnya.
+            <!-- Kartu ringkasan -->
+            <div class="cards-row">
+                <div class="stat-card">
+                    <div class="stat-label">Total Perusahaan</div>
+                    <div class="stat-value" id="stat-total-perusahaan">-</div>
+                    <div class="stat-footnote">Perusahaan penangkar dalam data</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Mortalitas Nasional</div>
+                    <div class="stat-value" id="stat-mortalitas-nasional">-</div>
+                    <div class="stat-footnote">Individu (seluruh tahun)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Natalitas Nasional</div>
+                    <div class="stat-value" id="stat-natalitas-nasional">-</div>
+                    <div class="stat-footnote">Individu (seluruh tahun)</div>
+                </div>
+            </div>
+
+            <!-- Grafik natalitas nasional -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Natalitas Nasional</h2>
+                    <select id="year-select" class="year-select">
+                        <!-- tahun diisi dari data -->
+                    </select>
+                </div>
+                <canvas id="natalitas-chart" height="120"></canvas>
+            </div>
+
+            <!-- Tabel Data Jenis -->
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h2>Data Jenis (agregat per jenis)</h2>
+                    <span class="badge" id="badge-tahun-jenis">Tahun -</span>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Jenis</th>
+                            <th>Jumlah Individu</th>
+                            <th>Natalitas</th>
+                            <th>Mortalitas</th>
+                        </tr>
+                        </thead>
+                        <tbody id="data-jenis-body">
+                        <!-- diisi JS -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
+        <!-- SECTION: DATA MORTALITAS -->
         <section id="section-data-mortalitas" class="page-section">
-            <div class="placeholder-box">
-                <strong>Data Mortalitas</strong>
-                Di sini nanti berisi ringkasan dan tabel mortalitas satwa per
-                periode, penyebab kematian, dan catatan medis.
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h2>Data Mortalitas</h2>
+                    <span class="badge">Seluruh data</span>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID Kematian</th>
+                            <th>ID Individu</th>
+                            <th>Jenis Individu</th>
+                            <th>Tanggal Kematian</th>
+                            <th>Jam Kematian</th>
+                            <th>Status Verifikasi</th>
+                            <th>Verifikator</th>
+                        </tr>
+                        </thead>
+                        <tbody id="mortalitas-body">
+                        <!-- diisi JS -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
+        <!-- SECTION: DATA NATALITAS -->
         <section id="section-data-natalitas" class="page-section">
-            <div class="placeholder-box">
-                <strong>Data Natalitas</strong>
-                Di sini nanti berisi data kelahiran per jenis, periode, dan
-                informasi induk/keturunan.
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h2>Data Natalitas</h2>
+                    <span class="badge">Seluruh data</span>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID Kelahiran</th>
+                            <th>ID Induk</th>
+                            <th>Jenis Induk</th>
+                            <th>Jumlah Anakan</th>
+                            <th>Status Kelahiran</th>
+                            <th>Tanggal Verifikasi</th>
+                            <th>Verifikator</th>
+                        </tr>
+                        </thead>
+                        <tbody id="natalitas-body">
+                        <!-- diisi JS -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
+        <!-- SECTION: QnA -->
         <section id="section-qna" class="page-section">
             <div class="placeholder-box">
                 <strong>QnA</strong>
-                Di sini dapat diisi daftar pertanyaan umum seputar pengisian
-                data penangkaran dan panduan teknis.
+                Di sini nanti dapat diisi FAQ, panduan pengisian format Excel/Google Sheet,
+                dan kontak helpdesk teknis.
             </div>
         </section>
 
+        <!-- SECTION: EXPORT DATA -->
         <section id="section-export" class="page-section">
             <div class="placeholder-box">
                 <strong>Export Data</strong>
-                Di sini nantinya berisi tombol untuk mengunduh data dalam
-                format CSV/Excel atau terhubung ke Google Sheet.
+                <p style="margin-bottom:8px;">
+                    Unduh file Excel sumber data nasional (semua sheet) untuk analisis lebih lanjut.
+                </p>
+                <p>
+                    <a href="data/Contoh_Format_Data_Penangkaran_dummy.xlsx">
+                        Download Contoh_Format_Data_Penangkaran_dummy.xlsx
+                    </a>
+                </p>
+                <p style="font-size:0.85rem;color:#6b7280;margin-top:8px;">
+                    Pastikan nama file dan lokasi folder <code>/data</code> sesuai dengan link di atas.
+                </p>
             </div>
         </section>
 
+        <!-- SECTION: DATA PERUSAHAAN -->
         <section id="section-perusahaan" class="page-section">
-            <div class="placeholder-box">
-                <strong>Data Perusahaan</strong>
-                Di sini nanti menampilkan daftar pemegang izin / perusahaan
-                penangkar, kontak, dan informasi legalitas.
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h2>Data Perusahaan / Unit Penangkar</h2>
+                    <span class="badge">Seluruh data</span>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Nomor Sertifikat Standar</th>
+                            <th>Nama Unit Penangkar</th>
+                            <th>Nama Pemilik</th>
+                            <th>Jenis Komoditas</th>
+                            <th>Kota/Kabupaten</th>
+                            <th>Provinsi</th>
+                            <th>UPT KSDA</th>
+                            <th>Main Species</th>
+                        </tr>
+                        </thead>
+                        <tbody id="perusahaan-body">
+                        <!-- diisi JS -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
     </main>
 </div>
 
+<!-- Chart.js untuk grafik -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- SheetJS untuk membaca Excel di browser -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
 <script>
+    // ----------------- NAVBAR INTERAKTIF -----------------
     const navLinks = document.querySelectorAll('.nav-link[data-target]');
     const sections = document.querySelectorAll('.page-section');
     const pageTitle = document.getElementById('page-title');
@@ -367,15 +618,15 @@
     const pageInfo = {
         'section-data-satwa': {
             title: 'Data Satwa',
-            subtitle: 'Halaman untuk menampilkan data satwa yang ditangkar.'
+            subtitle: 'Dashboard ringkasan nasional data penangkaran satwa (natalitas, mortalitas, dan data jenis).'
         },
         'section-data-mortalitas': {
             title: 'Data Mortalitas',
-            subtitle: 'Ringkasan dan detail data mortalitas satwa.'
+            subtitle: 'Rincian dan analisis data mortalitas satwa penangkaran.'
         },
         'section-data-natalitas': {
             title: 'Data Natalitas',
-            subtitle: 'Data kelahiran satwa per jenis dan periode.'
+            subtitle: 'Rincian dan analisis data natalitas satwa penangkaran.'
         },
         'section-qna': {
             title: 'QnA',
@@ -383,7 +634,7 @@
         },
         'section-export': {
             title: 'Export Data',
-            subtitle: 'Menu untuk mengunduh atau membagikan data penangkaran.'
+            subtitle: 'Unduh file sumber data penangkaran nasional.'
         },
         'section-perusahaan': {
             title: 'Data Perusahaan',
@@ -394,28 +645,335 @@
     navLinks.forEach(link => {
         link.addEventListener('click', function (e) {
             e.preventDefault();
-
             const targetId = this.dataset.target;
 
-            // Ubah status aktif di sidebar
             navLinks.forEach(l => l.classList.remove('active'));
             this.classList.add('active');
 
-            // Tampilkan section yang sesuai
             sections.forEach(sec => {
                 sec.classList.remove('is-active');
-                if (sec.id === targetId) {
-                    sec.classList.add('is-active');
-                }
+                if (sec.id === targetId) sec.classList.add('is-active');
             });
 
-            // Ubah judul dan subjudul
             if (pageInfo[targetId]) {
                 pageTitle.textContent = pageInfo[targetId].title;
                 pageSubtitle.textContent = pageInfo[targetId].subtitle;
             }
         });
     });
+
+    // ----------------- GLOBAL VAR UNTUK DATA -----------------
+    let dataSatwa = [];
+    let dataNatalitas = [];
+    let dataMortalitas = [];
+    let dataPerusahaan = [];
+    let availableYears = [];
+    let natalitasChartInstance = null;
+
+    // Elemen DOM untuk dashboard
+    const statTotalPerusahaan    = document.getElementById('stat-total-perusahaan');
+    const statMortalitasNasional = document.getElementById('stat-mortalitas-nasional');
+    const statNatalitasNasional  = document.getElementById('stat-natalitas-nasional');
+    const yearSelect             = document.getElementById('year-select');
+    const badgeTahunJenis        = document.getElementById('badge-tahun-jenis');
+    const dataJenisBody          = document.getElementById('data-jenis-body');
+
+    const natalitasBody  = document.getElementById('natalitas-body');
+    const mortalitasBody = document.getElementById('mortalitas-body');
+    const perusahaanBody = document.getElementById('perusahaan-body');
+
+    // ----------------- FUNGSI UTILITAS -----------------
+    function toDate(value) {
+        if (!value) return null;
+        if (value instanceof Date) return value;
+        const d = new Date(value);
+        if (isNaN(d)) return null;
+        return d;
+    }
+
+    function sheetToJson(workbook, sheetName) {
+        const sheet = workbook.Sheets[sheetName];
+        if (!sheet) return [];
+        return XLSX.utils.sheet_to_json(sheet, { defval: null });
+    }
+
+    function getYears() {
+        const set = new Set();
+        dataNatalitas.forEach(row => {
+            const d = toDate(row['Tanggal_Verifikasi']);
+            if (d) set.add(d.getFullYear());
+        });
+        dataMortalitas.forEach(row => {
+            const d = toDate(row['Tanggal_Kematian']);
+            if (d) set.add(d.getFullYear());
+        });
+        return Array.from(set).sort();
+    }
+
+    function computeDashboard(selectedYear) {
+        // total perusahaan = jumlah baris Data_Perusahaan
+        const totalPerusahaan = dataPerusahaan.length;
+
+        // total natalitas nasional = sum Jumlah_Anakan semua tahun
+        let totalNatalitas = 0;
+        dataNatalitas.forEach(row => {
+            const n = Number(row['Jumlah_Anakan'] || 0);
+            if (!isNaN(n)) totalNatalitas += n;
+        });
+
+        // total mortalitas nasional = jumlah baris Data_Mortalitas
+        const totalMortalitas = dataMortalitas.length;
+
+        // daftar tahun
+        const years = getYears();
+        if (!years.length) {
+            return {
+                totalPerusahaan,
+                totalNatalitas,
+                totalMortalitas,
+                years: [],
+                selectedYear: null,
+                natalitasMonthly: new Array(12).fill(0),
+                jenisStats: []
+            };
+        }
+
+        let year = selectedYear;
+        if (!year || !years.includes(year)) {
+            year = years[years.length - 1]; // pakai tahun paling akhir
+        }
+
+        // natalitas per bulan utk tahun terpilih
+        const natalitasMonthly = new Array(12).fill(0);
+        dataNatalitas.forEach(row => {
+            const d = toDate(row['Tanggal_Verifikasi']);
+            if (!d) return;
+            const y = d.getFullYear();
+            const m = d.getMonth(); // 0-11
+            if (y === year && m >= 0 && m < 12) {
+                const n = Number(row['Jumlah_Anakan'] || 0);
+                if (!isNaN(n)) natalitasMonthly[m] += n;
+            }
+        });
+
+        // agregat per jenis
+        const indivCounts = {};
+        dataSatwa.forEach(row => {
+            const jenis = row['Jenis_Individu'] || 'Tidak Diketahui';
+            indivCounts[jenis] = (indivCounts[jenis] || 0) + 1;
+        });
+
+        const natalitasByJenis = {};
+        dataNatalitas.forEach(row => {
+            const d = toDate(row['Tanggal_Verifikasi']);
+            if (!d) return;
+            const y = d.getFullYear();
+            if (y !== year) return;
+            const jenis = row['Jenis_Induk'] || 'Tidak Diketahui';
+            const n = Number(row['Jumlah_Anakan'] || 0);
+            if (!isNaN(n)) {
+                natalitasByJenis[jenis] = (natalitasByJenis[jenis] || 0) + n;
+            }
+        });
+
+        const mortalitasByJenis = {};
+        dataMortalitas.forEach(row => {
+            const d = toDate(row['Tanggal_Kematian']);
+            if (!d) return;
+            const y = d.getFullYear();
+            if (y !== year) return;
+            const jenis = row['Jenis_Individu'] || 'Tidak Diketahui';
+            mortalitasByJenis[jenis] = (mortalitasByJenis[jenis] || 0) + 1;
+        });
+
+        const jenisSet = new Set([
+            ...Object.keys(indivCounts),
+            ...Object.keys(natalitasByJenis),
+            ...Object.keys(mortalitasByJenis)
+        ]);
+
+        const jenisStats = Array.from(jenisSet)
+            .sort((a, b) => a.localeCompare(b, 'id-ID'))
+            .map(jenis => ({
+                jenis,
+                individu:  indivCounts[jenis]       || 0,
+                natalitas: natalitasByJenis[jenis]  || 0,
+                mortalitas: mortalitasByJenis[jenis] || 0
+            }));
+
+        return {
+            totalPerusahaan,
+            totalNatalitas,
+            totalMortalitas,
+            years,
+            selectedYear: year,
+            natalitasMonthly,
+            jenisStats
+        };
+    }
+
+    // ----------------- RENDER DASHBOARD -----------------
+    function buildNatalitasChart(monthlyData) {
+        const ctx = document.getElementById('natalitas-chart').getContext('2d');
+        const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+        if (natalitasChartInstance) {
+            natalitasChartInstance.destroy();
+        }
+
+        natalitasChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'Natalitas',
+                    data: monthlyData,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+    }
+
+    function buildDataJenisTable(jenisStats, year) {
+        dataJenisBody.innerHTML = '';
+        jenisStats.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${row.jenis}</td>
+                <td>${row.individu.toLocaleString('id-ID')}</td>
+                <td>${row.natalitas.toLocaleString('id-ID')}</td>
+                <td>${row.mortalitas.toLocaleString('id-ID')}</td>
+            `;
+            dataJenisBody.appendChild(tr);
+        });
+        badgeTahunJenis.textContent = year ? 'Tahun ' + year : 'Tahun -';
+    }
+
+    function populateYearSelect(years, selectedYear) {
+        yearSelect.innerHTML = '';
+        years.forEach(y => {
+            const opt = document.createElement('option');
+            opt.value = y;
+            opt.textContent = y;
+            if (y === selectedYear) opt.selected = true;
+            yearSelect.appendChild(opt);
+        });
+    }
+
+    function renderDashboard(selectedYear) {
+        const dash = computeDashboard(selectedYear);
+
+        // kartu ringkasan
+        statTotalPerusahaan.textContent    = dash.totalPerusahaan.toLocaleString('id-ID');
+        statMortalitasNasional.textContent = dash.totalMortalitas.toLocaleString('id-ID');
+        statNatalitasNasional.textContent  = dash.totalNatalitas.toLocaleString('id-ID');
+
+        populateYearSelect(dash.years, dash.selectedYear);
+        buildNatalitasChart(dash.natalitasMonthly);
+        buildDataJenisTable(dash.jenisStats, dash.selectedYear);
+    }
+
+    // ----------------- RENDER TABEL SHEET LAIN -----------------
+    function renderNatalitasTable() {
+        natalitasBody.innerHTML = '';
+        dataNatalitas.forEach(row => {
+            const d = toDate(row['Tanggal_Verifikasi']);
+            const tanggal = d ? d.toISOString().slice(0, 10) : '';
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${row['ID_Kelahiran'] || ''}</td>
+                <td>${row['ID_Induk'] || ''}</td>
+                <td>${row['Jenis_Induk'] || ''}</td>
+                <td>${row['Jumlah_Anakan'] || 0}</td>
+                <td>${row['Status_Kelahiran'] || ''}</td>
+                <td>${tanggal}</td>
+                <td>${row['Nama_Verifikator'] || ''}</td>
+            `;
+            natalitasBody.appendChild(tr);
+        });
+    }
+
+    function renderMortalitasTable() {
+        mortalitasBody.innerHTML = '';
+        dataMortalitas.forEach(row => {
+            const dK = toDate(row['Tanggal_Kematian']);
+            const tgl = dK ? dK.toISOString().slice(0, 10) : '';
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${row['ID_Kematian'] || ''}</td>
+                <td>${row['ID_Individu'] || ''}</td>
+                <td>${row['Jenis_Individu'] || ''}</td>
+                <td>${tgl}</td>
+                <td>${row['Jam_Kematian'] || ''}</td>
+                <td>${row['Status_Verifikasi_UPT'] || ''}</td>
+                <td>${row['Nama_Verifikator'] || ''}</td>
+            `;
+            mortalitasBody.appendChild(tr);
+        });
+    }
+
+    function renderPerusahaanTable() {
+        perusahaanBody.innerHTML = '';
+        dataPerusahaan.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${row['No.'] || ''}</td>
+                <td>${row['Nomor Sertifikat Standar'] || ''}</td>
+                <td>${row['Nama Unit Penangkar'] || ''}</td>
+                <td>${row['Nama Pemilik'] || ''}</td>
+                <td>${row['Jenis Komoditas'] || ''}</td>
+                <td>${row['Kota / Kabupaten'] || ''}</td>
+                <td>${row['Provinsi'] || ''}</td>
+                <td>${row['UPT KSDA'] || ''}</td>
+                <td>${row['Main_Species'] || ''}</td>
+            `;
+            perusahaanBody.appendChild(tr);
+        });
+    }
+
+    // ----------------- LOAD EXCEL SAAT PAGE DIBUKA -----------------
+    async function loadWorkbook() {
+        try {
+            const response = await fetch('data/Contoh_Format_Data_Penangkaran_dummy.xlsx');
+            if (!response.ok) {
+                console.error('Gagal memuat file Excel:', response.statusText);
+                return;
+            }
+            const arrayBuffer = await response.arrayBuffer();
+            const data = new Uint8Array(arrayBuffer);
+
+            const workbook = XLSX.read(data, { type: 'array', cellDates: true });
+
+            dataSatwa      = sheetToJson(workbook, 'Data_Satwa');
+            dataNatalitas  = sheetToJson(workbook, 'Data_Natalitas');
+            dataMortalitas = sheetToJson(workbook, 'Data_Mortalitas');
+            dataPerusahaan = sheetToJson(workbook, 'Data_Perusahaan');
+
+            // render semua bagian
+            renderDashboard();
+            renderNatalitasTable();
+            renderMortalitasTable();
+            renderPerusahaanTable();
+        } catch (err) {
+            console.error('Error saat membaca Excel:', err);
+        }
+    }
+
+    // event change tahun
+    yearSelect.addEventListener('change', () => {
+        const y = Number(yearSelect.value);
+        if (!isNaN(y)) {
+            renderDashboard(y);
+        }
+    });
+
+    // mulai!
+    loadWorkbook();
 </script>
 </body>
 </html>
