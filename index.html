@@ -165,7 +165,6 @@
         .page-section {
             display: none;
         }
-
         .page-section.is-active {
             display: block;
         }
@@ -177,12 +176,6 @@
             padding: 24px;
             color: #6b7280;
             font-size: 0.95rem;
-        }
-
-        .placeholder-box strong {
-            display: block;
-            margin-bottom: 6px;
-            color: #111827;
         }
 
         /* CARD RINGKASAN */
@@ -457,9 +450,7 @@
             <div class="chart-card">
                 <div class="chart-header">
                     <h2>Natalitas Nasional</h2>
-                    <select id="year-select" class="year-select">
-                        <!-- tahun diisi dari data -->
-                    </select>
+                    <select id="year-select" class="year-select"></select>
                 </div>
                 <canvas id="natalitas-chart" height="120"></canvas>
             </div>
@@ -480,9 +471,7 @@
                             <th>Mortalitas</th>
                         </tr>
                         </thead>
-                        <tbody id="data-jenis-body">
-                        <!-- diisi JS -->
-                        </tbody>
+                        <tbody id="data-jenis-body"></tbody>
                     </table>
                 </div>
             </div>
@@ -508,9 +497,7 @@
                             <th>Verifikator</th>
                         </tr>
                         </thead>
-                        <tbody id="mortalitas-body">
-                        <!-- diisi JS -->
-                        </tbody>
+                        <tbody id="mortalitas-body"></tbody>
                     </table>
                 </div>
             </div>
@@ -536,9 +523,7 @@
                             <th>Verifikator</th>
                         </tr>
                         </thead>
-                        <tbody id="natalitas-body">
-                        <!-- diisi JS -->
-                        </tbody>
+                        <tbody id="natalitas-body"></tbody>
                     </table>
                 </div>
             </div>
@@ -561,12 +546,13 @@
                     Unduh file Excel sumber data nasional (semua sheet) untuk analisis lebih lanjut.
                 </p>
                 <p>
-                    <a href="data/Contoh_Format_Data_Penangkaran_dummy.xlsx">
+                    <a href="Contoh_Format_Data_Penangkaran_dummy.xlsx">
                         Download Contoh_Format_Data_Penangkaran_dummy.xlsx
                     </a>
                 </p>
                 <p style="font-size:0.85rem;color:#6b7280;margin-top:8px;">
-                    Pastikan nama file dan lokasi folder <code>/data</code> sesuai dengan link di atas.
+                    Letakkan file Excel tersebut di root repo (sejajar dengan <code>index.html</code>)
+                    dengan nama yang sama persis.
                 </p>
             </div>
         </section>
@@ -587,15 +573,14 @@
                             <th>Nama Unit Penangkar</th>
                             <th>Nama Pemilik</th>
                             <th>Jenis Komoditas</th>
+                            <th>Jenis Spesies</th>
                             <th>Kota/Kabupaten</th>
                             <th>Provinsi</th>
                             <th>UPT KSDA</th>
                             <th>Main Species</th>
                         </tr>
                         </thead>
-                        <tbody id="perusahaan-body">
-                        <!-- diisi JS -->
-                        </tbody>
+                        <tbody id="perusahaan-body"></tbody>
                     </table>
                 </div>
             </div>
@@ -609,7 +594,7 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <script>
-    // ----------------- NAVBAR INTERAKTIF -----------------
+    // ---------- NAVBAR INTERAKTIF ----------
     const navLinks = document.querySelectorAll('.nav-link[data-target]');
     const sections = document.querySelectorAll('.page-section');
     const pageTitle = document.getElementById('page-title');
@@ -662,15 +647,14 @@
         });
     });
 
-    // ----------------- GLOBAL VAR UNTUK DATA -----------------
+    // ---------- GLOBAL DATA ----------
     let dataSatwa = [];
     let dataNatalitas = [];
     let dataMortalitas = [];
     let dataPerusahaan = [];
-    let availableYears = [];
     let natalitasChartInstance = null;
 
-    // Elemen DOM untuk dashboard
+    // Elemen DOM dashboard
     const statTotalPerusahaan    = document.getElementById('stat-total-perusahaan');
     const statMortalitasNasional = document.getElementById('stat-mortalitas-nasional');
     const statNatalitasNasional  = document.getElementById('stat-natalitas-nasional');
@@ -682,49 +666,44 @@
     const mortalitasBody = document.getElementById('mortalitas-body');
     const perusahaanBody = document.getElementById('perusahaan-body');
 
-    // ----------------- FUNGSI UTILITAS -----------------
+    // ---------- UTILITAS ----------
     function toDate(value) {
         if (!value) return null;
         if (value instanceof Date) return value;
         const d = new Date(value);
-        if (isNaN(d)) return null;
-        return d;
+        return isNaN(d) ? null : d;
     }
 
-    function sheetToJson(workbook, sheetName) {
-        const sheet = workbook.Sheets[sheetName];
+    function sheetToJson(workbook, name) {
+        const sheet = workbook.Sheets[name];
         if (!sheet) return [];
         return XLSX.utils.sheet_to_json(sheet, { defval: null });
     }
 
     function getYears() {
-        const set = new Set();
-        dataNatalitas.forEach(row => {
-            const d = toDate(row['Tanggal_Verifikasi']);
-            if (d) set.add(d.getFullYear());
+        const s = new Set();
+        dataNatalitas.forEach(r => {
+            const d = toDate(r['Tanggal_Verifikasi']);
+            if (d) s.add(d.getFullYear());
         });
-        dataMortalitas.forEach(row => {
-            const d = toDate(row['Tanggal_Kematian']);
-            if (d) set.add(d.getFullYear());
+        dataMortalitas.forEach(r => {
+            const d = toDate(r['Tanggal_Kematian']);
+            if (d) s.add(d.getFullYear());
         });
-        return Array.from(set).sort();
+        return Array.from(s).sort();
     }
 
     function computeDashboard(selectedYear) {
-        // total perusahaan = jumlah baris Data_Perusahaan
         const totalPerusahaan = dataPerusahaan.length;
 
-        // total natalitas nasional = sum Jumlah_Anakan semua tahun
         let totalNatalitas = 0;
-        dataNatalitas.forEach(row => {
-            const n = Number(row['Jumlah_Anakan'] || 0);
+        dataNatalitas.forEach(r => {
+            const n = Number(r['Jumlah_Anakan'] || 0);
             if (!isNaN(n)) totalNatalitas += n;
         });
 
-        // total mortalitas nasional = jumlah baris Data_Mortalitas
         const totalMortalitas = dataMortalitas.length;
 
-        // daftar tahun
         const years = getYears();
         if (!years.length) {
             return {
@@ -740,49 +719,47 @@
 
         let year = selectedYear;
         if (!year || !years.includes(year)) {
-            year = years[years.length - 1]; // pakai tahun paling akhir
+            year = years[years.length - 1];
         }
 
-        // natalitas per bulan utk tahun terpilih
         const natalitasMonthly = new Array(12).fill(0);
-        dataNatalitas.forEach(row => {
-            const d = toDate(row['Tanggal_Verifikasi']);
+        dataNatalitas.forEach(r => {
+            const d = toDate(r['Tanggal_Verifikasi']);
             if (!d) return;
             const y = d.getFullYear();
-            const m = d.getMonth(); // 0-11
+            const m = d.getMonth();
             if (y === year && m >= 0 && m < 12) {
-                const n = Number(row['Jumlah_Anakan'] || 0);
+                const n = Number(r['Jumlah_Anakan'] || 0);
                 if (!isNaN(n)) natalitasMonthly[m] += n;
             }
         });
 
-        // agregat per jenis
         const indivCounts = {};
-        dataSatwa.forEach(row => {
-            const jenis = row['Jenis_Individu'] || 'Tidak Diketahui';
+        dataSatwa.forEach(r => {
+            const jenis = r['Jenis_Individu'] || 'Tidak Diketahui';
             indivCounts[jenis] = (indivCounts[jenis] || 0) + 1;
         });
 
         const natalitasByJenis = {};
-        dataNatalitas.forEach(row => {
-            const d = toDate(row['Tanggal_Verifikasi']);
+        dataNatalitas.forEach(r => {
+            const d = toDate(r['Tanggal_Verifikasi']);
             if (!d) return;
             const y = d.getFullYear();
             if (y !== year) return;
-            const jenis = row['Jenis_Induk'] || 'Tidak Diketahui';
-            const n = Number(row['Jumlah_Anakan'] || 0);
+            const jenis = r['Jenis_Induk'] || 'Tidak Diketahui';
+            const n = Number(r['Jumlah_Anakan'] || 0);
             if (!isNaN(n)) {
                 natalitasByJenis[jenis] = (natalitasByJenis[jenis] || 0) + n;
             }
         });
 
         const mortalitasByJenis = {};
-        dataMortalitas.forEach(row => {
-            const d = toDate(row['Tanggal_Kematian']);
+        dataMortalitas.forEach(r => {
+            const d = toDate(r['Tanggal_Kematian']);
             if (!d) return;
             const y = d.getFullYear();
             if (y !== year) return;
-            const jenis = row['Jenis_Individu'] || 'Tidak Diketahui';
+            const jenis = r['Jenis_Individu'] || 'Tidak Diketahui';
             mortalitasByJenis[jenis] = (mortalitasByJenis[jenis] || 0) + 1;
         });
 
@@ -798,7 +775,7 @@
                 jenis,
                 individu:  indivCounts[jenis]       || 0,
                 natalitas: natalitasByJenis[jenis]  || 0,
-                mortalitas: mortalitasByJenis[jenis] || 0
+                mortalitas: mortalitasByJenis[jenis]|| 0
             }));
 
         return {
@@ -812,10 +789,10 @@
         };
     }
 
-    // ----------------- RENDER DASHBOARD -----------------
+    // ---------- RENDER DASHBOARD ----------
     function buildNatalitasChart(monthlyData) {
         const ctx = document.getElementById('natalitas-chart').getContext('2d');
-        const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        const labels = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
 
         if (natalitasChartInstance) {
             natalitasChartInstance.destroy();
@@ -828,8 +805,8 @@
                 datasets: [{
                     label: 'Natalitas',
                     data: monthlyData,
-                    fill: true,
-                    tension: 0.3
+                    tension: 0.3,
+                    fill: true
                 }]
             },
             options: {
@@ -841,13 +818,13 @@
 
     function buildDataJenisTable(jenisStats, year) {
         dataJenisBody.innerHTML = '';
-        jenisStats.forEach(row => {
+        jenisStats.forEach(r => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${row.jenis}</td>
-                <td>${row.individu.toLocaleString('id-ID')}</td>
-                <td>${row.natalitas.toLocaleString('id-ID')}</td>
-                <td>${row.mortalitas.toLocaleString('id-ID')}</td>
+                <td>${r.jenis}</td>
+                <td>${r.individu.toLocaleString('id-ID')}</td>
+                <td>${r.natalitas.toLocaleString('id-ID')}</td>
+                <td>${r.mortalitas.toLocaleString('id-ID')}</td>
             `;
             dataJenisBody.appendChild(tr);
         });
@@ -866,33 +843,32 @@
     }
 
     function renderDashboard(selectedYear) {
-        const dash = computeDashboard(selectedYear);
+        const d = computeDashboard(selectedYear);
 
-        // kartu ringkasan
-        statTotalPerusahaan.textContent    = dash.totalPerusahaan.toLocaleString('id-ID');
-        statMortalitasNasional.textContent = dash.totalMortalitas.toLocaleString('id-ID');
-        statNatalitasNasional.textContent  = dash.totalNatalitas.toLocaleString('id-ID');
+        statTotalPerusahaan.textContent    = d.totalPerusahaan.toLocaleString('id-ID');
+        statMortalitasNasional.textContent = d.totalMortalitas.toLocaleString('id-ID');
+        statNatalitasNasional.textContent  = d.totalNatalitas.toLocaleString('id-ID');
 
-        populateYearSelect(dash.years, dash.selectedYear);
-        buildNatalitasChart(dash.natalitasMonthly);
-        buildDataJenisTable(dash.jenisStats, dash.selectedYear);
+        populateYearSelect(d.years, d.selectedYear);
+        buildNatalitasChart(d.natalitasMonthly);
+        buildDataJenisTable(d.jenisStats, d.selectedYear);
     }
 
-    // ----------------- RENDER TABEL SHEET LAIN -----------------
+    // ---------- RENDER TABEL-TABEL ----------
     function renderNatalitasTable() {
         natalitasBody.innerHTML = '';
-        dataNatalitas.forEach(row => {
-            const d = toDate(row['Tanggal_Verifikasi']);
-            const tanggal = d ? d.toISOString().slice(0, 10) : '';
+        dataNatalitas.forEach(r => {
+            const d = toDate(r['Tanggal_Verifikasi']);
+            const tanggal = d ? d.toISOString().slice(0,10) : '';
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${row['ID_Kelahiran'] || ''}</td>
-                <td>${row['ID_Induk'] || ''}</td>
-                <td>${row['Jenis_Induk'] || ''}</td>
-                <td>${row['Jumlah_Anakan'] || 0}</td>
-                <td>${row['Status_Kelahiran'] || ''}</td>
+                <td>${r['ID_Kelahiran'] || ''}</td>
+                <td>${r['ID_Induk'] || ''}</td>
+                <td>${r['Jenis_Induk'] || ''}</td>
+                <td>${r['Jumlah_Anakan'] || 0}</td>
+                <td>${r['Status_Kelahiran'] || ''}</td>
                 <td>${tanggal}</td>
-                <td>${row['Nama_Verifikator'] || ''}</td>
+                <td>${r['Nama_Verifikator'] || ''}</td>
             `;
             natalitasBody.appendChild(tr);
         });
@@ -900,18 +876,18 @@
 
     function renderMortalitasTable() {
         mortalitasBody.innerHTML = '';
-        dataMortalitas.forEach(row => {
-            const dK = toDate(row['Tanggal_Kematian']);
-            const tgl = dK ? dK.toISOString().slice(0, 10) : '';
+        dataMortalitas.forEach(r => {
+            const d = toDate(r['Tanggal_Kematian']);
+            const tanggal = d ? d.toISOString().slice(0,10) : '';
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${row['ID_Kematian'] || ''}</td>
-                <td>${row['ID_Individu'] || ''}</td>
-                <td>${row['Jenis_Individu'] || ''}</td>
-                <td>${tgl}</td>
-                <td>${row['Jam_Kematian'] || ''}</td>
-                <td>${row['Status_Verifikasi_UPT'] || ''}</td>
-                <td>${row['Nama_Verifikator'] || ''}</td>
+                <td>${r['ID_Kematian'] || ''}</td>
+                <td>${r['ID_Individu'] || ''}</td>
+                <td>${r['Jenis_Individu'] || ''}</td>
+                <td>${tanggal}</td>
+                <td>${r['Jam_Kematian'] || ''}</td>
+                <td>${r['Status_Verifikasi_UPT'] || ''}</td>
+                <td>${r['Nama_Verifikator'] || ''}</td>
             `;
             mortalitasBody.appendChild(tr);
         });
@@ -919,34 +895,34 @@
 
     function renderPerusahaanTable() {
         perusahaanBody.innerHTML = '';
-        dataPerusahaan.forEach(row => {
+        dataPerusahaan.forEach(r => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${row['No.'] || ''}</td>
-                <td>${row['Nomor Sertifikat Standar'] || ''}</td>
-                <td>${row['Nama Unit Penangkar'] || ''}</td>
-                <td>${row['Nama Pemilik'] || ''}</td>
-                <td>${row['Jenis Komoditas'] || ''}</td>
-                <td>${row['Kota / Kabupaten'] || ''}</td>
-                <td>${row['Provinsi'] || ''}</td>
-                <td>${row['UPT KSDA'] || ''}</td>
-                <td>${row['Main_Species'] || ''}</td>
+                <td>${r['No.'] || ''}</td>
+                <td>${r['Nomor Sertifikat Standar'] || ''}</td>
+                <td>${r['Nama Unit Penangkar'] || ''}</td>
+                <td>${r['Nama Pemilik'] || ''}</td>
+                <td>${r['Jenis Komoditas'] || ''}</td>
+                <td>${r['Jenis Spesies'] || ''}</td>
+                <td>${r['Kota / Kabupaten'] || ''}</td>
+                <td>${r['Provinsi'] || ''}</td>
+                <td>${r['UPT KSDA'] || ''}</td>
+                <td>${r['Main_Species'] || ''}</td>
             `;
             perusahaanBody.appendChild(tr);
         });
     }
 
-    // ----------------- LOAD EXCEL SAAT PAGE DIBUKA -----------------
+    // ---------- LOAD EXCEL SAAT PAGE DIBUKA ----------
     async function loadWorkbook() {
         try {
-            const response = await fetch('data/Contoh_Format_Data_Penangkaran_dummy.xlsx');
-            if (!response.ok) {
-                console.error('Gagal memuat file Excel:', response.statusText);
+            const resp = await fetch('Contoh_Format_Data_Penangkaran_dummy.xlsx');
+            if (!resp.ok) {
+                console.error('Gagal memuat Excel:', resp.status, resp.statusText);
                 return;
             }
-            const arrayBuffer = await response.arrayBuffer();
+            const arrayBuffer = await resp.arrayBuffer();
             const data = new Uint8Array(arrayBuffer);
-
             const workbook = XLSX.read(data, { type: 'array', cellDates: true });
 
             dataSatwa      = sheetToJson(workbook, 'Data_Satwa');
@@ -954,7 +930,6 @@
             dataMortalitas = sheetToJson(workbook, 'Data_Mortalitas');
             dataPerusahaan = sheetToJson(workbook, 'Data_Perusahaan');
 
-            // render semua bagian
             renderDashboard();
             renderNatalitasTable();
             renderMortalitasTable();
@@ -964,15 +939,11 @@
         }
     }
 
-    // event change tahun
     yearSelect.addEventListener('change', () => {
         const y = Number(yearSelect.value);
-        if (!isNaN(y)) {
-            renderDashboard(y);
-        }
+        if (!isNaN(y)) renderDashboard(y);
     });
 
-    // mulai!
     loadWorkbook();
 </script>
 </body>
