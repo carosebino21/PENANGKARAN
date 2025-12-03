@@ -140,7 +140,7 @@
             border: 1.5px solid #e5e7eb;
         }
 
-        /* AREA KONTEN TENGAH (Sementara Placeholder) */
+        /* AREA KONTEN TENGAH */
         .content {
             flex: 1;
             padding: 24px 28px;
@@ -174,6 +174,15 @@
             display: block;
             margin-bottom: 6px;
             color: #111827;
+        }
+
+        /* Section per halaman */
+        .page-section {
+            display: none;
+        }
+
+        .page-section.is-active {
+            display: block;
         }
 
         @media (max-width: 800px) {
@@ -231,37 +240,37 @@
                 <div class="nav-section-title">Menu Utama</div>
                 <ul class="nav-list">
                     <li class="nav-item">
-                        <a href="#" class="nav-link active">
+                        <a href="#" class="nav-link active" data-target="section-data-satwa">
                             <div class="nav-link-icon"></div>
                             <span>Data Satwa</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link" data-target="section-data-mortalitas">
                             <div class="nav-link-icon"></div>
                             <span>Data Mortalitas</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link" data-target="section-data-natalitas">
                             <div class="nav-link-icon"></div>
                             <span>Data Natalitas</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link" data-target="section-qna">
                             <div class="nav-link-icon"></div>
                             <span>QnA</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link" data-target="section-export">
                             <div class="nav-link-icon"></div>
                             <span>Export Data</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link" data-target="section-perusahaan">
                             <div class="nav-link-icon"></div>
                             <span>Data Perusahaan</span>
                         </a>
@@ -289,26 +298,124 @@
         </div>
     </aside>
 
-    <!-- AREA KONTEN TENGAH (sementara kosong / placeholder) -->
+    <!-- AREA KONTEN TENGAH -->
     <main class="content">
         <div class="content-header">
-            <h1>Dashboard</h1>
-            <p>
-                Area konten utama untuk menampilkan total pengguna, mortalitas
-                &amp; natalitas nasional, grafik, dan tabel data. 
-                Saat ini masih berupa placeholder.
+            <h1 id="page-title">Data Satwa</h1>
+            <p id="page-subtitle">
+                Halaman untuk menampilkan data satwa yang ditangkar.
             </p>
         </div>
 
-        <div class="placeholder-box">
-            <strong>Konten Dashboard Belum Diisi</strong>
-            Bagian ini nantinya akan berisi kartu ringkasan indikator,
-            grafik natalitas/mortalitas, dan tabel data jenis seperti pada
-            desain yang Tsugiono-Sama kirimkan. Untuk sementara, fokus 
-            tampilan sudah pada sidebar kiri (menu Data Satwa, Mortalitas,
-            Natalitas, QnA, Export Data, dan Data Perusahaan).
-        </div>
+        <!-- Setiap section adalah "halaman" berbeda -->
+        <section id="section-data-satwa" class="page-section is-active">
+            <div class="placeholder-box">
+                <strong>Data Satwa</strong>
+                Di sini nanti bisa diisi tabel penangkaran per jenis satwa,
+                jumlah individu, status perlindungan, dan informasi lainnya.
+            </div>
+        </section>
+
+        <section id="section-data-mortalitas" class="page-section">
+            <div class="placeholder-box">
+                <strong>Data Mortalitas</strong>
+                Di sini nanti berisi ringkasan dan tabel mortalitas satwa per
+                periode, penyebab kematian, dan catatan medis.
+            </div>
+        </section>
+
+        <section id="section-data-natalitas" class="page-section">
+            <div class="placeholder-box">
+                <strong>Data Natalitas</strong>
+                Di sini nanti berisi data kelahiran per jenis, periode, dan
+                informasi induk/keturunan.
+            </div>
+        </section>
+
+        <section id="section-qna" class="page-section">
+            <div class="placeholder-box">
+                <strong>QnA</strong>
+                Di sini dapat diisi daftar pertanyaan umum seputar pengisian
+                data penangkaran dan panduan teknis.
+            </div>
+        </section>
+
+        <section id="section-export" class="page-section">
+            <div class="placeholder-box">
+                <strong>Export Data</strong>
+                Di sini nantinya berisi tombol untuk mengunduh data dalam
+                format CSV/Excel atau terhubung ke Google Sheet.
+            </div>
+        </section>
+
+        <section id="section-perusahaan" class="page-section">
+            <div class="placeholder-box">
+                <strong>Data Perusahaan</strong>
+                Di sini nanti menampilkan daftar pemegang izin / perusahaan
+                penangkar, kontak, dan informasi legalitas.
+            </div>
+        </section>
     </main>
 </div>
+
+<script>
+    const navLinks = document.querySelectorAll('.nav-link[data-target]');
+    const sections = document.querySelectorAll('.page-section');
+    const pageTitle = document.getElementById('page-title');
+    const pageSubtitle = document.getElementById('page-subtitle');
+
+    const pageInfo = {
+        'section-data-satwa': {
+            title: 'Data Satwa',
+            subtitle: 'Halaman untuk menampilkan data satwa yang ditangkar.'
+        },
+        'section-data-mortalitas': {
+            title: 'Data Mortalitas',
+            subtitle: 'Ringkasan dan detail data mortalitas satwa.'
+        },
+        'section-data-natalitas': {
+            title: 'Data Natalitas',
+            subtitle: 'Data kelahiran satwa per jenis dan periode.'
+        },
+        'section-qna': {
+            title: 'QnA',
+            subtitle: 'Pertanyaan umum dan panduan pengisian data penangkaran.'
+        },
+        'section-export': {
+            title: 'Export Data',
+            subtitle: 'Menu untuk mengunduh atau membagikan data penangkaran.'
+        },
+        'section-perusahaan': {
+            title: 'Data Perusahaan',
+            subtitle: 'Informasi perusahaan/penangkar pemegang izin.'
+        }
+    };
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const targetId = this.dataset.target;
+
+            // Ubah status aktif di sidebar
+            navLinks.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+
+            // Tampilkan section yang sesuai
+            sections.forEach(sec => {
+                sec.classList.remove('is-active');
+                if (sec.id === targetId) {
+                    sec.classList.add('is-active');
+                }
+            });
+
+            // Ubah judul dan subjudul
+            if (pageInfo[targetId]) {
+                pageTitle.textContent = pageInfo[targetId].title;
+                pageSubtitle.textContent = pageInfo[targetId].subtitle;
+            }
+        });
+    });
+</script>
 </body>
 </html>
