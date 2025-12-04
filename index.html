@@ -362,7 +362,7 @@
         <div>
             <div class="sidebar-header">
                 DATA PENANGKARAN
-                <span>Dashboard</span>
+            <span>Dashboard</span>
             </div>
 
             <div class="nav-section">
@@ -712,6 +712,14 @@
         return XLSX.utils.sheet_to_json(sheet, { defval: null });
     }
 
+    // normalisasi nama (untuk menggabungkan variasi penulisan)
+    function normalizeName(value) {
+        const s = (value || '').toString().trim().toLowerCase();
+        return s
+            .replace(/\./g, '')      // hilangkan titik
+            .replace(/\s+/g, ' ');   // rapikan spasi ganda
+    }
+
     function getYears() {
         const s = new Set();
         dataNatalitas.forEach(r => {
@@ -919,22 +927,25 @@
         const seen = new Set(); // untuk menghindari duplikasi per (unit, komoditas, provFilter)
 
         dataPerusahaan.forEach(r => {
-            const unit = (r['Nama Unit Penangkar'] || '').toString().trim();
-            if (!unit) return;
+            const unitRaw = (r['Nama Unit Penangkar'] || '').toString();
+            const komRaw  = (r['Jenis Komoditas'] || '').toString();
+            const provRaw = (r['Provinsi'] || '').toString();
 
-            const kom = (r['Jenis Komoditas'] || '').toString().trim() || 'Tidak Diketahui';
-            const prov = (r['Provinsi'] || '').toString().trim();
+            if (!unitRaw.trim()) return;
 
-            // jika ada filter provinsi, hanya ambil baris dari provinsi tersebut
-            if (provFilter && prov !== provFilter) return;
+            const unitKey = normalizeName(unitRaw);
+            const komKey  = normalizeName(komRaw) || 'tidak diketahui';
+            const provKey = normalizeName(provRaw);
 
-            // key unik: unit + komoditas + (provinsi filter / nasional)
-            const key = unit + '|' + kom + '|' + (provFilter || 'ALL');
+            if (provFilter && provKey !== normalizeName(provFilter)) return;
 
-            if (seen.has(key)) return; // sudah dihitung
+            const key = unitKey + '|' + komKey + '|' + (provFilter ? provKey : 'all');
+
+            if (seen.has(key)) return;
             seen.add(key);
 
-            counts[kom] = (counts[kom] || 0) + 1;
+            const komLabel = komRaw.trim() || 'Tidak Diketahui';
+            counts[komLabel] = (counts[komLabel] || 0) + 1;
         });
 
         const labels = Object.keys(counts).sort((a, b) => a.localeCompare(b, 'id-ID'));
@@ -948,16 +959,21 @@
         const seen = new Set(); // untuk menghindari duplikasi per (unit, provinsi)
 
         dataPerusahaan.forEach(r => {
-            const unit = (r['Nama Unit Penangkar'] || '').toString().trim();
-            if (!unit) return;
+            const unitRaw = (r['Nama Unit Penangkar'] || '').toString();
+            const provRaw = (r['Provinsi'] || '').toString();
 
-            const prov = (r['Provinsi'] || '').toString().trim() || 'Tidak Diketahui';
-            const key = unit + '|' + prov;
+            if (!unitRaw.trim()) return;
 
-            if (seen.has(key)) return; // sudah dihitung
+            const unitKey = normalizeName(unitRaw);
+            const provKey = normalizeName(provRaw) || 'tidak diketahui';
+
+            const key = unitKey + '|' + provKey;
+
+            if (seen.has(key)) return;
             seen.add(key);
 
-            counts[prov] = (counts[prov] || 0) + 1;
+            const provLabel = provRaw.trim() || 'Tidak Diketahui';
+            counts[provLabel] = (counts[provLabel] || 0) + 1;
         });
 
         const labels = Object.keys(counts).sort((a, b) => a.localeCompare(b, 'id-ID'));
