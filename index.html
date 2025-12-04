@@ -362,7 +362,7 @@
         <div>
             <div class="sidebar-header">
                 DATA PENANGKARAN
-            <span>Dashboard</span>
+                <span>Dashboard</span>
             </div>
 
             <div class="nav-section">
@@ -507,6 +507,18 @@
 
         <!-- SECTION: DATA MORTALITAS -->
         <section id="section-data-mortalitas" class="page-section">
+            <!-- Grafik ringkasan mortalitas -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Ringkasan Mortalitas</h2>
+                    <select id="mortalitas-mode-select" class="chart-mode-select">
+                        <option value="jenis">Per Jenis Individu</option>
+                        <option value="status">Per Status Verifikasi</option>
+                    </select>
+                </div>
+                <canvas id="mortalitas-chart" height="120"></canvas>
+            </div>
+
             <div class="table-card">
                 <div class="table-card-header">
                     <h2>Data Mortalitas</h2>
@@ -533,6 +545,18 @@
 
         <!-- SECTION: DATA NATALITAS -->
         <section id="section-data-natalitas" class="page-section">
+            <!-- Grafik ringkasan natalitas -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Ringkasan Natalitas</h2>
+                    <select id="natalitas-mode-select" class="chart-mode-select">
+                        <option value="jenis">Per Jenis Induk</option>
+                        <option value="status">Per Status Kelahiran</option>
+                    </select>
+                </div>
+                <canvas id="natalitas-summary-chart" height="120"></canvas>
+            </div>
+
             <div class="table-card">
                 <div class="table-card-header">
                     <h2>Data Natalitas</h2>
@@ -682,6 +706,8 @@
 
     let natalitasChartInstance = null;
     let perusahaanBarChartInstance = null;
+    let mortalitasChartInstance = null;
+    let natalitasSummaryChartInstance = null;
 
     // Elemen DOM dashboard
     const statTotalPerusahaan    = document.getElementById('stat-total-perusahaan');
@@ -697,6 +723,9 @@
 
     const chartModeSelect       = document.getElementById('chart-mode-select');
     const provinsiFilterSelect  = document.getElementById('provinsi-filter-select');
+
+    const mortalitasModeSelect  = document.getElementById('mortalitas-mode-select');
+    const natalitasModeSelect   = document.getElementById('natalitas-mode-select');
 
     // ---------- UTILITAS ----------
     function toDate(value) {
@@ -829,7 +858,7 @@
         };
     }
 
-    // ---------- DASHBOARD NATALITAS ----------
+    // ---------- DASHBOARD NATALITAS (DATA SATWA) ----------
     function buildNatalitasChart(monthlyData) {
         const ctx = document.getElementById('natalitas-chart').getContext('2d');
         const labels = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
@@ -924,7 +953,7 @@
     // Hitung jumlah penangkar per jenis komoditas (presence per Nama Unit Penangkar)
     function computeCountsPerCommodity(provFilter) {
         const counts = {};
-        const seen = new Set(); // untuk menghindari duplikasi per (unit, komoditas, provFilter)
+        const seen = new Set();
 
         dataPerusahaan.forEach(r => {
             const unitRaw = (r['Nama Unit Penangkar'] || '').toString();
@@ -956,7 +985,7 @@
     // Hitung jumlah penangkar per provinsi (presence per Nama Unit Penangkar)
     function computeCountsPerProvince() {
         const counts = {};
-        const seen = new Set(); // untuk menghindari duplikasi per (unit, provinsi)
+        const seen = new Set();
 
         dataPerusahaan.forEach(r => {
             const unitRaw = (r['Nama Unit Penangkar'] || '').toString();
@@ -1028,14 +1057,106 @@
     }
 
     function refreshPerusahaanBarChart() {
-        const mode = chartModeSelect.value;   // 'commodity' atau 'province'
-        const provFilter = provinsiFilterSelect.value; // '' = semua
+        const mode = chartModeSelect.value;
+        const provFilter = provinsiFilterSelect.value;
 
         if (mode === 'province') {
             buildPerusahaanBarChart('province', '');
         } else {
             buildPerusahaanBarChart('commodity', provFilter);
         }
+    }
+
+    // ---------- UTIL UNTUK RINGKASAN (MORTALITAS & NATALITAS) ----------
+    function computeCountsByField(dataArr, fieldName) {
+        const counts = {};
+        dataArr.forEach(r => {
+            let raw = r[fieldName];
+            let label = (raw == null ? '' : raw).toString().trim();
+            if (!label) label = 'Tidak Diketahui';
+            counts[label] = (counts[label] || 0) + 1;
+        });
+        const labels = Object.keys(counts).sort((a, b) => a.localeCompare(b, 'id-ID'));
+        const values = labels.map(l => counts[l]);
+        return { labels, values };
+    }
+
+    // ---------- GRAFIK DATA MORTALITAS ----------
+    function buildMortalitasChart(mode) {
+        if (!document.getElementById('mortalitas-chart')) return;
+        const ctx = document.getElementById('mortalitas-chart').getContext('2d');
+
+        let dataField, titleLabel;
+        if (mode === 'status') {
+            dataField = 'Status_Verifikasi_UPT';
+            titleLabel = 'Jumlah mortalitas per status verifikasi';
+        } else {
+            dataField = 'Jenis_Individu';
+            titleLabel = 'Jumlah mortalitas per jenis individu';
+        }
+
+        const chartData = computeCountsByField(dataMortalitas, dataField);
+
+        if (mortalitasChartInstance) {
+            mortalitasChartInstance.destroy();
+        }
+
+        mortalitasChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: chartData.labels,
+                datasets: [{
+                    label: titleLabel,
+                    data: chartData.values
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { autoSkip: false, maxRotation: 60, minRotation: 0 } },
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    // ---------- GRAFIK DATA NATALITAS ----------
+    function buildNatalitasSummaryChart(mode) {
+        if (!document.getElementById('natalitas-summary-chart')) return;
+        const ctx = document.getElementById('natalitas-summary-chart').getContext('2d');
+
+        let dataField, titleLabel;
+        if (mode === 'status') {
+            dataField = 'Status_Kelahiran';
+            titleLabel = 'Jumlah kelahiran per status kelahiran';
+        } else {
+            dataField = 'Jenis_Induk';
+            titleLabel = 'Jumlah kelahiran per jenis induk';
+        }
+
+        const chartData = computeCountsByField(dataNatalitas, dataField);
+
+        if (natalitasSummaryChartInstance) {
+            natalitasSummaryChartInstance.destroy();
+        }
+
+        natalitasSummaryChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: chartData.labels,
+                datasets: [{
+                    label: titleLabel,
+                    data: chartData.values
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { autoSkip: false, maxRotation: 60, minRotation: 0 } },
+                    y: { beginAtZero: true }
+                }
+            }
+        });
     }
 
     // ---------- RENDER TABEL-TABEL ----------
@@ -1122,6 +1243,9 @@
             // Dropdown provinsi & grafik distribusi penangkaran
             populateProvinsiFilter();
             refreshPerusahaanBarChart();
+            // Grafik ringkasan mortalitas & natalitas
+            buildMortalitasChart('jenis');
+            buildNatalitasSummaryChart('jenis');
         } catch (err) {
             console.error('Error saat membaca Excel:', err);
         }
@@ -1138,6 +1262,14 @@
 
     provinsiFilterSelect.addEventListener('change', () => {
         refreshPerusahaanBarChart();
+    });
+
+    mortalitasModeSelect.addEventListener('change', () => {
+        buildMortalitasChart(mortalitasModeSelect.value);
+    });
+
+    natalitasModeSelect.addEventListener('change', () => {
+        buildNatalitasSummaryChart(natalitasModeSelect.value);
     });
 
     loadWorkbook();
