@@ -226,18 +226,29 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .chart-header h2 {
             font-size: 1rem;
         }
 
-        .year-select {
+        .year-select,
+        .chart-mode-select,
+        .provinsi-select {
             font-size: 0.85rem;
             padding: 4px 8px;
             border-radius: 999px;
             border: 1px solid #d1d5db;
             background: #f9fafb;
+        }
+
+        .chart-header-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         /* TABEL DATA */
@@ -437,12 +448,12 @@
                 <div class="stat-card">
                     <div class="stat-label">Mortalitas Nasional</div>
                     <div class="stat-value" id="stat-mortalitas-nasional">-</div>
-                    <div class="stat-footnote">Individu </div>
+                    <div class="stat-footnote">Individu (seluruh tahun)</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Natalitas Nasional</div>
                     <div class="stat-value" id="stat-natalitas-nasional">-</div>
-                    <div class="stat-footnote">Individu </div>
+                    <div class="stat-footnote">Individu (seluruh tahun)</div>
                 </div>
             </div>
 
@@ -453,6 +464,23 @@
                     <select id="year-select" class="year-select"></select>
                 </div>
                 <canvas id="natalitas-chart" height="120"></canvas>
+            </div>
+
+            <!-- Grafik distribusi penangkaran (Jenis Spesies / Provinsi) -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Distribusi Penangkaran</h2>
+                    <div class="chart-header-controls">
+                        <select id="chart-mode-select" class="chart-mode-select">
+                            <option value="species">Per Jenis Spesies (nasional)</option>
+                            <option value="province">Per Provinsi (nasional)</option>
+                        </select>
+                        <select id="provinsi-filter-select" class="provinsi-select">
+                            <!-- diisi dari data -->
+                        </select>
+                    </div>
+                </div>
+                <canvas id="perusahaan-bar-chart" height="140"></canvas>
             </div>
 
             <!-- Tabel Data Jenis -->
@@ -652,7 +680,9 @@
     let dataNatalitas = [];
     let dataMortalitas = [];
     let dataPerusahaan = [];
+
     let natalitasChartInstance = null;
+    let perusahaanBarChartInstance = null;
 
     // Elemen DOM dashboard
     const statTotalPerusahaan    = document.getElementById('stat-total-perusahaan');
@@ -665,6 +695,9 @@
     const natalitasBody  = document.getElementById('natalitas-body');
     const mortalitasBody = document.getElementById('mortalitas-body');
     const perusahaanBody = document.getElementById('perusahaan-body');
+
+    const chartModeSelect    = document.getElementById('chart-mode-select');
+    const provinsiFilterSelect = document.getElementById('provinsi-filter-select');
 
     // ---------- UTILITAS ----------
     function toDate(value) {
@@ -789,7 +822,7 @@
         };
     }
 
-    // ---------- RENDER DASHBOARD ----------
+    // ---------- DASHBOARD NATALITAS ----------
     function buildNatalitasChart(monthlyData) {
         const ctx = document.getElementById('natalitas-chart').getContext('2d');
         const labels = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
@@ -852,6 +885,118 @@
         populateYearSelect(d.years, d.selectedYear);
         buildNatalitasChart(d.natalitasMonthly);
         buildDataJenisTable(d.jenisStats, d.selectedYear);
+    }
+
+    // ---------- DISTRIBUSI PERUSAHAAN (SPESIES / PROVINSI) ----------
+    function getUniqueProvinces() {
+        const s = new Set();
+        dataPerusahaan.forEach(r => {
+            const p = (r['Provinsi'] || '').toString().trim();
+            if (p) s.add(p);
+        });
+        return Array.from(s).sort((a, b) => a.localeCompare(b, 'id-ID'));
+    }
+
+    function populateProvinsiFilter() {
+        const provs = getUniqueProvinces();
+        provinsiFilterSelect.innerHTML = '';
+
+        const optAll = document.createElement('option');
+        optAll.value = '';
+        optAll.textContent = 'Semua Provinsi';
+        provinsiFilterSelect.appendChild(optAll);
+
+        provs.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p;
+            opt.textContent = p;
+            provinsiFilterSelect.appendChild(opt);
+        });
+    }
+
+    function computeCountsPerSpecies(provFilter) {
+        const counts = {};
+        dataPerusahaan.forEach(r => {
+            const jenis = (r['Jenis Spesies'] || '').toString().trim() || 'Tidak Diketahui';
+            const prov  = (r['Provinsi'] || '').toString().trim();
+            if (provFilter && prov !== provFilter) return;
+            counts[jenis] = (counts[jenis] || 0) + 1;
+        });
+
+        const labels = Object.keys(counts).sort((a, b) => a.localeCompare(b, 'id-ID'));
+        const values = labels.map(l => counts[l]);
+        return { labels, values };
+    }
+
+    function computeCountsPerProvince() {
+        const counts = {};
+        dataPerusahaan.forEach(r => {
+            const prov = (r['Provinsi'] || '').toString().trim() || 'Tidak Diketahui';
+            counts[prov] = (counts[prov] || 0) + 1;
+        });
+
+        const labels = Object.keys(counts).sort((a, b) => a.localeCompare(b, 'id-ID'));
+        const values = labels.map(l => counts[l]);
+        return { labels, values };
+    }
+
+    function buildPerusahaanBarChart(mode, provFilter) {
+        const ctx = document.getElementById('perusahaan-bar-chart').getContext('2d');
+
+        let chartData;
+        let titleLabel;
+
+        if (mode === 'province') {
+            chartData = computeCountsPerProvince();
+            titleLabel = 'Jumlah penangkaran per provinsi';
+        } else {
+            chartData = computeCountsPerSpecies(provFilter || '');
+            titleLabel = provFilter
+                ? `Jumlah penangkaran per jenis spesies (Provinsi: ${provFilter})`
+                : 'Jumlah penangkaran per jenis spesies (nasional)';
+        }
+
+        if (perusahaanBarChartInstance) {
+            perusahaanBarChartInstance.destroy();
+        }
+
+        perusahaanBarChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: chartData.labels,
+                datasets: [{
+                    label: titleLabel,
+                    data: chartData.values
+                }]
+            },
+            options: {
+                indexAxis: 'x',
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        ticks: { autoSkip: false, maxRotation: 60, minRotation: 0 }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    function refreshPerusahaanBarChart() {
+        const mode = chartModeSelect.value; // 'species' atau 'province'
+        const provFilter = provinsiFilterSelect.value; // '' = semua
+
+        if (mode === 'province') {
+            // kalau mode provinsi, filter provinsi tidak relevan → set ke semua
+            buildPerusahaanBarChart('province', '');
+        } else {
+            // mode species: gunakan filter provinsi (bisa kosong = nasional)
+            buildPerusahaanBarChart('species', provFilter);
+        }
     }
 
     // ---------- RENDER TABEL-TABEL ----------
@@ -930,10 +1075,15 @@
             dataMortalitas = sheetToJson(workbook, 'Data_Mortalitas');
             dataPerusahaan = sheetToJson(workbook, 'Data_Perusahaan');
 
+            // Dashboard utama
             renderDashboard();
+            // Tabel-tabel
             renderNatalitasTable();
             renderMortalitasTable();
             renderPerusahaanTable();
+            // Dropdown provinsi & grafik distribusi penangkaran
+            populateProvinsiFilter();
+            refreshPerusahaanBarChart();
         } catch (err) {
             console.error('Error saat membaca Excel:', err);
         }
@@ -942,6 +1092,14 @@
     yearSelect.addEventListener('change', () => {
         const y = Number(yearSelect.value);
         if (!isNaN(y)) renderDashboard(y);
+    });
+
+    chartModeSelect.addEventListener('change', () => {
+        refreshPerusahaanBarChart();
+    });
+
+    provinsiFilterSelect.addEventListener('change', () => {
+        refreshPerusahaanBarChart();
     });
 
     loadWorkbook();
