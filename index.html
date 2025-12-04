@@ -466,13 +466,13 @@
                 <canvas id="natalitas-chart" height="120"></canvas>
             </div>
 
-            <!-- Grafik distribusi penangkaran (Jenis Spesies / Provinsi) -->
+            <!-- Grafik distribusi penangkaran (Jenis Komoditas / Provinsi) -->
             <div class="chart-card">
                 <div class="chart-header">
                     <h2>Distribusi Penangkaran</h2>
                     <div class="chart-header-controls">
                         <select id="chart-mode-select" class="chart-mode-select">
-                            <option value="species">Per Jenis Spesies (nasional)</option>
+                            <option value="commodity">Per Jenis Komoditas (nasional)</option>
                             <option value="province">Per Provinsi (nasional)</option>
                         </select>
                         <select id="provinsi-filter-select" class="provinsi-select">
@@ -601,7 +601,6 @@
                             <th>Nama Unit Penangkar</th>
                             <th>Nama Pemilik</th>
                             <th>Jenis Komoditas</th>
-                            <th>Jenis Spesies</th>
                             <th>Kota/Kabupaten</th>
                             <th>Provinsi</th>
                             <th>UPT KSDA</th>
@@ -696,8 +695,8 @@
     const mortalitasBody = document.getElementById('mortalitas-body');
     const perusahaanBody = document.getElementById('perusahaan-body');
 
-    const chartModeSelect    = document.getElementById('chart-mode-select');
-    const provinsiFilterSelect = document.getElementById('provinsi-filter-select');
+    const chartModeSelect       = document.getElementById('chart-mode-select');
+    const provinsiFilterSelect  = document.getElementById('provinsi-filter-select');
 
     // ---------- UTILITAS ----------
     function toDate(value) {
@@ -887,7 +886,7 @@
         buildDataJenisTable(d.jenisStats, d.selectedYear);
     }
 
-    // ---------- DISTRIBUSI PERUSAHAAN (SPESIES / PROVINSI) ----------
+    // ---------- DISTRIBUSI PERUSAHAAN (JENIS KOMODITAS / PROVINSI) ----------
     function getUniqueProvinces() {
         const s = new Set();
         dataPerusahaan.forEach(r => {
@@ -914,13 +913,13 @@
         });
     }
 
-    function computeCountsPerSpecies(provFilter) {
+    function computeCountsPerCommodity(provFilter) {
         const counts = {};
         dataPerusahaan.forEach(r => {
-            const jenis = (r['Jenis Spesies'] || '').toString().trim() || 'Tidak Diketahui';
+            const kom = (r['Jenis Komoditas'] || '').toString().trim() || 'Tidak Diketahui';
             const prov  = (r['Provinsi'] || '').toString().trim();
             if (provFilter && prov !== provFilter) return;
-            counts[jenis] = (counts[jenis] || 0) + 1;
+            counts[kom] = (counts[kom] || 0) + 1;
         });
 
         const labels = Object.keys(counts).sort((a, b) => a.localeCompare(b, 'id-ID'));
@@ -950,10 +949,10 @@
             chartData = computeCountsPerProvince();
             titleLabel = 'Jumlah penangkaran per provinsi';
         } else {
-            chartData = computeCountsPerSpecies(provFilter || '');
+            chartData = computeCountsPerCommodity(provFilter || '');
             titleLabel = provFilter
-                ? `Jumlah penangkaran per jenis spesies (Provinsi: ${provFilter})`
-                : 'Jumlah penangkaran per jenis spesies (nasional)';
+                ? `Jumlah penangkaran per jenis komoditas (Provinsi: ${provFilter})`
+                : 'Jumlah penangkaran per jenis komoditas (nasional)';
         }
 
         if (perusahaanBarChartInstance) {
@@ -987,15 +986,13 @@
     }
 
     function refreshPerusahaanBarChart() {
-        const mode = chartModeSelect.value; // 'species' atau 'province'
+        const mode = chartModeSelect.value;   // 'commodity' atau 'province'
         const provFilter = provinsiFilterSelect.value; // '' = semua
 
         if (mode === 'province') {
-            // kalau mode provinsi, filter provinsi tidak relevan → set ke semua
             buildPerusahaanBarChart('province', '');
         } else {
-            // mode species: gunakan filter provinsi (bisa kosong = nasional)
-            buildPerusahaanBarChart('species', provFilter);
+            buildPerusahaanBarChart('commodity', provFilter);
         }
     }
 
@@ -1048,7 +1045,6 @@
                 <td>${r['Nama Unit Penangkar'] || ''}</td>
                 <td>${r['Nama Pemilik'] || ''}</td>
                 <td>${r['Jenis Komoditas'] || ''}</td>
-                <td>${r['Jenis Spesies'] || ''}</td>
                 <td>${r['Kota / Kabupaten'] || ''}</td>
                 <td>${r['Provinsi'] || ''}</td>
                 <td>${r['UPT KSDA'] || ''}</td>
