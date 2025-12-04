@@ -913,12 +913,27 @@
         });
     }
 
+    // Hitung jumlah penangkar per jenis komoditas (presence per Nama Unit Penangkar)
     function computeCountsPerCommodity(provFilter) {
         const counts = {};
+        const seen = new Set(); // untuk menghindari duplikasi per (unit, komoditas, provFilter)
+
         dataPerusahaan.forEach(r => {
+            const unit = (r['Nama Unit Penangkar'] || '').toString().trim();
+            if (!unit) return;
+
             const kom = (r['Jenis Komoditas'] || '').toString().trim() || 'Tidak Diketahui';
-            const prov  = (r['Provinsi'] || '').toString().trim();
+            const prov = (r['Provinsi'] || '').toString().trim();
+
+            // jika ada filter provinsi, hanya ambil baris dari provinsi tersebut
             if (provFilter && prov !== provFilter) return;
+
+            // key unik: unit + komoditas + (provinsi filter / nasional)
+            const key = unit + '|' + kom + '|' + (provFilter || 'ALL');
+
+            if (seen.has(key)) return; // sudah dihitung
+            seen.add(key);
+
             counts[kom] = (counts[kom] || 0) + 1;
         });
 
@@ -927,10 +942,21 @@
         return { labels, values };
     }
 
+    // Hitung jumlah penangkar per provinsi (presence per Nama Unit Penangkar)
     function computeCountsPerProvince() {
         const counts = {};
+        const seen = new Set(); // untuk menghindari duplikasi per (unit, provinsi)
+
         dataPerusahaan.forEach(r => {
+            const unit = (r['Nama Unit Penangkar'] || '').toString().trim();
+            if (!unit) return;
+
             const prov = (r['Provinsi'] || '').toString().trim() || 'Tidak Diketahui';
+            const key = unit + '|' + prov;
+
+            if (seen.has(key)) return; // sudah dihitung
+            seen.add(key);
+
             counts[prov] = (counts[prov] || 0) + 1;
         });
 
@@ -947,12 +973,12 @@
 
         if (mode === 'province') {
             chartData = computeCountsPerProvince();
-            titleLabel = 'Jumlah penangkaran per provinsi';
+            titleLabel = 'Jumlah penangkaran per provinsi (unik per Nama Unit Penangkar)';
         } else {
             chartData = computeCountsPerCommodity(provFilter || '');
             titleLabel = provFilter
-                ? `Jumlah penangkaran per jenis komoditas (Provinsi: ${provFilter})`
-                : 'Jumlah penangkaran per jenis komoditas (nasional)';
+                ? `Jumlah penangkaran per jenis komoditas (Provinsi: ${provFilter}, unik per Nama Unit Penangkar)`
+                : 'Jumlah penangkaran per jenis komoditas (nasional, unik per Nama Unit Penangkar)';
         }
 
         if (perusahaanBarChartInstance) {
