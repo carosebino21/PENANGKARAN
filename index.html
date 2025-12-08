@@ -265,6 +265,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .table-card-header h2 {
@@ -310,120 +312,19 @@
             font-size: 0.75rem;
         }
 
-        /* WIZARD INPUT (REVISI 4.3) */
-        .wizard-container {
-            background: #ffffff;
-            border-radius: 16px;
-            border: 1px solid #e5e7eb;
-            padding: 18px 20px;
-            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.04);
+        .badge-ok {
+            background: #dcfce7;
+            color: #166534;
         }
 
-        .wizard-steps {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 8px;
-            margin-bottom: 18px;
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
         }
 
-        .wizard-step-indicator {
-            text-align: center;
-            padding: 8px;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            background: #e5e7eb;
-            color: #4b5563;
-        }
-
-        .wizard-step-indicator.is-active {
-            background: #2563eb;
-            color: #ffffff;
-        }
-
-        .wizard-step {
-            display: none;
-        }
-
-        .wizard-step.is-active {
-            display: block;
-        }
-
-        .wizard-nav {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-            margin-top: 16px;
-        }
-
-        .wizard-note {
-            margin-top: 10px;
-            font-size: 0.8rem;
-            color: #6b7280;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px 16px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .form-group label {
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .form-group input,
-        .form-group select {
-            padding: 8px 10px;
-            border-radius: 10px;
-            border: 1px solid #d1d5db;
-            font-size: 0.9rem;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 1px #dbeafe;
-        }
-
-        .form-group small {
-            font-size: 0.75rem;
-            color: #6b7280;
-        }
-
-        .btn {
-            border-radius: 999px;
-            border: none;
-            padding: 8px 14px;
-            font-size: 0.9rem;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background: #2563eb;
-            color: #ffffff;
-        }
-
-        .btn-secondary {
-            background: #e5e7eb;
-            color: #111827;
-        }
-
-        @media (max-width: 900px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .wizard-steps {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
+        .badge-critical {
+            background: #fee2e2;
+            color: #b91c1c;
         }
 
         @media (max-width: 800px) {
@@ -500,12 +401,6 @@
                         <a href="#" class="nav-link" data-target="section-data-natalitas">
                             <div class="nav-link-icon"></div>
                             <span>Data Natalitas</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" data-target="section-input-wizard">
-                            <div class="nav-link-icon"></div>
-                            <span>Input Data (Wizard)</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -703,178 +598,12 @@
             </div>
         </section>
 
-        <!-- SECTION: INPUT DATA (WIZARD) - REVISI 4.3 -->
-        <section id="section-input-wizard" class="page-section">
-            <div class="wizard-container">
-                <h2 style="margin-bottom:8px;">Input Data Penangkaran (Wizard)</h2>
-                <p style="font-size:0.9rem;color:#6b7280;margin-bottom:14px;">
-                    Alur input data dibagi menjadi beberapa langkah untuk mengikuti probis:
-                    mulai dari identitas penangkaran, data individu, kelahiran, hingga kematian.
-                    Pada versi prototype ini, pengisian hanya digunakan sebagai simulasi
-                    dan belum tersambung ke server.
-                </p>
-
-                <div class="wizard-steps">
-                    <div class="wizard-step-indicator is-active" data-step="1">1. Penangkaran</div>
-                    <div class="wizard-step-indicator" data-step="2">2. Individu</div>
-                    <div class="wizard-step-indicator" data-step="3">3. Kelahiran</div>
-                    <div class="wizard-step-indicator" data-step="4">4. Kematian</div>
-                </div>
-
-                <!-- STEP 1 -->
-                <div class="wizard-step is-active" data-step="1">
-                    <h3 style="margin-bottom:10px;">Langkah 1 – Identitas Penangkaran</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="wizard-penangkaran">Nama Penangkaran</label>
-                            <select id="wizard-penangkaran">
-                                <option value="">-- Pilih Penangkaran --</option>
-                                <!-- Diisi dari Data_Perusahaan -->
-                            </select>
-                            <small>Daftar diambil dari sheet Data_Perusahaan.</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="wizard-taxa">Taxa Komoditas yang Ditangkarkan</label>
-                            <select id="wizard-taxa">
-                                <option value="">-- Pilih Taxa --</option>
-                                <option value="Aves">Aves (Burung)</option>
-                                <option value="Mamalia">Mamalia</option>
-                                <option value="Reptil">Reptil</option>
-                                <option value="Ikan Hias">Ikan Hias</option>
-                            </select>
-                            <small>Disesuaikan dengan komoditas utama yang tercatat.</small>
-                        </div>
-                    </div>
-                    <div class="wizard-nav">
-                        <button class="btn btn-primary" id="wizard-next-to-individu">Lanjut ke Individu</button>
-                    </div>
-                </div>
-
-                <!-- STEP 2 -->
-                <div class="wizard-step" data-step="2">
-                    <h3 style="margin-bottom:10px;">Langkah 2 – Data Individu</h3>
-                    <p style="font-size:0.85rem;color:#6b7280;margin-bottom:10px;">
-                        Struktur kolom mengikuti sheet <strong>Data_Individu</strong>:
-                        ID_Individu, Jenis_Individu, Kelamin, dan Berat_Individu_kg.
-                    </p>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="wizard-id-individu">ID Individu</label>
-                            <input id="wizard-id-individu" type="text" placeholder="Contoh: JKT-FH-2025-001">
-                            <small>Pola: KODEKOTA-KODEPENANGKAR-TAHUN-NOMORURUT.</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="wizard-jenis-individu">Jenis Individu</label>
-                            <input id="wizard-jenis-individu" type="text" placeholder="Contoh: Python reticulatus">
-                        </div>
-                        <div class="form-group">
-                            <label for="wizard-kelamin">Kelamin</label>
-                            <select id="wizard-kelamin">
-                                <option value="">-- Pilih Kelamin --</option>
-                                <option value="Jantan">Jantan</option>
-                                <option value="Betina">Betina</option>
-                                <option value="Tidak diketahui">Tidak diketahui</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="wizard-berat">Berat Individu (kg)</label>
-                            <input id="wizard-berat" type="number" step="0.1" min="0" placeholder="Contoh: 12.5">
-                        </div>
-                    </div>
-                    <div class="wizard-nav">
-                        <button class="btn btn-secondary" data-prev-step="1">Kembali</button>
-                        <button class="btn btn-primary" id="wizard-next-to-kelahiran">Lanjut ke Kelahiran</button>
-                    </div>
-                </div>
-
-                <!-- STEP 3 -->
-                <div class="wizard-step" data-step="3">
-                    <h3 style="margin-bottom:10px;">Langkah 3 – Data Kelahiran</h3>
-                    <p style="font-size:0.85rem;color:#6b7280;margin-bottom:10px;">
-                        Struktur kolom mengikuti sheet <strong>Data_Natalitas</strong>:
-                        ID_Kelahiran, ID_Induk, Jenis_Induk, Status_Kelahiran, dan Jumlah_Anakan.
-                    </p>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="wizard-id-induk">ID Induk (sesuai Data_Individu)</label>
-                            <input id="wizard-id-induk" type="text" placeholder="Contoh: JKT-FH-2023-010">
-                        </div>
-                        <div class="form-group">
-                            <label for="wizard-jenis-induk">Jenis Induk</label>
-                            <input id="wizard-jenis-induk" type="text" placeholder="Contoh: Python reticulatus">
-                        </div>
-                        <div class="form-group">
-                            <label for="wizard-status-kelahiran">Status Kelahiran</label>
-                            <select id="wizard-status-kelahiran">
-                                <option value="">-- Pilih Status --</option>
-                                <option value="Hidup">Hidup</option>
-                                <option value="Mati">Mati</option>
-                                <option value="Aborsi">Aborsi</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="wizard-jumlah-anakan">Jumlah Anakan</label>
-                            <input id="wizard-jumlah-anakan" type="number" min="0" placeholder="Contoh: 4">
-                        </div>
-                    </div>
-                    <div class="wizard-nav">
-                        <button class="btn btn-secondary" data-prev-step="2">Kembali</button>
-                        <button class="btn btn-primary" id="wizard-next-to-kematian">Lanjut ke Kematian</button>
-                    </div>
-                </div>
-
-                <!-- STEP 4 -->
-                <div class="wizard-step" data-step="4">
-                    <h3 style="margin-bottom:10px;">Langkah 4 – Data Kematian</h3>
-                    <p style="font-size:0.85rem;color:#6b7280;margin-bottom:10px;">
-                        Struktur kolom mengikuti sheet <strong>Data_Mortalitas</strong>:
-                        ID_Kematian, ID_Individu, Jenis_Individu, Tanggal_Kematian, Jam_Kematian,
-                        dan dokumentasi geotag.
-                    </p>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="wizard-id-kematian-individu">ID Individu (jika ada kematian)</label>
-                            <input id="wizard-id-kematian-individu" type="text" placeholder="Isi jika ada kematian">
-                        </div>
-                        <div class="form-group">
-                            <label for="wizard-tanggal-kematian">Tanggal Kematian</label>
-                            <input id="wizard-tanggal-kematian" type="date">
-                        </div>
-                        <div class="form-group">
-                            <label for="wizard-jam-kematian">Jam Kematian</label>
-                            <input id="wizard-jam-kematian" type="time">
-                        </div>
-                        <div class="form-group">
-                            <label for="wizard-link-foto">Link Foto Geotag</label>
-                            <input id="wizard-link-foto" type="url" placeholder="URL dokumen foto (Google Drive, dsb.)">
-                        </div>
-                    </div>
-                    <div class="wizard-nav">
-                        <button class="btn btn-secondary" data-prev-step="3">Kembali</button>
-                        <button class="btn btn-primary" id="wizard-finish">Selesai (Simulasi)</button>
-                    </div>
-                    <p class="wizard-note">
-                        Catatan: Pada versi penuh, data akan dikirim ke server dan disinkronkan
-                        dengan Google Sheet. Di prototype ini, wizard berfungsi sebagai simulasi
-                        dan alat edukasi bagi penangkar untuk memahami struktur data.
-                    </p>
-                </div>
-            </div>
-        </section>
-
         <!-- SECTION: QnA -->
         <section id="section-qna" class="page-section">
             <div class="placeholder-box">
                 <strong>QnA</strong>
-                <p style="margin-top:8px;margin-bottom:8px;">
-                    Di sini nantinya dapat diisi FAQ, panduan pengisian format Excel/Google Sheet,
-                    dan kontak helpdesk teknis Direktorat KSG.
-                </p>
-                <ul style="font-size:0.9rem;margin-left:18px;color:#4b5563;">
-                    <li>Penjelasan singkat struktur sheet: Data_Individu, Data_Natalitas, dan Data_Mortalitas.</li>
-                    <li>Contoh pola penulisan ID_Individu dan ID_Kelahiran yang baku.</li>
-                    <li>Alur verifikasi: Penangkar → UPT/Resort → Direktorat KSG.</li>
-                </ul>
+                Di sini nanti dapat diisi FAQ, panduan pengisian format Excel/Google Sheet,
+                dan kontak helpdesk teknis.
             </div>
         </section>
 
@@ -902,7 +631,12 @@
             <div class="table-card">
                 <div class="table-card-header">
                     <h2>Data Perusahaan / Unit Penangkar</h2>
-                    <span class="badge">Seluruh data</span>
+                    <div class="chart-header-controls">
+                        <span class="badge" id="badge-izin-warning">Status izin: -</span>
+                        <select id="taksa-filter-select" class="chart-mode-select">
+                            <option value="">Semua Taksa</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="table-wrapper">
                     <table>
@@ -913,9 +647,12 @@
                             <th>Nama Unit Penangkar</th>
                             <th>Nama Pemilik</th>
                             <th>Jenis Komoditas</th>
+                            <th>BMP</th>
                             <th>Kota/Kabupaten</th>
                             <th>Provinsi</th>
                             <th>UPT KSDA</th>
+                            <th>Tanggal Berakhir</th>
+                            <th>Status Izin</th>
                             <th>Main Species</th>
                         </tr>
                         </thead>
@@ -951,10 +688,6 @@
         'section-data-natalitas': {
             title: 'Data Natalitas',
             subtitle: 'Rincian dan analisis data natalitas satwa penangkaran.'
-        },
-        'section-input-wizard': {
-            title: 'Input Data (Wizard)',
-            subtitle: 'Simulasi alur pengisian data penangkaran sesuai probis dan struktur Google Sheet.'
         },
         'section-qna': {
             title: 'QnA',
@@ -1001,7 +734,7 @@
     let mortalitasChartInstance = null;
     let natalitasSummaryChartInstance = null;
 
-    // Elemen DOM dashboard
+    // Elemen DOM dashboard umum
     const statTotalPerusahaan    = document.getElementById('stat-total-perusahaan');
     const statMortalitasNasional = document.getElementById('stat-mortalitas-nasional');
     const statNatalitasNasional  = document.getElementById('stat-natalitas-nasional');
@@ -1019,16 +752,10 @@
     const mortalitasModeSelect  = document.getElementById('mortalitas-mode-select');
     const natalitasModeSelect   = document.getElementById('natalitas-mode-select');
 
-    // Wizard elements
-    const wizardStepIndicators = document.querySelectorAll('.wizard-step-indicator');
-    const wizardSteps = document.querySelectorAll('.wizard-step');
+    const taksaFilterSelect     = document.getElementById('taksa-filter-select');
+    const badgeIzinWarning      = document.getElementById('badge-izin-warning');
 
-    const wizardPenangkaranSelect = document.getElementById('wizard-penangkaran');
-    const wizardTaxaSelect        = document.getElementById('wizard-taxa');
-    const wizardNextToIndividu    = document.getElementById('wizard-next-to-individu');
-    const wizardNextToKelahiran   = document.getElementById('wizard-next-to-kelahiran');
-    const wizardNextToKematian    = document.getElementById('wizard-next-to-kematian');
-    const wizardFinishBtn         = document.getElementById('wizard-finish');
+    let currentTaksaFilter = '';
 
     // ---------- UTILITAS ----------
     function toDate(value) {
@@ -1462,6 +1189,56 @@
         });
     }
 
+    // ---------- TAKSA FILTER & BMP / STATUS IZIN ----------
+    function getUniqueTaksa() {
+        const s = new Set();
+        dataPerusahaan.forEach(r => {
+            const t = (r['Jenis Komoditas'] || '').toString().trim();
+            if (t) s.add(t);
+        });
+        return Array.from(s).sort((a, b) => a.localeCompare(b, 'id-ID'));
+    }
+
+    function populateTaksaFilter() {
+        const taksa = getUniqueTaksa();
+        taksaFilterSelect.innerHTML = '';
+
+        const optAll = document.createElement('option');
+        optAll.value = '';
+        optAll.textContent = 'Semua Taksa';
+        taksaFilterSelect.appendChild(optAll);
+
+        taksa.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t;
+            opt.textContent = t;
+            taksaFilterSelect.appendChild(opt);
+        });
+    }
+
+    function getBMPValue(row) {
+        return row['BMP'] || row['BMP_TSL'] || row['BMP (individu)'] || '';
+    }
+
+    function getPermitStatus(expiryRaw) {
+        const d = toDate(expiryRaw);
+        if (!d) return { label: 'Tidak ada data', type: 'none' };
+
+        const today = new Date();
+        today.setHours(0,0,0,0);
+
+        const diffMs   = d - today;
+        const diffDays = diffMs / (1000 * 60 * 60 * 24);
+
+        if (diffDays < 0) {
+            return { label: 'Sudah berakhir', type: 'critical' };
+        }
+        if (diffDays <= 180) { // < 6 bulan
+            return { label: 'Akan berakhir (<6 bulan)', type: 'warning' };
+        }
+        return { label: 'Aktif', type: 'ok' };
+    }
+
     // ---------- RENDER TABEL-TABEL ----------
     function renderNatalitasTable() {
         natalitasBody.innerHTML = '';
@@ -1503,99 +1280,60 @@
 
     function renderPerusahaanTable() {
         perusahaanBody.innerHTML = '';
+        let warningCount = 0;
+
         dataPerusahaan.forEach(r => {
+            const taksa = (r['Jenis Komoditas'] || '').toString().trim();
+            if (currentTaksaFilter && taksa !== currentTaksaFilter) return;
+
+            const kegiatan = (r['Jenis Kegiatan Pemanfaatan (Komersial / Non-Komersial)'] || '').toString();
+            let bmp = '';
+            if (/komersial/i.test(kegiatan)) {
+                bmp = getBMPValue(r) || '-';
+            } else {
+                bmp = '-';
+            }
+
+            const tBerakhir = r['Tanggal Berakhir'];
+            const izinStatus = getPermitStatus(tBerakhir);
+
+            let statusClass = 'badge';
+            if (izinStatus.type === 'critical') statusClass = 'badge-critical';
+            else if (izinStatus.type === 'warning') statusClass = 'badge-warning';
+            else if (izinStatus.type === 'ok') statusClass = 'badge-ok';
+
+            if (izinStatus.type === 'critical' || izinStatus.type === 'warning') {
+                warningCount++;
+            }
+
+            const d = toDate(tBerakhir);
+            const tanggalBerakhir = d ? d.toISOString().slice(0,10) : '';
+
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${r['No.'] || ''}</td>
                 <td>${r['Nomor Sertifikat Standar'] || ''}</td>
                 <td>${r['Nama Unit Penangkar'] || ''}</td>
                 <td>${r['Nama Pemilik'] || ''}</td>
-                <td>${r['Jenis Komoditas'] || ''}</td>
+                <td>${taksa || ''}</td>
+                <td>${bmp}</td>
                 <td>${r['Kota / Kabupaten'] || ''}</td>
                 <td>${r['Provinsi'] || ''}</td>
                 <td>${r['UPT KSDA'] || ''}</td>
+                <td>${tanggalBerakhir}</td>
+                <td><span class="${statusClass}">${izinStatus.label}</span></td>
                 <td>${r['Main_Species'] || ''}</td>
             `;
             perusahaanBody.appendChild(tr);
         });
-    }
 
-    // ---------- WIZARD LOGIC ----------
-    function setWizardStep(step) {
-        wizardSteps.forEach(s => {
-            s.classList.toggle('is-active', s.dataset.step === String(step));
-        });
-        wizardStepIndicators.forEach(i => {
-            i.classList.toggle('is-active', i.dataset.step === String(step));
-        });
-    }
-
-    function getUniquePenangkaranFromPerusahaan() {
-        const s = new Set();
-        dataPerusahaan.forEach(r => {
-            const nama = (r['Nama Unit Penangkar'] || '').toString().trim();
-            const kota = (r['Kota / Kabupaten'] || '').toString().trim();
-            if (!nama) return;
-            s.add(nama + '|' + kota);
-        });
-        return Array.from(s).sort((a, b) => a.localeCompare(b, 'id-ID'));
-    }
-
-    function populateWizardPenangkaran() {
-        if (!wizardPenangkaranSelect) return;
-        wizardPenangkaranSelect.innerHTML = '<option value="">-- Pilih Penangkaran --</option>';
-        const arr = getUniquePenangkaranFromPerusahaan();
-        arr.forEach(item => {
-            const [nama, kota] = item.split('|');
-            const opt = document.createElement('option');
-            opt.value = nama;
-            opt.textContent = kota ? `${nama} – ${kota}` : nama;
-            wizardPenangkaranSelect.appendChild(opt);
-        });
-    }
-
-    function initWizard() {
-        if (!wizardNextToIndividu) return;
-
-        wizardNextToIndividu.addEventListener('click', () => {
-            const pen = wizardPenangkaranSelect.value;
-            const taxa = wizardTaxaSelect.value;
-            if (!pen || !taxa) {
-                alert('Silakan pilih Nama Penangkaran dan Taxa terlebih dahulu.');
-                return;
-            }
-            setWizardStep(2);
-        });
-
-        wizardNextToKelahiran.addEventListener('click', () => {
-            const idInd = document.getElementById('wizard-id-individu').value.trim();
-            const jenis = document.getElementById('wizard-jenis-individu').value.trim();
-            if (!idInd || !jenis) {
-                alert('ID Individu dan Jenis Individu wajib diisi.');
-                return;
-            }
-            setWizardStep(3);
-        });
-
-        wizardNextToKematian.addEventListener('click', () => {
-            // Data kelahiran boleh kosong (misal belum ada kelahiran), jadi tidak dipaksa.
-            setWizardStep(4);
-        });
-
-        document.querySelectorAll('[data-prev-step]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const prev = btn.getAttribute('data-prev-step');
-                if (prev) setWizardStep(prev);
-            });
-        });
-
-        wizardFinishBtn.addEventListener('click', () => {
-            alert(
-                'Simulasi selesai.\n\nPada sistem produksi, data ini akan dikirim ke server dan ' +
-                'disinkronkan dengan Google Sheet (Data_Individu, Data_Natalitas, dan Data_Mortalitas).'
-            );
-            setWizardStep(1);
-        });
+        if (warningCount > 0) {
+            badgeIzinWarning.textContent =
+                'Izin kritis/akan habis: ' + warningCount.toLocaleString('id-ID') + ' unit';
+        } else {
+            badgeIzinWarning.textContent =
+                'Tidak ada izin yang akan habis dalam 6 bulan';
+        }
     }
 
     // ---------- LOAD EXCEL SAAT PAGE DIBUKA ----------
@@ -1620,6 +1358,8 @@
             // Tabel-tabel
             renderNatalitasTable();
             renderMortalitasTable();
+            // Filter taksa & tabel perusahaan
+            populateTaksaFilter();
             renderPerusahaanTable();
             // Dropdown provinsi & grafik distribusi penangkaran
             populateProvinsiFilter();
@@ -1627,8 +1367,6 @@
             // Grafik ringkasan mortalitas & natalitas
             buildMortalitasChart('jenis');
             buildNatalitasSummaryChart('jenis');
-            // Isi drop-down penangkaran di wizard
-            populateWizardPenangkaran();
         } catch (err) {
             console.error('Error saat membaca Excel:', err);
         }
@@ -1656,8 +1394,11 @@
         buildNatalitasSummaryChart(natalitasModeSelect.value);
     });
 
-    // Init wizard dan load workbook
-    initWizard();
+    taksaFilterSelect.addEventListener('change', () => {
+        currentTaksaFilter = taksaFilterSelect.value;
+        renderPerusahaanTable();
+    });
+
     loadWorkbook();
 </script>
 </body>
