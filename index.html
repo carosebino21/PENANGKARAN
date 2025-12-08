@@ -279,6 +279,11 @@
       font-size: 0.95rem;
     }
 
+    /* batasi tinggi grafik */
+    .chart-card canvas {
+      max-height: 320px;
+    }
+
     /* WIZARD */
     .wizard-tabs {
       display: flex;
@@ -518,7 +523,7 @@
             </select>
           </div>
         </div>
-        <canvas id="satwa-distribusi-chart" height="130"></canvas>
+        <canvas id="satwa-distribusi-chart" height="80"></canvas>
       </div>
 
       <div class="table-card">
@@ -555,7 +560,7 @@
             </select>
           </div>
         </div>
-        <canvas id="natalitas-chart" height="130"></canvas>
+        <canvas id="natalitas-chart" height="80"></canvas>
       </div>
 
       <div class="table-card">
@@ -593,7 +598,7 @@
             </select>
           </div>
         </div>
-        <canvas id="mortalitas-chart" height="130"></canvas>
+        <canvas id="mortalitas-chart" height="80"></canvas>
       </div>
 
       <div class="table-card">
@@ -966,12 +971,10 @@
   let unitToSpesies   = {};
   let unitToProvinsi  = {};
 
-  // charts
   let satwaChart = null;
   let natalitasChart = null;
   let mortalitasChart = null;
 
-  // DOM references
   const satwaProvFilter   = document.getElementById('satwa-provinsi-filter');
   const satwaSpesiesFilter= document.getElementById('satwa-spesies-filter');
   const satwaTableBody    = document.getElementById('satwa-table-body');
@@ -996,7 +999,6 @@
   const masaYellowCount    = document.getElementById('masa-yellow-count');
   const masaRedCount       = document.getElementById('masa-red-count');
 
-  /* ---------------- UTIL ---------------- */
   function toDate(v) {
     if (!v) return null;
     if (v instanceof Date) return v;
@@ -1014,7 +1016,6 @@
     return (str || '').toString().trim().toLowerCase().replace(/\./g,'').replace(/\s+/g, ' ');
   }
 
-  // status izin: hijau 5–2 tahun, kuning <2 tahun, merah <3 bulan / habis
   function getPermitStatus(expiryRaw) {
     const d = toDate(expiryRaw);
     if (!d) return { type: 'none', label: 'Tidak ada data', diffDays: Infinity };
@@ -1095,7 +1096,6 @@
     });
   }
 
-  // grafik: x = Jenis Komoditas, y = jumlah penangkar (unit unik) sesuai filter provinsi & jenis spesies
   function buildSatwaChart() {
     const provFilter = satwaProvFilter.value;
     const spesiesFilter = satwaSpesiesFilter.value;
@@ -1107,7 +1107,7 @@
       const unit = (r['Nama Unit Penangkar'] || '').toString();
       const kom  = (r['Jenis Komoditas'] || '').toString() || 'Tidak diketahui';
       const prov = (r['Provinsi'] || '').toString();
-      const spes= (r['Jenis Spesies'] || '').toString();
+      const spes = (r['Jenis Spesies'] || '').toString();
 
       if (!unit.trim()) return;
       if (provFilter && prov !== provFilter) return;
@@ -1138,6 +1138,7 @@
         }]
       },
       options: {
+        aspectRatio: 4,
         plugins: { legend: { display:false } },
         scales: {
           x: { ticks: { autoSkip:false, maxRotation:60, minRotation:0 } },
@@ -1226,6 +1227,7 @@
         }]
       },
       options: {
+        aspectRatio: 4,
         plugins: { legend: { display:false } },
         scales: {
           x: { ticks:{ autoSkip:false, maxRotation:60, minRotation:0 } },
@@ -1304,6 +1306,7 @@
         }]
       },
       options: {
+        aspectRatio: 4,
         plugins: { legend: { display:false } },
         scales: {
           x: { ticks:{ autoSkip:false, maxRotation:60, minRotation:0 } },
@@ -1577,30 +1580,22 @@
 
       buildUnitMaps();
 
-      // Satwa
       populateSatwaFilters();
       buildSatwaChart();
       renderSatwaTable();
 
-      // Natalitas
       populateNatalitasStatusFilter();
       buildNatalitasChart();
       renderNatalitasTable();
 
-      // Mortalitas
       populateMortalitasStatusFilter();
       buildMortalitasChart();
       renderMortalitasTable();
 
-      // Perusahaan
       populatePerusahaanFilters();
       renderPerusahaanTable();
 
-      // Masa berlaku
       renderMasaTable();
-
-      // Dashboard ringkas (header stat)
-      // di sini bisa ditambahkan jika ingin ada angka total di atas dashboard
     } catch (err) {
       console.error('Error membaca workbook:', err);
     }
