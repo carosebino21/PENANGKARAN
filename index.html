@@ -161,7 +161,6 @@
             color: #6b7280;
         }
 
-        /* Section per halaman */
         .page-section {
             display: none;
         }
@@ -178,7 +177,6 @@
             font-size: 0.95rem;
         }
 
-        /* CARD RINGKASAN */
         .cards-row {
             display: flex;
             flex-wrap: wrap;
@@ -212,7 +210,6 @@
             color: #9ca3af;
         }
 
-        /* CHART CARD */
         .chart-card {
             background: #ffffff;
             border-radius: 16px;
@@ -251,7 +248,6 @@
             flex-wrap: wrap;
         }
 
-        /* TABEL DATA */
         .table-card {
             background: #ffffff;
             border-radius: 16px;
@@ -374,7 +370,7 @@
 <body>
 <div class="app">
 
-    <!-- SIDEBAR KIRI -->
+    <!-- SIDEBAR -->
     <aside class="sidebar">
         <div>
             <div class="sidebar-header">
@@ -401,6 +397,12 @@
                         <a href="#" class="nav-link" data-target="section-data-natalitas">
                             <div class="nav-link-icon"></div>
                             <span>Data Natalitas</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-target="section-masa-berlaku">
+                            <div class="nav-link-icon"></div>
+                            <span>Masa Berlaku Dokumen</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -444,7 +446,7 @@
         </div>
     </aside>
 
-    <!-- AREA KONTEN TENGAH -->
+    <!-- KONTEN -->
     <main class="content">
         <div class="content-header">
             <h1 id="page-title">Data Satwa</h1>
@@ -453,9 +455,8 @@
             </p>
         </div>
 
-        <!-- SECTION: DATA SATWA / DASHBOARD -->
+        <!-- DATA SATWA -->
         <section id="section-data-satwa" class="page-section is-active">
-            <!-- Kartu ringkasan -->
             <div class="cards-row">
                 <div class="stat-card">
                     <div class="stat-label">Total Perusahaan</div>
@@ -474,7 +475,6 @@
                 </div>
             </div>
 
-            <!-- Grafik natalitas nasional -->
             <div class="chart-card">
                 <div class="chart-header">
                     <h2>Natalitas Nasional</h2>
@@ -483,7 +483,6 @@
                 <canvas id="natalitas-chart" height="120"></canvas>
             </div>
 
-            <!-- Grafik distribusi penangkaran (Jenis Komoditas / Provinsi) -->
             <div class="chart-card">
                 <div class="chart-header">
                     <h2>Distribusi Penangkaran</h2>
@@ -492,15 +491,12 @@
                             <option value="commodity">Per Jenis Komoditas (nasional)</option>
                             <option value="province">Per Provinsi (nasional)</option>
                         </select>
-                        <select id="provinsi-filter-select" class="provinsi-select">
-                            <!-- diisi dari data -->
-                        </select>
+                        <select id="provinsi-filter-select" class="provinsi-select"></select>
                     </div>
                 </div>
                 <canvas id="perusahaan-bar-chart" height="140"></canvas>
             </div>
 
-            <!-- Tabel Data Jenis -->
             <div class="table-card">
                 <div class="table-card-header">
                     <h2>Data Jenis (agregat per jenis)</h2>
@@ -520,11 +516,36 @@
                     </table>
                 </div>
             </div>
+
+            <!-- DATA SATWA PER TAKSA -->
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h2>Data Satwa per Taksa</h2>
+                    <div class="chart-header-controls">
+                        <select id="satwa-taksa-select" class="chart-mode-select">
+                            <option value="">Semua Taksa</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID Individu</th>
+                            <th>Nama Individu</th>
+                            <th>Jenis Individu</th>
+                            <th>Nama Unit Penangkar</th>
+                            <th>Taksa (Jenis Komoditas)</th>
+                        </tr>
+                        </thead>
+                        <tbody id="data-satwa-body"></tbody>
+                    </table>
+                </div>
+            </div>
         </section>
 
-        <!-- SECTION: DATA MORTALITAS -->
+        <!-- DATA MORTALITAS -->
         <section id="section-data-mortalitas" class="page-section">
-            <!-- Grafik ringkasan mortalitas -->
             <div class="chart-card">
                 <div class="chart-header">
                     <h2>Ringkasan Mortalitas</h2>
@@ -560,9 +581,8 @@
             </div>
         </section>
 
-        <!-- SECTION: DATA NATALITAS -->
+        <!-- DATA NATALITAS -->
         <section id="section-data-natalitas" class="page-section">
-            <!-- Grafik ringkasan natalitas -->
             <div class="chart-card">
                 <div class="chart-header">
                     <h2>Ringkasan Natalitas</h2>
@@ -598,7 +618,59 @@
             </div>
         </section>
 
-        <!-- SECTION: QnA -->
+        <!-- MASA BERLAKU DOKUMEN -->
+        <section id="section-masa-berlaku" class="page-section">
+            <div class="cards-row">
+                <div class="stat-card">
+                    <div class="stat-label">Hijau (≥ 2 tahun)</div>
+                    <div class="stat-value" id="masa-count-green">-</div>
+                    <div class="stat-footnote">Masa berlaku 2–5 tahun atau lebih</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Kuning (&lt; 2 tahun)</div>
+                    <div class="stat-value" id="masa-count-yellow">-</div>
+                    <div class="stat-footnote">Masa berlaku 3 bulan–2 tahun</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Merah (&lt; 3 bulan / habis)</div>
+                    <div class="stat-value" id="masa-count-red">-</div>
+                    <div class="stat-footnote">Perlu perhatian segera</div>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h2>Daftar Masa Berlaku Dokumen Penangkaran</h2>
+                    <div class="chart-header-controls">
+                        <select id="masa-filter-select" class="chart-mode-select">
+                            <option value="">Semua Status</option>
+                            <option value="green">Hijau (≥ 2 tahun)</option>
+                            <option value="yellow">Kuning (&lt; 2 tahun)</option>
+                            <option value="red">Merah (&lt; 3 bulan / habis)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Nama Unit Penangkar</th>
+                            <th>Jenis Komoditas</th>
+                            <th>Provinsi</th>
+                            <th>Tanggal Terbit</th>
+                            <th>Tanggal Berakhir</th>
+                            <th>Sisa Waktu</th>
+                            <th>Status Izin</th>
+                        </tr>
+                        </thead>
+                        <tbody id="masa-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- QNA -->
         <section id="section-qna" class="page-section">
             <div class="placeholder-box">
                 <strong>QnA</strong>
@@ -607,26 +679,26 @@
             </div>
         </section>
 
-        <!-- SECTION: EXPORT DATA -->
+        <!-- EXPORT -->
         <section id="section-export" class="page-section">
             <div class="placeholder-box">
                 <strong>Export Data</strong>
                 <p style="margin-bottom:8px;">
                     Unduh file Excel sumber data nasional (semua sheet) untuk analisis lebih lanjut.
                 </p>
-                <p>
-                    <a href="Contoh_Format_Data_Penangkaran_dummy.xlsx">
-                        Download Contoh_Format_Data_Penangkaran_dummy.xlsx
-                    </a>
-                </p>
-                <p style="font-size:0.85rem;color:#6b7280;margin-top:8px;">
-                    Letakkan file Excel tersebut di root repo (sejajar dengan <code>index.html</code>)
-                    dengan nama yang sama persis.
-                </p>
+            <p>
+                <a href="Contoh_Format_Data_Penangkaran_dummy.xlsx">
+                    Download Contoh_Format_Data_Penangkaran_dummy.xlsx
+                </a>
+            </p>
+            <p style="font-size:0.85rem;color:#6b7280;margin-top:8px;">
+                Letakkan file Excel tersebut di root repo (sejajar dengan <code>index.html</code>)
+                dengan nama yang sama persis.
+            </p>
             </div>
         </section>
 
-        <!-- SECTION: DATA PERUSAHAAN -->
+        <!-- DATA PERUSAHAAN -->
         <section id="section-perusahaan" class="page-section">
             <div class="table-card">
                 <div class="table-card-header">
@@ -647,10 +719,10 @@
                             <th>Nama Unit Penangkar</th>
                             <th>Nama Pemilik</th>
                             <th>Jenis Komoditas</th>
-                            <th>BMP</th>
                             <th>Kota/Kabupaten</th>
                             <th>Provinsi</th>
                             <th>UPT KSDA</th>
+                            <th>Tanggal Terbit</th>
                             <th>Tanggal Berakhir</th>
                             <th>Status Izin</th>
                             <th>Main Species</th>
@@ -664,13 +736,11 @@
     </main>
 </div>
 
-<!-- Chart.js untuk grafik -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- SheetJS untuk membaca Excel di browser -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <script>
-    // ---------- NAVBAR INTERAKTIF ----------
+    /* ---------------- NAVBAR ---------------- */
     const navLinks = document.querySelectorAll('.nav-link[data-target]');
     const sections = document.querySelectorAll('.page-section');
     const pageTitle = document.getElementById('page-title');
@@ -688,6 +758,10 @@
         'section-data-natalitas': {
             title: 'Data Natalitas',
             subtitle: 'Rincian dan analisis data natalitas satwa penangkaran.'
+        },
+        'section-masa-berlaku': {
+            title: 'Masa Berlaku Dokumen Penangkaran',
+            subtitle: 'Tracking masa berlaku perizinan usaha penangkaran untuk keperluan pengawasan.'
         },
         'section-qna': {
             title: 'QnA',
@@ -723,18 +797,18 @@
         });
     });
 
-    // ---------- GLOBAL DATA ----------
+    /* ---------------- DATA GLOBAL ---------------- */
     let dataSatwa = [];
     let dataNatalitas = [];
     let dataMortalitas = [];
     let dataPerusahaan = [];
+    let unitToTaksaMap = {};
 
     let natalitasChartInstance = null;
     let perusahaanBarChartInstance = null;
     let mortalitasChartInstance = null;
     let natalitasSummaryChartInstance = null;
 
-    // Elemen DOM dashboard umum
     const statTotalPerusahaan    = document.getElementById('stat-total-perusahaan');
     const statMortalitasNasional = document.getElementById('stat-mortalitas-nasional');
     const statNatalitasNasional  = document.getElementById('stat-natalitas-nasional');
@@ -748,16 +822,26 @@
 
     const chartModeSelect       = document.getElementById('chart-mode-select');
     const provinsiFilterSelect  = document.getElementById('provinsi-filter-select');
-
     const mortalitasModeSelect  = document.getElementById('mortalitas-mode-select');
     const natalitasModeSelect   = document.getElementById('natalitas-mode-select');
 
     const taksaFilterSelect     = document.getElementById('taksa-filter-select');
     const badgeIzinWarning      = document.getElementById('badge-izin-warning');
 
-    let currentTaksaFilter = '';
+    const satwaTaksaSelect      = document.getElementById('satwa-taksa-select');
+    const dataSatwaBody         = document.getElementById('data-satwa-body');
 
-    // ---------- UTILITAS ----------
+    const masaBody              = document.getElementById('masa-body');
+    const masaFilterSelect      = document.getElementById('masa-filter-select');
+    const masaCountGreen        = document.getElementById('masa-count-green');
+    const masaCountYellow       = document.getElementById('masa-count-yellow');
+    const masaCountRed          = document.getElementById('masa-count-red');
+
+    let currentTaksaFilter = '';
+    let currentSatwaTaksaFilter = '';
+    let currentMasaFilter = '';
+
+    /* ---------------- UTILITAS ---------------- */
     function toDate(value) {
         if (!value) return null;
         if (value instanceof Date) return value;
@@ -771,12 +855,9 @@
         return XLSX.utils.sheet_to_json(sheet, { defval: null });
     }
 
-    // normalisasi nama (untuk menggabungkan variasi penulisan)
     function normalizeName(value) {
         const s = (value || '').toString().trim().toLowerCase();
-        return s
-            .replace(/\./g, '')      // hilangkan titik
-            .replace(/\s+/g, ' ');   // rapikan spasi ganda
+        return s.replace(/\./g, '').replace(/\s+/g, ' ');
     }
 
     function getYears() {
@@ -792,6 +873,7 @@
         return Array.from(s).sort();
     }
 
+    /* ---- Perhitungan dashboard umum ---- */
     function computeDashboard(selectedYear) {
         const totalPerusahaan = dataPerusahaan.length;
 
@@ -802,7 +884,6 @@
         });
 
         const totalMortalitas = dataMortalitas.length;
-
         const years = getYears();
         if (!years.length) {
             return {
@@ -835,7 +916,7 @@
 
         const indivCounts = {};
         dataSatwa.forEach(r => {
-            const jenis = r['Jenis_Individu'] || 'Tidak Diketahui';
+            const jenis = r['Jenis_Individu'] || r['Jenis Individu'] || 'Tidak Diketahui';
             indivCounts[jenis] = (indivCounts[jenis] || 0) + 1;
         });
 
@@ -888,14 +969,12 @@
         };
     }
 
-    // ---------- DASHBOARD NATALITAS (DATA SATWA) ----------
+    /* ---- Grafik natalitas nasional ---- */
     function buildNatalitasChart(monthlyData) {
         const ctx = document.getElementById('natalitas-chart').getContext('2d');
         const labels = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
 
-        if (natalitasChartInstance) {
-            natalitasChartInstance.destroy();
-        }
+        if (natalitasChartInstance) natalitasChartInstance.destroy();
 
         natalitasChartInstance = new Chart(ctx, {
             type: 'line',
@@ -953,7 +1032,7 @@
         buildDataJenisTable(d.jenisStats, d.selectedYear);
     }
 
-    // ---------- DISTRIBUSI PERUSAHAAN (JENIS KOMODITAS / PROVINSI) ----------
+    /* ---- Distribusi penangkaran (komoditas/provinsi) ---- */
     function getUniqueProvinces() {
         const s = new Set();
         dataPerusahaan.forEach(r => {
@@ -966,12 +1045,10 @@
     function populateProvinsiFilter() {
         const provs = getUniqueProvinces();
         provinsiFilterSelect.innerHTML = '';
-
         const optAll = document.createElement('option');
         optAll.value = '';
         optAll.textContent = 'Semua Provinsi';
         provinsiFilterSelect.appendChild(optAll);
-
         provs.forEach(p => {
             const opt = document.createElement('option');
             opt.value = p;
@@ -980,7 +1057,6 @@
         });
     }
 
-    // Hitung jumlah penangkar per jenis komoditas (presence per Nama Unit Penangkar)
     function computeCountsPerCommodity(provFilter) {
         const counts = {};
         const seen = new Set();
@@ -1012,7 +1088,6 @@
         return { labels, values };
     }
 
-    // Hitung jumlah penangkar per provinsi (presence per Nama Unit Penangkar)
     function computeCountsPerProvince() {
         const counts = {};
         const seen = new Set();
@@ -1025,7 +1100,6 @@
 
             const unitKey = normalizeName(unitRaw);
             const provKey = normalizeName(provRaw) || 'tidak diketahui';
-
             const key = unitKey + '|' + provKey;
 
             if (seen.has(key)) return;
@@ -1042,7 +1116,6 @@
 
     function buildPerusahaanBarChart(mode, provFilter) {
         const ctx = document.getElementById('perusahaan-bar-chart').getContext('2d');
-
         let chartData;
         let titleLabel;
 
@@ -1056,9 +1129,7 @@
                 : 'Jumlah penangkaran per jenis komoditas (nasional, unik per Nama Unit Penangkar)';
         }
 
-        if (perusahaanBarChartInstance) {
-            perusahaanBarChartInstance.destroy();
-        }
+        if (perusahaanBarChartInstance) perusahaanBarChartInstance.destroy();
 
         perusahaanBarChartInstance = new Chart(ctx, {
             type: 'bar',
@@ -1071,16 +1142,10 @@
             },
             options: {
                 indexAxis: 'x',
-                plugins: {
-                    legend: { display: false }
-                },
+                plugins: { legend: { display: false } },
                 scales: {
-                    x: {
-                        ticks: { autoSkip: false, maxRotation: 60, minRotation: 0 }
-                    },
-                    y: {
-                        beginAtZero: true
-                    }
+                    x: { ticks: { autoSkip: false, maxRotation: 60, minRotation: 0 } },
+                    y: { beginAtZero: true }
                 }
             }
         });
@@ -1089,15 +1154,11 @@
     function refreshPerusahaanBarChart() {
         const mode = chartModeSelect.value;
         const provFilter = provinsiFilterSelect.value;
-
-        if (mode === 'province') {
-            buildPerusahaanBarChart('province', '');
-        } else {
-            buildPerusahaanBarChart('commodity', provFilter);
-        }
+        if (mode === 'province') buildPerusahaanBarChart('province', '');
+        else buildPerusahaanBarChart('commodity', provFilter);
     }
 
-    // ---------- UTIL UNTUK RINGKASAN (MORTALITAS & NATALITAS) ----------
+    /* ---- Util ringkasan mortalitas & natalitas ---- */
     function computeCountsByField(dataArr, fieldName) {
         const counts = {};
         dataArr.forEach(r => {
@@ -1111,12 +1172,10 @@
         return { labels, values };
     }
 
-    // ---------- GRAFIK DATA MORTALITAS ----------
     function buildMortalitasChart(mode) {
-        if (!document.getElementById('mortalitas-chart')) return;
         const ctx = document.getElementById('mortalitas-chart').getContext('2d');
-
         let dataField, titleLabel;
+
         if (mode === 'status') {
             dataField = 'Status_Verifikasi_UPT';
             titleLabel = 'Jumlah mortalitas per status verifikasi';
@@ -1127,9 +1186,7 @@
 
         const chartData = computeCountsByField(dataMortalitas, dataField);
 
-        if (mortalitasChartInstance) {
-            mortalitasChartInstance.destroy();
-        }
+        if (mortalitasChartInstance) mortalitasChartInstance.destroy();
 
         mortalitasChartInstance = new Chart(ctx, {
             type: 'bar',
@@ -1150,12 +1207,10 @@
         });
     }
 
-    // ---------- GRAFIK DATA NATALITAS ----------
     function buildNatalitasSummaryChart(mode) {
-        if (!document.getElementById('natalitas-summary-chart')) return;
         const ctx = document.getElementById('natalitas-summary-chart').getContext('2d');
-
         let dataField, titleLabel;
+
         if (mode === 'status') {
             dataField = 'Status_Kelahiran';
             titleLabel = 'Jumlah kelahiran per status kelahiran';
@@ -1166,9 +1221,7 @@
 
         const chartData = computeCountsByField(dataNatalitas, dataField);
 
-        if (natalitasSummaryChartInstance) {
-            natalitasSummaryChartInstance.destroy();
-        }
+        if (natalitasSummaryChartInstance) natalitasSummaryChartInstance.destroy();
 
         natalitasSummaryChartInstance = new Chart(ctx, {
             type: 'bar',
@@ -1189,7 +1242,18 @@
         });
     }
 
-    // ---------- TAKSA FILTER & BMP / STATUS IZIN ----------
+    /* ---- Taksa dari Data_Perusahaan ---- */
+    function buildUnitToTaksaMap() {
+        unitToTaksaMap = {};
+        dataPerusahaan.forEach(r => {
+            const unit = (r['Nama Unit Penangkar'] || '').toString();
+            const taksa = (r['Jenis Komoditas'] || '').toString().trim();
+            if (!unit) return;
+            const key = normalizeName(unit);
+            if (!unitToTaksaMap[key]) unitToTaksaMap[key] = taksa;
+        });
+    }
+
     function getUniqueTaksa() {
         const s = new Set();
         dataPerusahaan.forEach(r => {
@@ -1202,44 +1266,70 @@
     function populateTaksaFilter() {
         const taksa = getUniqueTaksa();
         taksaFilterSelect.innerHTML = '';
-
         const optAll = document.createElement('option');
         optAll.value = '';
         optAll.textContent = 'Semua Taksa';
         taksaFilterSelect.appendChild(optAll);
-
         taksa.forEach(t => {
             const opt = document.createElement('option');
             opt.value = t;
             opt.textContent = t;
             taksaFilterSelect.appendChild(opt);
         });
+
+        // untuk Data Satwa per Taksa
+        satwaTaksaSelect.innerHTML = '';
+        const optAll2 = document.createElement('option');
+        optAll2.value = '';
+        optAll2.textContent = 'Semua Taksa';
+        satwaTaksaSelect.appendChild(optAll2);
+        taksa.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t;
+            opt.textContent = t;
+            satwaTaksaSelect.appendChild(opt);
+        });
     }
 
-    function getBMPValue(row) {
-        return row['BMP'] || row['BMP_TSL'] || row['BMP (individu)'] || '';
-    }
-
+    /* ---- Status izin / masa berlaku ---- */
     function getPermitStatus(expiryRaw) {
         const d = toDate(expiryRaw);
-        if (!d) return { label: 'Tidak ada data', type: 'none' };
+        if (!d) return { label: 'Tidak ada data', type: 'none', diffDays: Infinity };
 
         const today = new Date();
         today.setHours(0,0,0,0);
-
-        const diffMs   = d - today;
-        const diffDays = diffMs / (1000 * 60 * 60 * 24);
+        const diffDays = Math.round((d - today) / (1000 * 60 * 60 * 24));
 
         if (diffDays < 0) {
-            return { label: 'Sudah berakhir', type: 'critical' };
+            return { label: 'Sudah berakhir', type: 'red', diffDays };
         }
-        if (diffDays <= 180) { // < 6 bulan
-            return { label: 'Akan berakhir (<6 bulan)', type: 'warning' };
+        if (diffDays <= 90) {
+            return { label: 'Kurang dari 3 bulan', type: 'red', diffDays };
         }
-        return { label: 'Aktif', type: 'ok' };
+        if (diffDays <= 730) {
+            return { label: 'Kurang dari 2 tahun', type: 'yellow', diffDays };
+        }
+        if (diffDays <= 1825) {
+            return { label: '2–5 tahun', type: 'green', diffDays };
+        }
+        return { label: '>5 tahun', type: 'green', diffDays };
     }
 
-    // ---------- RENDER TABEL-TABEL ----------
+    function formatRemaining(diffDays) {
+        if (!isFinite(diffDays)) return '-';
+        if (diffDays < 0) return `${Math.abs(diffDays)} hari lalu`;
+        const years = Math.floor(diffDays / 365);
+        const remDays = diffDays % 365;
+        const months = Math.floor(remDays / 30);
+        const days = remDays % 30;
+        const parts = [];
+        if (years) parts.push(`${years} thn`);
+        if (months) parts.push(`${months} bln`);
+        if (!years && !months) parts.push(`${days} hari`);
+        return parts.join(' ');
+    }
+
+    /* ---- Render tabel ---- */
     function renderNatalitasTable() {
         natalitasBody.innerHTML = '';
         dataNatalitas.forEach(r => {
@@ -1286,28 +1376,20 @@
             const taksa = (r['Jenis Komoditas'] || '').toString().trim();
             if (currentTaksaFilter && taksa !== currentTaksaFilter) return;
 
-            const kegiatan = (r['Jenis Kegiatan Pemanfaatan (Komersial / Non-Komersial)'] || '').toString();
-            let bmp = '';
-            if (/komersial/i.test(kegiatan)) {
-                bmp = getBMPValue(r) || '-';
-            } else {
-                bmp = '-';
-            }
-
+            const tTerbit   = toDate(r['Tanggal Terbit']);
             const tBerakhir = r['Tanggal Berakhir'];
+
             const izinStatus = getPermitStatus(tBerakhir);
-
             let statusClass = 'badge';
-            if (izinStatus.type === 'critical') statusClass = 'badge-critical';
-            else if (izinStatus.type === 'warning') statusClass = 'badge-warning';
-            else if (izinStatus.type === 'ok') statusClass = 'badge-ok';
+            if (izinStatus.type === 'green') statusClass = 'badge-ok';
+            else if (izinStatus.type === 'yellow') statusClass = 'badge-warning';
+            else if (izinStatus.type === 'red') statusClass = 'badge-critical';
 
-            if (izinStatus.type === 'critical' || izinStatus.type === 'warning') {
-                warningCount++;
-            }
+            if (izinStatus.type === 'yellow' || izinStatus.type === 'red') warningCount++;
 
-            const d = toDate(tBerakhir);
-            const tanggalBerakhir = d ? d.toISOString().slice(0,10) : '';
+            const tanggalTerbit = tTerbit ? tTerbit.toISOString().slice(0,10) : '';
+            const dExp = toDate(tBerakhir);
+            const tanggalBerakhir = dExp ? dExp.toISOString().slice(0,10) : '';
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
@@ -1316,10 +1398,10 @@
                 <td>${r['Nama Unit Penangkar'] || ''}</td>
                 <td>${r['Nama Pemilik'] || ''}</td>
                 <td>${taksa || ''}</td>
-                <td>${bmp}</td>
                 <td>${r['Kota / Kabupaten'] || ''}</td>
                 <td>${r['Provinsi'] || ''}</td>
                 <td>${r['UPT KSDA'] || ''}</td>
+                <td>${tanggalTerbit}</td>
                 <td>${tanggalBerakhir}</td>
                 <td><span class="${statusClass}">${izinStatus.label}</span></td>
                 <td>${r['Main_Species'] || ''}</td>
@@ -1329,14 +1411,104 @@
 
         if (warningCount > 0) {
             badgeIzinWarning.textContent =
-                'Izin kritis/akan habis: ' + warningCount.toLocaleString('id-ID') + ' unit';
+                'Izin kuning/merah: ' + warningCount.toLocaleString('id-ID') + ' unit';
         } else {
-            badgeIzinWarning.textContent =
-                'Tidak ada izin yang akan habis dalam 6 bulan';
+            badgeIzinWarning.textContent = 'Semua izin ≥ 2 tahun dari hari ini';
         }
     }
 
-    // ---------- LOAD EXCEL SAAT PAGE DIBUKA ----------
+    /* ---- Data Satwa per Taksa ---- */
+    function renderSatwaTable() {
+        dataSatwaBody.innerHTML = '';
+        dataSatwa.forEach(r => {
+            const unit = (r['Nama Unit Penangkar'] || r['Nama Unit Penangkaran'] || '').toString();
+            const unitKey = normalizeName(unit);
+            const taksa = unitToTaksaMap[unitKey] || '';
+
+            if (currentSatwaTaksaFilter && taksa !== currentSatwaTaksaFilter) return;
+
+            const idInd = r['ID_Individu'] || r['ID Individu'] || '';
+            const nmInd = r['Nama_Individu'] || r['Nama Individu'] || '';
+            const jenis = r['Jenis_Individu'] || r['Jenis Individu'] || '';
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${idInd}</td>
+                <td>${nmInd}</td>
+                <td>${jenis}</td>
+                <td>${unit}</td>
+                <td>${taksa}</td>
+            `;
+            dataSatwaBody.appendChild(tr);
+        });
+    }
+
+    /* ---- Masa Berlaku Dokumen ---- */
+    function renderMasaTable() {
+        masaBody.innerHTML = '';
+
+        let countGreen = 0, countYellow = 0, countRed = 0;
+        const rows = [];
+
+        dataPerusahaan.forEach(r => {
+            const tTerbit   = toDate(r['Tanggal Terbit']);
+            const tBerakhir = r['Tanggal Berakhir'];
+            const status    = getPermitStatus(tBerakhir);
+
+            if (currentMasaFilter && status.type !== currentMasaFilter) return;
+            if (status.type === 'green') countGreen++;
+            else if (status.type === 'yellow') countYellow++;
+            else if (status.type === 'red') countRed++;
+
+            const dExp = toDate(tBerakhir);
+            const diffDays = status.diffDays;
+            rows.push({
+                row: r,
+                tTerbit,
+                tBerakhir: dExp,
+                status,
+                diffDays
+            });
+        });
+
+        // sort berdasarkan sisa waktu (paling sedikit dulu)
+        rows.sort((a, b) => a.diffDays - b.diffDays);
+
+        rows.forEach(item => {
+            const r = item.row;
+            const tTerbit = item.tTerbit;
+            const tExp    = item.tBerakhir;
+            const status  = item.status;
+
+            let statusClass = 'badge';
+            if (status.type === 'green') statusClass = 'badge-ok';
+            else if (status.type === 'yellow') statusClass = 'badge-warning';
+            else if (status.type === 'red') statusClass = 'badge-critical';
+
+            const tanggalTerbit   = tTerbit ? tTerbit.toISOString().slice(0,10) : '';
+            const tanggalBerakhir = tExp ? tExp.toISOString().slice(0,10) : '';
+            const sisa            = formatRemaining(status.diffDays);
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${r['No.'] || ''}</td>
+                <td>${r['Nama Unit Penangkar'] || ''}</td>
+                <td>${r['Jenis Komoditas'] || ''}</td>
+                <td>${r['Provinsi'] || ''}</td>
+                <td>${tanggalTerbit}</td>
+                <td>${tanggalBerakhir}</td>
+                <td>${sisa}</td>
+                <td><span class="${statusClass}">${status.label}</span></td>
+            `;
+            masaBody.appendChild(tr);
+        });
+
+        masaCountGreen.textContent  = countGreen.toLocaleString('id-ID');
+        masaCountYellow.textContent = countYellow.toLocaleString('id-ID');
+        masaCountRed.textContent    = countRed.toLocaleString('id-ID');
+    }
+
+    /* ---- Load Excel ---- */
     async function loadWorkbook() {
         try {
             const resp = await fetch('Contoh_Format_Data_Penangkaran_dummy.xlsx');
@@ -1353,38 +1525,36 @@
             dataMortalitas = sheetToJson(workbook, 'Data_Mortalitas');
             dataPerusahaan = sheetToJson(workbook, 'Data_Perusahaan');
 
-            // Dashboard utama
+            buildUnitToTaksaMap();
+
             renderDashboard();
-            // Tabel-tabel
             renderNatalitasTable();
             renderMortalitasTable();
-            // Filter taksa & tabel perusahaan
+
             populateTaksaFilter();
             renderPerusahaanTable();
-            // Dropdown provinsi & grafik distribusi penangkaran
+            renderSatwaTable();
+
             populateProvinsiFilter();
             refreshPerusahaanBarChart();
-            // Grafik ringkasan mortalitas & natalitas
+
             buildMortalitasChart('jenis');
             buildNatalitasSummaryChart('jenis');
+
+            renderMasaTable();
         } catch (err) {
             console.error('Error saat membaca Excel:', err);
         }
     }
 
-    // ---------- EVENT LISTENERS ----------
+    /* ---- Event listeners ---- */
     yearSelect.addEventListener('change', () => {
         const y = Number(yearSelect.value);
         if (!isNaN(y)) renderDashboard(y);
     });
 
-    chartModeSelect.addEventListener('change', () => {
-        refreshPerusahaanBarChart();
-    });
-
-    provinsiFilterSelect.addEventListener('change', () => {
-        refreshPerusahaanBarChart();
-    });
+    chartModeSelect.addEventListener('change', refreshPerusahaanBarChart);
+    provinsiFilterSelect.addEventListener('change', refreshPerusahaanBarChart);
 
     mortalitasModeSelect.addEventListener('change', () => {
         buildMortalitasChart(mortalitasModeSelect.value);
@@ -1397,6 +1567,16 @@
     taksaFilterSelect.addEventListener('change', () => {
         currentTaksaFilter = taksaFilterSelect.value;
         renderPerusahaanTable();
+    });
+
+    satwaTaksaSelect.addEventListener('change', () => {
+        currentSatwaTaksaFilter = satwaTaksaSelect.value;
+        renderSatwaTable();
+    });
+
+    masaFilterSelect.addEventListener('change', () => {
+        currentMasaFilter = masaFilterSelect.value;
+        renderMasaTable();
     });
 
     loadWorkbook();
