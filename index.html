@@ -182,13 +182,24 @@
       color: #9ca3af;
     }
 
-    .chart-card, .table-card, .wizard-card {
-      background: #ffffff;
-      border-radius: 16px;
-      border: 1px solid #e5e7eb;
-      padding: 18px 20px;
-      margin-bottom: 24px;
-    }
+    /* CARD UNTUK GRAFIK – DIBUAT LEBIH SEMPIT & DITENGAHKAN */
+.chart-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  padding: 18px 20px;
+  margin: 0 auto 24px;      /* auto = center */
+  max-width: 1000px;        /* atur lebar maksimum grafik di sini */
+}
+
+/* CARD LAIN (TABEL, WIZARD) TETAP FULL WIDTH */
+.table-card, .wizard-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+}
 
     .chart-header, .table-card-header, .wizard-header {
       display: flex;
