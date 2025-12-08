@@ -1,1585 +1,1637 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>Dashboard Data Penangkaran</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>Dashboard Data Penangkaran</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-                         Roboto, Helvetica, Arial, sans-serif;
-            background: #f3f4f6;
-            color: #111827;
-        }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   Roboto, Helvetica, Arial, sans-serif;
+      background: #f3f4f6;
+      color: #111827;
+    }
 
-        .app {
-            display: flex;
-            min-height: 100vh;
-        }
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
 
-        /* SIDEBAR */
-        .sidebar {
-            width: 260px;
-            background: #ffffff;
-            border-right: 1px solid #e5e7eb;
-            display: flex;
-            flex-direction: column;
-            padding: 20px 18px;
-        }
+    /* SIDEBAR */
+    .sidebar {
+      width: 260px;
+      background: #ffffff;
+      border-right: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 18px;
+    }
 
-        .sidebar-header {
-            font-weight: 800;
-            font-size: 1.1rem;
-            letter-spacing: 0.05em;
-            color: #111827;
-            margin-bottom: 28px;
-        }
+    .sidebar-header {
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+      color: #111827;
+      margin-bottom: 24px;
+    }
 
-        .sidebar-header span {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #6b7280;
-            margin-top: 4px;
-        }
+    .sidebar-header span {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #6b7280;
+      margin-top: 4px;
+    }
 
-        .nav-section-title {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: #9ca3af;
-            margin-bottom: 8px;
-        }
+    .nav-section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin: 12px 0 6px;
+    }
 
-        .nav-list {
-            list-style: none;
-        }
+    .nav-list { list-style: none; }
 
-        .nav-item {
-            margin-bottom: 4px;
-        }
+    .nav-item { margin-bottom: 4px; }
 
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            color: #374151;
-            transition: background 0.15s ease, color 0.15s ease;
-        }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      text-decoration: none;
+      color: #374151;
+      transition: background 0.15s ease, color 0.15s ease;
+      cursor: pointer;
+    }
 
-        .nav-link-icon {
-            width: 18px;
-            height: 18px;
-            border-radius: 5px;
-            border: 1.5px solid #e5e7eb;
-        }
+    .nav-link-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      border: 1.5px solid #e5e7eb;
+    }
 
-        .nav-link.active {
-            background: #2563eb;
-            color: #ffffff;
-        }
+    .nav-link.active {
+      background: #2563eb;
+      color: #ffffff;
+    }
 
-        .nav-link.active .nav-link-icon {
-            border-color: #bfdbfe;
-            background: #1d4ed8;
-        }
+    .nav-link.active .nav-link-icon {
+      border-color: #bfdbfe;
+      background: #1d4ed8;
+    }
 
-        .nav-link:hover:not(.active) {
-            background: #f3f4ff;
-            color: #1d4ed8;
-        }
+    .nav-link:hover:not(.active) {
+      background: #f3f4ff;
+      color: #1d4ed8;
+    }
 
-        .sidebar-footer {
-            margin-top: auto;
-            padding-top: 20px;
-            border-top: 1px solid #e5e7eb;
-        }
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+    }
 
-        .sidebar-footer-title {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            color: #9ca3af;
-            margin-bottom: 8px;
-        }
+    .footer-list { list-style: none; }
 
-        .footer-list {
-            list-style: none;
-        }
+    .footer-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      text-decoration: none;
+      color: #4b5563;
+      transition: background 0.15s ease, color 0.15s ease;
+      cursor: pointer;
+    }
 
-        .footer-link {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 10px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            text-decoration: none;
-            color: #4b5563;
-            transition: background 0.15s ease, color 0.15s ease;
-        }
+    .footer-link:hover {
+      background: #f3f4ff;
+      color: #1d4ed8;
+    }
 
-        .footer-link:hover {
-            background: #f3f4ff;
-            color: #1d4ed8;
-        }
+    .footer-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1.5px solid #e5e7eb;
+    }
 
-        .footer-icon {
-            width: 18px;
-            height: 18px;
-            border-radius: 999px;
-            border: 1.5px solid #e5e7eb;
-        }
+    /* CONTENT */
+    .content {
+      flex: 1;
+      padding: 24px 28px;
+    }
 
-        /* AREA KONTEN TENGAH */
-        .content {
-            flex: 1;
-            padding: 24px 28px;
-        }
+    .content-header {
+      margin-bottom: 24px;
+    }
 
-        .content-header {
-            margin-bottom: 24px;
-        }
+    .content-header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
 
-        .content-header h1 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
+    .content-header p {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
 
-        .content-header p {
-            font-size: 0.9rem;
-            color: #6b7280;
-        }
+    .page-section { display: none; }
+    .page-section.is-active { display: block; }
 
-        .page-section {
-            display: none;
-        }
-        .page-section.is-active {
-            display: block;
-        }
+    .cards-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
 
-        .placeholder-box {
-            background: #ffffff;
-            border-radius: 16px;
-            border: 1px solid #e5e7eb;
-            padding: 24px;
-            color: #6b7280;
-            font-size: 0.95rem;
-        }
+    .stat-card {
+      flex: 1;
+      min-width: 220px;
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      padding: 16px 18px;
+    }
 
-        .cards-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
+    .stat-label {
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
 
-        .stat-card {
-            flex: 1;
-            min-width: 220px;
-            background: #ffffff;
-            border-radius: 16px;
-            border: 1px solid #e5e7eb;
-            padding: 16px 18px;
-        }
+    .stat-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
 
-        .stat-label {
-            font-size: 0.85rem;
-            color: #6b7280;
-            margin-bottom: 8px;
-        }
+    .stat-footnote {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
 
-        .stat-value {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
+    .chart-card, .table-card, .wizard-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      padding: 18px 20px;
+      margin-bottom: 24px;
+    }
 
-        .stat-footnote {
-            font-size: 0.8rem;
-            color: #9ca3af;
-        }
+    .chart-header, .table-card-header, .wizard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
 
-        .chart-card {
-            background: #ffffff;
-            border-radius: 16px;
-            border: 1px solid #e5e7eb;
-            padding: 18px 20px;
-            margin-bottom: 24px;
-        }
+    .chart-header h2,
+    .table-card-header h2,
+    .wizard-header h2 {
+      font-size: 1rem;
+    }
 
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
+    .chart-header-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
 
-        .chart-header h2 {
-            font-size: 1rem;
-        }
+    .pill-select {
+      font-size: 0.85rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+    }
 
-        .year-select,
-        .chart-mode-select,
-        .provinsi-select {
-            font-size: 0.85rem;
-            padding: 4px 8px;
-            border-radius: 999px;
-            border: 1px solid #d1d5db;
-            background: #f9fafb;
-        }
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 0.75rem;
+    }
 
-        .chart-header-controls {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+    .badge-ok {
+      background: #dcfce7;
+      color: #166534;
+    }
 
-        .table-card {
-            background: #ffffff;
-            border-radius: 16px;
-            border: 1px solid #e5e7eb;
-            padding: 18px 20px;
-            margin-bottom: 24px;
-        }
+    .badge-warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
 
-        .table-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
+    .badge-critical {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
 
-        .table-card-header h2 {
-            font-size: 1rem;
-        }
+    .table-wrapper {
+      max-height: 390px;
+      overflow: auto;
+    }
 
-        .table-wrapper {
-            max-height: 380px;
-            overflow: auto;
-        }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-        }
+    thead { background: #f3f4f6; }
 
-        thead {
-            background: #f3f4f6;
-        }
+    th, td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+    }
 
-        th, td {
-            padding: 8px 10px;
-            border-bottom: 1px solid #e5e7eb;
-            text-align: left;
-        }
+    th {
+      font-weight: 600;
+      color: #4b5563;
+    }
 
-        th {
-            font-weight: 600;
-            color: #4b5563;
-        }
+    tbody tr:nth-child(even) { background: #f9fafb; }
 
-        tbody tr:nth-child(even) {
-            background: #f9fafb;
-        }
+    .placeholder-box {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      padding: 24px;
+      color: #6b7280;
+      font-size: 0.95rem;
+    }
 
-        .badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 999px;
-            background: #eff6ff;
-            color: #1d4ed8;
-            font-size: 0.75rem;
-        }
+    /* WIZARD */
+    .wizard-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
 
-        .badge-ok {
-            background: #dcfce7;
-            color: #166534;
-        }
+    .wizard-tab {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      cursor: pointer;
+    }
 
-        .badge-warning {
-            background: #fef3c7;
-            color: #92400e;
-        }
+    .wizard-tab.active {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #2563eb;
+    }
 
-        .badge-critical {
-            background: #fee2e2;
-            color: #b91c1c;
-        }
+    .wizard-steps {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 12px;
+      font-size: 0.75rem;
+      color: #6b7280;
+    }
 
-        @media (max-width: 800px) {
-            .app {
-                flex-direction: column;
-            }
+    .wizard-step-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      margin-right: 4px;
+    }
 
-            .sidebar {
-                width: 100%;
-                flex-direction: row;
-                overflow-x: auto;
-                padding: 12px;
-            }
+    .wizard-step-dot.active {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #2563eb;
+    }
 
-            .sidebar-header {
-                margin-bottom: 0;
-                margin-right: 16px;
-                white-space: nowrap;
-            }
+    .wizard-body { margin-top: 4px; }
 
-            .nav-section-title,
-            .sidebar-footer,
-            .sidebar-footer-title {
-                display: none;
-            }
+    .wizard-step { display: none; }
+    .wizard-step.active { display: block; }
 
-            .nav-list {
-                display: flex;
-                flex-direction: row;
-                gap: 4px;
-            }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px 16px;
+      margin-bottom: 12px;
+    }
 
-            .nav-item {
-                margin-bottom: 0;
-            }
+    .form-field label {
+      display: block;
+      font-size: 0.8rem;
+      color: #374151;
+      margin-bottom: 4px;
+    }
 
-            .nav-link {
-                white-space: nowrap;
-            }
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 0.85rem;
+      background: #ffffff;
+    }
 
-            .content {
-                padding: 16px;
-            }
-        }
-    </style>
+    .wizard-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 0.85rem;
+      cursor: pointer;
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+      border-color: #d1d5db;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    .wizard-summary {
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 0.8rem;
+      margin-top: 8px;
+      max-height: 180px;
+      overflow: auto;
+    }
+
+    @media (max-width: 900px) {
+      .app { flex-direction: column; }
+
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 12px;
+      }
+
+      .sidebar-header {
+        margin-bottom: 0;
+        margin-right: 16px;
+        white-space: nowrap;
+      }
+
+      .nav-section-title,
+      .sidebar-footer { display: none; }
+
+      .nav-list {
+        display: flex;
+        flex-direction: row;
+        gap: 4px;
+      }
+
+      .nav-link { white-space: nowrap; }
+
+      .content { padding: 16px; }
+    }
+  </style>
 </head>
 <body>
 <div class="app">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <div>
-            <div class="sidebar-header">
-                DATA PENANGKARAN
-                <span>Dashboard</span>
-            </div>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-header">
+        DATA PENANGKARAN
+        <span>Dashboard 2025</span>
+      </div>
 
-            <div class="nav-section">
-                <div class="nav-section-title">Menu Utama</div>
-                <ul class="nav-list">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active" data-target="section-data-satwa">
-                            <div class="nav-link-icon"></div>
-                            <span>Data Satwa</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" data-target="section-data-mortalitas">
-                            <div class="nav-link-icon"></div>
-                            <span>Data Mortalitas</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" data-target="section-data-natalitas">
-                            <div class="nav-link-icon"></div>
-                            <span>Data Natalitas</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" data-target="section-masa-berlaku">
-                            <div class="nav-link-icon"></div>
-                            <span>Masa Berlaku Dokumen</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" data-target="section-qna">
-                            <div class="nav-link-icon"></div>
-                            <span>QnA</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" data-target="section-export">
-                            <div class="nav-link-icon"></div>
-                            <span>Export Data</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" data-target="section-perusahaan">
-                            <div class="nav-link-icon"></div>
-                            <span>Data Perusahaan</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+      <div class="nav-section-title">Data Penangkaran</div>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a class="nav-link active" data-target="section-data-satwa">
+            <div class="nav-link-icon"></div><span>Data Satwa</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-target="section-data-natalitas">
+            <div class="nav-link-icon"></div><span>Data Natalitas</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-target="section-data-mortalitas">
+            <div class="nav-link-icon"></div><span>Data Mortalitas</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="nav-section-title">Data Penangkar</div>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a class="nav-link" data-target="section-data-perusahaan">
+            <div class="nav-link-icon"></div><span>Data Perusahaan</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-target="section-masa-berlaku">
+            <div class="nav-link-icon"></div><span>Masa Berlaku Dokumen</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-target="section-pengisian">
+            <div class="nav-link-icon"></div><span>Pengisian Data</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-footer">
+      <ul class="footer-list">
+        <li>
+          <a class="footer-link" href="Data Penangkaran_2025.xlsx" download>
+            <div class="footer-icon"></div><span>Export Data</span>
+          </a>
+        </li>
+        <li>
+          <a class="footer-link">
+            <div class="footer-icon"></div><span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+    <div class="content-header">
+      <h1 id="page-title">Data Satwa</h1>
+      <p id="page-subtitle">
+        Ringkasan distribusi penangkaran dan daftar satwa per jenis komoditas.
+      </p>
+    </div>
+
+    <!-- DATA SATWA -->
+    <section id="section-data-satwa" class="page-section is-active">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h2>Distribusi Penangkaran per Jenis Komoditas</h2>
+          <div class="chart-header-controls">
+            <select id="satwa-provinsi-filter" class="pill-select">
+              <option value="">Semua Provinsi</option>
+            </select>
+            <select id="satwa-spesies-filter" class="pill-select">
+              <option value="">Semua Jenis Spesies</option>
+            </select>
+          </div>
+        </div>
+        <canvas id="satwa-distribusi-chart" height="130"></canvas>
+      </div>
+
+      <div class="table-card">
+        <div class="table-card-header">
+          <h2>Daftar Satwa per Jenis Komoditas</h2>
+          <span class="badge" id="satwa-count-badge">- individu</span>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+            <tr>
+              <th>ID Individu</th>
+              <th>Nama Individu</th>
+              <th>Jenis Individu</th>
+              <th>Nama Unit Penangkar</th>
+              <th>Jenis Komoditas</th>
+              <th>Provinsi</th>
+            </tr>
+            </thead>
+            <tbody id="satwa-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- DATA NATALITAS -->
+    <section id="section-data-natalitas" class="page-section">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h2>Ringkasan Natalitas per Jenis Induk</h2>
+          <div class="chart-header-controls">
+            <select id="natalitas-status-filter" class="pill-select">
+              <option value="">Semua Status Verifikasi</option>
+            </select>
+          </div>
+        </div>
+        <canvas id="natalitas-chart" height="130"></canvas>
+      </div>
+
+      <div class="table-card">
+        <div class="table-card-header">
+          <h2>Data Natalitas Lengkap</h2>
+          <span class="badge" id="natalitas-count-badge">- catatan</span>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+            <tr>
+              <th>ID Kelahiran</th>
+              <th>ID Induk</th>
+              <th>Jenis Induk</th>
+              <th>Jumlah Anakan</th>
+              <th>Status Verifikasi</th>
+              <th>Tanggal Kelahiran</th>
+              <th>Jam Kelahiran</th>
+            </tr>
+            </thead>
+            <tbody id="natalitas-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- DATA MORTALITAS -->
+    <section id="section-data-mortalitas" class="page-section">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h2>Ringkasan Mortalitas per Jenis Individu</h2>
+          <div class="chart-header-controls">
+            <select id="mortalitas-status-filter" class="pill-select">
+              <option value="">Semua Status Verifikasi</option>
+            </select>
+          </div>
+        </div>
+        <canvas id="mortalitas-chart" height="130"></canvas>
+      </div>
+
+      <div class="table-card">
+        <div class="table-card-header">
+          <h2>Data Mortalitas Lengkap</h2>
+          <span class="badge" id="mortalitas-count-badge">- catatan</span>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+            <tr>
+              <th>ID Kematian</th>
+              <th>ID Individu</th>
+              <th>Jenis Individu</th>
+              <th>Status Verifikasi</th>
+              <th>Tanggal Kematian</th>
+              <th>Jam Kematian</th>
+            </tr>
+            </thead>
+            <tbody id="mortalitas-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- DATA PERUSAHAAN -->
+    <section id="section-data-perusahaan" class="page-section">
+      <div class="table-card">
+        <div class="table-card-header">
+          <h2>Data Perusahaan / Unit Penangkar</h2>
+          <div class="chart-header-controls">
+            <select id="perusahaan-komoditas-filter" class="pill-select">
+              <option value="">Semua Komoditas</option>
+            </select>
+            <select id="perusahaan-provinsi-filter" class="pill-select">
+              <option value="">Semua Provinsi</option>
+            </select>
+            <select id="perusahaan-status-filter" class="pill-select">
+              <option value="">Semua Status Izin</option>
+              <option value="green">Hijau (≥ 2 tahun)</option>
+              <option value="yellow">Kuning (&lt; 2 tahun)</option>
+              <option value="red">Merah (&lt; 3 bulan / habis)</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+            <tr>
+              <th>No.</th>
+              <th>Nomor Sertifikat Standar</th>
+              <th>Nama Unit Penangkar</th>
+              <th>Nama Pemilik</th>
+              <th>Jenis Komoditas</th>
+              <th>Jenis Spesies</th>
+              <th>Kota/Kabupaten</th>
+              <th>Provinsi</th>
+              <th>Jenis Kegiatan</th>
+              <th>Tanggal Terbit</th>
+              <th>Tanggal Berakhir</th>
+              <th>Status Izin</th>
+            </tr>
+            </thead>
+            <tbody id="perusahaan-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- MASA BERLAKU -->
+    <section id="section-masa-berlaku" class="page-section">
+      <div class="cards-row">
+        <div class="stat-card">
+          <div class="stat-label">Hijau (5–2 tahun)</div>
+          <div class="stat-value" id="masa-green-count">-</div>
+          <div class="stat-footnote">Masa berlaku panjang</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Kuning (&lt; 2 tahun)</div>
+          <div class="stat-value" id="masa-yellow-count">-</div>
+          <div class="stat-footnote">Perlu monitoring</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Merah (&lt; 3 bulan / habis)</div>
+          <div class="stat-value" id="masa-red-count">-</div>
+          <div class="stat-footnote">Perlu tindakan segera</div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-card-header">
+          <h2>Masa Berlaku Dokumen Penangkaran</h2>
+          <div class="chart-header-controls">
+            <select id="masa-status-filter" class="pill-select">
+              <option value="">Semua Status</option>
+              <option value="green">Hijau</option>
+              <option value="yellow">Kuning</option>
+              <option value="red">Merah</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+            <tr>
+              <th>No.</th>
+              <th>Nomor Sertifikat Standar</th>
+              <th>Nama Unit Penangkar</th>
+              <th>Jenis Komoditas</th>
+              <th>Provinsi</th>
+              <th>Tanggal Terbit</th>
+              <th>Tanggal Berakhir</th>
+              <th>Sisa Waktu</th>
+              <th>Status</th>
+            </tr>
+            </thead>
+            <tbody id="masa-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- PENGISIAN DATA (WIZARD) -->
+    <section id="section-pengisian" class="page-section">
+      <div class="wizard-card">
+        <div class="wizard-header">
+          <h2>Pengisian Data Penangkar</h2>
+          <span class="badge">Contoh alur input (mockup, belum tersambung database)</span>
         </div>
 
-        <div class="sidebar-footer">
-            <div class="sidebar-footer-title">Pengaturan</div>
-            <ul class="footer-list">
-                <li>
-                    <a href="#" class="footer-link">
-                        <div class="footer-icon"></div>
-                        <span>Pengaturan</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="footer-link">
-                        <div class="footer-icon"></div>
-                        <span>Logout</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </aside>
-
-    <!-- KONTEN -->
-    <main class="content">
-        <div class="content-header">
-            <h1 id="page-title">Data Satwa</h1>
-            <p id="page-subtitle">
-                Dashboard ringkasan nasional data penangkaran satwa (natalitas, mortalitas, dan data jenis).
-            </p>
+        <div class="wizard-tabs">
+          <button class="wizard-tab active" data-wizard="perusahaan">Data Lengkap Perusahaan</button>
+          <button class="wizard-tab" data-wizard="natalitas">Data Natalitas</button>
+          <button class="wizard-tab" data-wizard="mortalitas">Data Mortalitas</button>
         </div>
 
-        <!-- DATA SATWA -->
-        <section id="section-data-satwa" class="page-section is-active">
-            <div class="cards-row">
-                <div class="stat-card">
-                    <div class="stat-label">Total Perusahaan</div>
-                    <div class="stat-value" id="stat-total-perusahaan">-</div>
-                    <div class="stat-footnote">Perusahaan penangkar dalam data</div>
+        <!-- WIZARD PERUSAHAAN -->
+        <div class="wizard" id="wizard-perusahaan">
+          <div class="wizard-steps">
+            <div class="wizard-step-dot active" data-step-dot="perusahaan-0">1</div>
+            <div class="wizard-step-dot" data-step-dot="perusahaan-1">2</div>
+          </div>
+          <div class="wizard-body">
+            <div class="wizard-step active" data-step="perusahaan-0">
+              <div class="form-grid">
+                <div class="form-field">
+                  <label>Nama Perusahaan Penangkar</label>
+                  <input id="perusahaan-nama" type="text">
                 </div>
-                <div class="stat-card">
-                    <div class="stat-label">Mortalitas Nasional</div>
-                    <div class="stat-value" id="stat-mortalitas-nasional">-</div>
-                    <div class="stat-footnote">Individu (seluruh tahun)</div>
+                <div class="form-field">
+                  <label>Nama Pemilik Perusahaan</label>
+                  <input id="perusahaan-pemilik" type="text">
                 </div>
-                <div class="stat-card">
-                    <div class="stat-label">Natalitas Nasional</div>
-                    <div class="stat-value" id="stat-natalitas-nasional">-</div>
-                    <div class="stat-footnote">Individu (seluruh tahun)</div>
+                <div class="form-field">
+                  <label>Nomor Sertifikat Standar</label>
+                  <input id="perusahaan-nomor-sertifikat" type="text">
                 </div>
+                <div class="form-field">
+                  <label>Jenis Komoditas</label>
+                  <input id="perusahaan-komoditas" type="text" placeholder="Aves, Reptil, dsb.">
+                </div>
+                <div class="form-field">
+                  <label>Jenis Spesies</label>
+                  <input id="perusahaan-spesies" type="text" placeholder="Burung/Aves, Reptil, dsb.">
+                </div>
+                <div class="form-field">
+                  <label>Status Satwa</label>
+                  <input id="perusahaan-status-satwa" type="text" placeholder="Dilindungi / Tidak Dilindungi">
+                </div>
+              </div>
             </div>
 
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h2>Natalitas Nasional</h2>
-                    <select id="year-select" class="year-select"></select>
+            <div class="wizard-step" data-step="perusahaan-1">
+              <div class="form-grid">
+                <div class="form-field">
+                  <label>Jenis Kegiatan / Pemanfaatan</label>
+                  <select id="perusahaan-jenis-kegiatan">
+                    <option value="Komersial">Komersial</option>
+                    <option value="Non-Komersial">Non-Komersial</option>
+                  </select>
                 </div>
-                <canvas id="natalitas-chart" height="120"></canvas>
+                <div class="form-field">
+                  <label>Kota / Kabupaten</label>
+                  <input id="perusahaan-kota" type="text">
+                </div>
+                <div class="form-field">
+                  <label>Provinsi</label>
+                  <input id="perusahaan-prov" type="text">
+                </div>
+                <div class="form-field">
+                  <label>Nilai Investasi Real (Rp)</label>
+                  <input id="perusahaan-investasi" type="number" min="0">
+                </div>
+              </div>
+              <div class="wizard-summary" id="perusahaan-summary"></div>
             </div>
+          </div>
+          <div class="wizard-footer">
+            <button class="btn-secondary btn" id="perusahaan-prev" disabled>Sebelumnya</button>
+            <button class="btn" id="perusahaan-next">Berikutnya</button>
+          </div>
+        </div>
 
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h2>Distribusi Penangkaran</h2>
-                    <div class="chart-header-controls">
-                        <select id="chart-mode-select" class="chart-mode-select">
-                            <option value="commodity">Per Jenis Komoditas (nasional)</option>
-                            <option value="province">Per Provinsi (nasional)</option>
-                        </select>
-                        <select id="provinsi-filter-select" class="provinsi-select"></select>
-                    </div>
+        <!-- WIZARD NATALITAS -->
+        <div class="wizard" id="wizard-natalitas" style="display:none;">
+          <div class="wizard-steps">
+            <div class="wizard-step-dot active" data-step-dot="natalitas-0">1</div>
+            <div class="wizard-step-dot" data-step-dot="natalitas-1">2</div>
+          </div>
+          <div class="wizard-body">
+            <div class="wizard-step active" data-step="natalitas-0">
+              <div class="form-grid">
+                <div class="form-field">
+                  <label>ID Kelahiran</label>
+                  <input id="natalitas-id" type="text">
                 </div>
-                <canvas id="perusahaan-bar-chart" height="140"></canvas>
+                <div class="form-field">
+                  <label>ID Indukan</label>
+                  <input id="natalitas-id-induk" type="text">
+                </div>
+                <div class="form-field">
+                  <label>Jenis Indukan (berdasarkan komoditas)</label>
+                  <input id="natalitas-jenis-induk" type="text">
+                </div>
+                <div class="form-field">
+                  <label>Kelahiran individu dari indukan ke-</label>
+                  <input id="natalitas-ke" type="number" min="1">
+                </div>
+              </div>
             </div>
+            <div class="wizard-step" data-step="natalitas-1">
+              <div class="form-grid">
+                <div class="form-field">
+                  <label>Jumlah Anakan</label>
+                  <input id="natalitas-jumlah" type="number" min="1">
+                </div>
+                <div class="form-field">
+                  <label>Jam Kelahiran</label>
+                  <input id="natalitas-jam" type="time">
+                </div>
+                <div class="form-field">
+                  <label>Tanggal Kelahiran</label>
+                  <input id="natalitas-tanggal" type="date">
+                </div>
+              </div>
+              <div class="wizard-summary" id="natalitas-summary"></div>
+            </div>
+          </div>
+          <div class="wizard-footer">
+            <button class="btn-secondary btn" id="natalitas-prev" disabled>Sebelumnya</button>
+            <button class="btn" id="natalitas-next">Berikutnya</button>
+          </div>
+        </div>
 
-            <div class="table-card">
-                <div class="table-card-header">
-                    <h2>Data Jenis (agregat per jenis)</h2>
-                    <span class="badge" id="badge-tahun-jenis">Tahun -</span>
+        <!-- WIZARD MORTALITAS -->
+        <div class="wizard" id="wizard-mortalitas" style="display:none;">
+          <div class="wizard-steps">
+            <div class="wizard-step-dot active" data-step-dot="mortalitas-0">1</div>
+            <div class="wizard-step-dot" data-step-dot="mortalitas-1">2</div>
+          </div>
+          <div class="wizard-body">
+            <div class="wizard-step active" data-step="mortalitas-0">
+              <div class="form-grid">
+                <div class="form-field">
+                  <label>ID Kematian</label>
+                  <input id="mortalitas-id" type="text">
                 </div>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>Jenis</th>
-                            <th>Jumlah Individu</th>
-                            <th>Natalitas</th>
-                            <th>Mortalitas</th>
-                        </tr>
-                        </thead>
-                        <tbody id="data-jenis-body"></tbody>
-                    </table>
+                <div class="form-field">
+                  <label>ID Individu yang mati</label>
+                  <input id="mortalitas-id-individu" type="text">
                 </div>
+                <div class="form-field">
+                  <label>Jenis Individu (berdasarkan komoditas)</label>
+                  <input id="mortalitas-jenis-individu" type="text">
+                </div>
+              </div>
             </div>
+            <div class="wizard-step" data-step="mortalitas-1">
+              <div class="form-grid">
+                <div class="form-field">
+                  <label>Jam Kematian</label>
+                  <input id="mortalitas-jam" type="time">
+                </div>
+                <div class="form-field">
+                  <label>Tanggal Kematian</label>
+                  <input id="mortalitas-tanggal" type="date">
+                </div>
+                <div class="form-field">
+                  <label>Link Foto Geotag (untuk verifikasi)</label>
+                  <input id="mortalitas-link-foto" type="url" placeholder="https://...">
+                </div>
+              </div>
+              <div class="wizard-summary" id="mortalitas-summary"></div>
+            </div>
+          </div>
+          <div class="wizard-footer">
+            <button class="btn-secondary btn" id="mortalitas-prev" disabled>Sebelumnya</button>
+            <button class="btn" id="mortalitas-next">Berikutnya</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            <!-- DATA SATWA PER TAKSA -->
-            <div class="table-card">
-                <div class="table-card-header">
-                    <h2>Data Satwa per Taksa</h2>
-                    <div class="chart-header-controls">
-                        <select id="satwa-taksa-select" class="chart-mode-select">
-                            <option value="">Semua Taksa</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>ID Individu</th>
-                            <th>Nama Individu</th>
-                            <th>Jenis Individu</th>
-                            <th>Nama Unit Penangkar</th>
-                            <th>Taksa (Jenis Komoditas)</th>
-                        </tr>
-                        </thead>
-                        <tbody id="data-satwa-body"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- DATA MORTALITAS -->
-        <section id="section-data-mortalitas" class="page-section">
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h2>Ringkasan Mortalitas</h2>
-                    <select id="mortalitas-mode-select" class="chart-mode-select">
-                        <option value="jenis">Per Jenis Individu</option>
-                        <option value="status">Per Status Verifikasi</option>
-                    </select>
-                </div>
-                <canvas id="mortalitas-chart" height="120"></canvas>
-            </div>
-
-            <div class="table-card">
-                <div class="table-card-header">
-                    <h2>Data Mortalitas</h2>
-                    <span class="badge">Seluruh data</span>
-                </div>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>ID Kematian</th>
-                            <th>ID Individu</th>
-                            <th>Jenis Individu</th>
-                            <th>Tanggal Kematian</th>
-                            <th>Jam Kematian</th>
-                            <th>Status Verifikasi</th>
-                            <th>Verifikator</th>
-                        </tr>
-                        </thead>
-                        <tbody id="mortalitas-body"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- DATA NATALITAS -->
-        <section id="section-data-natalitas" class="page-section">
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h2>Ringkasan Natalitas</h2>
-                    <select id="natalitas-mode-select" class="chart-mode-select">
-                        <option value="jenis">Per Jenis Induk</option>
-                        <option value="status">Per Status Kelahiran</option>
-                    </select>
-                </div>
-                <canvas id="natalitas-summary-chart" height="120"></canvas>
-            </div>
-
-            <div class="table-card">
-                <div class="table-card-header">
-                    <h2>Data Natalitas</h2>
-                    <span class="badge">Seluruh data</span>
-                </div>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>ID Kelahiran</th>
-                            <th>ID Induk</th>
-                            <th>Jenis Induk</th>
-                            <th>Jumlah Anakan</th>
-                            <th>Status Kelahiran</th>
-                            <th>Tanggal Verifikasi</th>
-                            <th>Verifikator</th>
-                        </tr>
-                        </thead>
-                        <tbody id="natalitas-body"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- MASA BERLAKU DOKUMEN -->
-        <section id="section-masa-berlaku" class="page-section">
-            <div class="cards-row">
-                <div class="stat-card">
-                    <div class="stat-label">Hijau (≥ 2 tahun)</div>
-                    <div class="stat-value" id="masa-count-green">-</div>
-                    <div class="stat-footnote">Masa berlaku 2–5 tahun atau lebih</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Kuning (&lt; 2 tahun)</div>
-                    <div class="stat-value" id="masa-count-yellow">-</div>
-                    <div class="stat-footnote">Masa berlaku 3 bulan–2 tahun</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Merah (&lt; 3 bulan / habis)</div>
-                    <div class="stat-value" id="masa-count-red">-</div>
-                    <div class="stat-footnote">Perlu perhatian segera</div>
-                </div>
-            </div>
-
-            <div class="table-card">
-                <div class="table-card-header">
-                    <h2>Daftar Masa Berlaku Dokumen Penangkaran</h2>
-                    <div class="chart-header-controls">
-                        <select id="masa-filter-select" class="chart-mode-select">
-                            <option value="">Semua Status</option>
-                            <option value="green">Hijau (≥ 2 tahun)</option>
-                            <option value="yellow">Kuning (&lt; 2 tahun)</option>
-                            <option value="red">Merah (&lt; 3 bulan / habis)</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Nama Unit Penangkar</th>
-                            <th>Jenis Komoditas</th>
-                            <th>Provinsi</th>
-                            <th>Tanggal Terbit</th>
-                            <th>Tanggal Berakhir</th>
-                            <th>Sisa Waktu</th>
-                            <th>Status Izin</th>
-                        </tr>
-                        </thead>
-                        <tbody id="masa-body"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- QNA -->
-        <section id="section-qna" class="page-section">
-            <div class="placeholder-box">
-                <strong>QnA</strong>
-                Di sini nanti dapat diisi FAQ, panduan pengisian format Excel/Google Sheet,
-                dan kontak helpdesk teknis.
-            </div>
-        </section>
-
-        <!-- EXPORT -->
-        <section id="section-export" class="page-section">
-            <div class="placeholder-box">
-                <strong>Export Data</strong>
-                <p style="margin-bottom:8px;">
-                    Unduh file Excel sumber data nasional (semua sheet) untuk analisis lebih lanjut.
-                </p>
-            <p>
-                <a href="Contoh_Format_Data_Penangkaran_dummy.xlsx">
-                    Download Contoh_Format_Data_Penangkaran_dummy.xlsx
-                </a>
-            </p>
-            <p style="font-size:0.85rem;color:#6b7280;margin-top:8px;">
-                Letakkan file Excel tersebut di root repo (sejajar dengan <code>index.html</code>)
-                dengan nama yang sama persis.
-            </p>
-            </div>
-        </section>
-
-        <!-- DATA PERUSAHAAN -->
-        <section id="section-perusahaan" class="page-section">
-            <div class="table-card">
-                <div class="table-card-header">
-                    <h2>Data Perusahaan / Unit Penangkar</h2>
-                    <div class="chart-header-controls">
-                        <span class="badge" id="badge-izin-warning">Status izin: -</span>
-                        <select id="taksa-filter-select" class="chart-mode-select">
-                            <option value="">Semua Taksa</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Nomor Sertifikat Standar</th>
-                            <th>Nama Unit Penangkar</th>
-                            <th>Nama Pemilik</th>
-                            <th>Jenis Komoditas</th>
-                            <th>Kota/Kabupaten</th>
-                            <th>Provinsi</th>
-                            <th>UPT KSDA</th>
-                            <th>Tanggal Terbit</th>
-                            <th>Tanggal Berakhir</th>
-                            <th>Status Izin</th>
-                            <th>Main Species</th>
-                        </tr>
-                        </thead>
-                        <tbody id="perusahaan-body"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-    </main>
+  </main>
 </div>
 
+<!-- LIBRARY -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <script>
-    /* ---------------- NAVBAR ---------------- */
-    const navLinks = document.querySelectorAll('.nav-link[data-target]');
-    const sections = document.querySelectorAll('.page-section');
-    const pageTitle = document.getElementById('page-title');
-    const pageSubtitle = document.getElementById('page-subtitle');
+  /* ---------------- NAVIGATION ---------------- */
+  const navLinks = document.querySelectorAll('.nav-link[data-target]');
+  const sections = document.querySelectorAll('.page-section');
+  const pageTitle = document.getElementById('page-title');
+  const pageSubtitle = document.getElementById('page-subtitle');
 
-    const pageInfo = {
-        'section-data-satwa': {
-            title: 'Data Satwa',
-            subtitle: 'Dashboard ringkasan nasional data penangkaran satwa (natalitas, mortalitas, dan data jenis).'
-        },
-        'section-data-mortalitas': {
-            title: 'Data Mortalitas',
-            subtitle: 'Rincian dan analisis data mortalitas satwa penangkaran.'
-        },
-        'section-data-natalitas': {
-            title: 'Data Natalitas',
-            subtitle: 'Rincian dan analisis data natalitas satwa penangkaran.'
-        },
-        'section-masa-berlaku': {
-            title: 'Masa Berlaku Dokumen Penangkaran',
-            subtitle: 'Tracking masa berlaku perizinan usaha penangkaran untuk keperluan pengawasan.'
-        },
-        'section-qna': {
-            title: 'QnA',
-            subtitle: 'Pertanyaan umum dan panduan pengisian data penangkaran.'
-        },
-        'section-export': {
-            title: 'Export Data',
-            subtitle: 'Unduh file sumber data penangkaran nasional.'
-        },
-        'section-perusahaan': {
-            title: 'Data Perusahaan',
-            subtitle: 'Informasi perusahaan/penangkar pemegang izin.'
+  const pageInfo = {
+    'section-data-satwa': {
+      title: 'Data Satwa',
+      subtitle: 'Ringkasan distribusi penangkaran dan daftar satwa per jenis komoditas.'
+    },
+    'section-data-natalitas': {
+      title: 'Data Natalitas',
+      subtitle: 'Grafik dan tabel kelahiran berdasarkan jenis induk dan status verifikasi.'
+    },
+    'section-data-mortalitas': {
+      title: 'Data Mortalitas',
+      subtitle: 'Grafik dan tabel kematian berdasarkan jenis individu dan status verifikasi.'
+    },
+    'section-data-perusahaan': {
+      title: 'Data Perusahaan',
+      subtitle: 'Profil perusahaan penangkar beserta filter komoditas, provinsi, dan status izin.'
+    },
+    'section-masa-berlaku': {
+      title: 'Masa Berlaku Dokumen Penangkaran',
+      subtitle: 'Monitoring masa berlaku sertifikat standar penangkaran.'
+    },
+    'section-pengisian': {
+      title: 'Pengisian Data',
+      subtitle: 'Contoh alur pengisian data perusahaan, natalitas, dan mortalitas.'
+    }
+  };
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const targetId = link.dataset.target;
+
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+
+      sections.forEach(sec => {
+        sec.classList.toggle('is-active', sec.id === targetId);
+      });
+
+      if (pageInfo[targetId]) {
+        pageTitle.textContent = pageInfo[targetId].title;
+        pageSubtitle.textContent = pageInfo[targetId].subtitle;
+      }
+    });
+  });
+
+  /* ---------------- GLOBAL DATA ---------------- */
+  let dataSatwa = [];
+  let dataNatalitas = [];
+  let dataMortalitas = [];
+  let dataPerusahaan = [];
+  let unitToKomoditas = {};
+  let unitToSpesies   = {};
+  let unitToProvinsi  = {};
+
+  // charts
+  let satwaChart = null;
+  let natalitasChart = null;
+  let mortalitasChart = null;
+
+  // DOM references
+  const satwaProvFilter   = document.getElementById('satwa-provinsi-filter');
+  const satwaSpesiesFilter= document.getElementById('satwa-spesies-filter');
+  const satwaTableBody    = document.getElementById('satwa-table-body');
+  const satwaCountBadge   = document.getElementById('satwa-count-badge');
+
+  const natalitasStatusFilter = document.getElementById('natalitas-status-filter');
+  const natalitasTableBody    = document.getElementById('natalitas-table-body');
+  const natalitasCountBadge   = document.getElementById('natalitas-count-badge');
+
+  const mortalitasStatusFilter= document.getElementById('mortalitas-status-filter');
+  const mortalitasTableBody   = document.getElementById('mortalitas-table-body');
+  const mortalitasCountBadge  = document.getElementById('mortalitas-count-badge');
+
+  const perusahaanKomFilter = document.getElementById('perusahaan-komoditas-filter');
+  const perusahaanProvFilter= document.getElementById('perusahaan-provinsi-filter');
+  const perusahaanStatusFilter = document.getElementById('perusahaan-status-filter');
+  const perusahaanTableBody = document.getElementById('perusahaan-table-body');
+
+  const masaStatusFilter   = document.getElementById('masa-status-filter');
+  const masaTableBody      = document.getElementById('masa-table-body');
+  const masaGreenCount     = document.getElementById('masa-green-count');
+  const masaYellowCount    = document.getElementById('masa-yellow-count');
+  const masaRedCount       = document.getElementById('masa-red-count');
+
+  /* ---------------- UTIL ---------------- */
+  function toDate(v) {
+    if (!v) return null;
+    if (v instanceof Date) return v;
+    const d = new Date(v);
+    return isNaN(d) ? null : d;
+  }
+
+  function sheetToJson(workbook, name) {
+    const sheet = workbook.Sheets[name];
+    if (!sheet) return [];
+    return XLSX.utils.sheet_to_json(sheet, { defval: null });
+  }
+
+  function normalizeName(str) {
+    return (str || '').toString().trim().toLowerCase().replace(/\./g,'').replace(/\s+/g, ' ');
+  }
+
+  // status izin: hijau 5–2 tahun, kuning <2 tahun, merah <3 bulan / habis
+  function getPermitStatus(expiryRaw) {
+    const d = toDate(expiryRaw);
+    if (!d) return { type: 'none', label: 'Tidak ada data', diffDays: Infinity };
+
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    const diffDays = Math.round((d - today) / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 0 || diffDays <= 90) {
+      return { type: 'red', label: 'Merah (&lt;3 bulan / habis)', diffDays };
+    }
+    if (diffDays <= 730) {
+      return { type: 'yellow', label: 'Kuning (&lt;2 tahun)', diffDays };
+    }
+    if (diffDays <= 1825) {
+      return { type: 'green', label: 'Hijau (5–2 tahun)', diffDays };
+    }
+    return { type: 'green', label: 'Hijau (&gt;5 tahun)', diffDays };
+  }
+
+  function formatRemaining(diffDays) {
+    if (!isFinite(diffDays)) return '-';
+    if (diffDays < 0) return Math.abs(diffDays) + ' hari lalu';
+    const years = Math.floor(diffDays / 365);
+    const rem = diffDays % 365;
+    const months = Math.floor(rem / 30);
+    const days = rem % 30;
+    const parts = [];
+    if (years) parts.push(years + ' thn');
+    if (months) parts.push(months + ' bln');
+    if (!years && !months) parts.push(days + ' hari');
+    return parts.join(' ');
+  }
+
+  function uniqueValues(arr, field) {
+    const s = new Set();
+    arr.forEach(r => {
+      const v = (r[field] || '').toString().trim();
+      if (v) s.add(v);
+    });
+    return Array.from(s).sort((a,b)=>a.localeCompare(b,'id-ID'));
+  }
+
+  /* ---------------- DATA SATWA ---------------- */
+  function buildUnitMaps() {
+    unitToKomoditas = {};
+    unitToSpesies   = {};
+    unitToProvinsi  = {};
+    dataPerusahaan.forEach(r => {
+      const unit = (r['Nama Unit Penangkar'] || '').toString();
+      if (!unit) return;
+      const key = normalizeName(unit);
+      unitToKomoditas[key] = (r['Jenis Komoditas'] || '').toString();
+      unitToSpesies[key]   = (r['Jenis Spesies'] || '').toString();
+      unitToProvinsi[key]  = (r['Provinsi'] || '').toString();
+    });
+  }
+
+  function populateSatwaFilters() {
+    const provs = uniqueValues(dataPerusahaan, 'Provinsi');
+    const spesies = uniqueValues(dataPerusahaan, 'Jenis Spesies');
+
+    satwaProvFilter.innerHTML = '<option value="">Semua Provinsi</option>';
+    provs.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p;
+      opt.textContent = p;
+      satwaProvFilter.appendChild(opt);
+    });
+
+    satwaSpesiesFilter.innerHTML = '<option value="">Semua Jenis Spesies</option>';
+    spesies.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s;
+      opt.textContent = s;
+      satwaSpesiesFilter.appendChild(opt);
+    });
+  }
+
+  // grafik: x = Jenis Komoditas, y = jumlah penangkar (unit unik) sesuai filter provinsi & jenis spesies
+  function buildSatwaChart() {
+    const provFilter = satwaProvFilter.value;
+    const spesiesFilter = satwaSpesiesFilter.value;
+
+    const counts = {};
+    const seen = new Set();
+
+    dataPerusahaan.forEach(r => {
+      const unit = (r['Nama Unit Penangkar'] || '').toString();
+      const kom  = (r['Jenis Komoditas'] || '').toString() || 'Tidak diketahui';
+      const prov = (r['Provinsi'] || '').toString();
+      const spes= (r['Jenis Spesies'] || '').toString();
+
+      if (!unit.trim()) return;
+      if (provFilter && prov !== provFilter) return;
+      if (spesiesFilter && spes !== spesiesFilter) return;
+
+      const unitKey = normalizeName(unit);
+      const key = unitKey + '|' + kom;
+
+      if (seen.has(key)) return;
+      seen.add(key);
+
+      counts[kom] = (counts[kom] || 0) + 1;
+    });
+
+    const labels = Object.keys(counts).sort((a,b)=>a.localeCompare(b,'id-ID'));
+    const values = labels.map(l => counts[l]);
+
+    const ctx = document.getElementById('satwa-distribusi-chart').getContext('2d');
+    if (satwaChart) satwaChart.destroy();
+
+    satwaChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Jumlah penangkar per jenis komoditas',
+          data: values
+        }]
+      },
+      options: {
+        plugins: { legend: { display:false } },
+        scales: {
+          x: { ticks: { autoSkip:false, maxRotation:60, minRotation:0 } },
+          y: { beginAtZero:true }
         }
+      }
+    });
+  }
+
+  function renderSatwaTable() {
+    const provFilter = satwaProvFilter.value;
+    const spesiesFilter = satwaSpesiesFilter.value;
+    satwaTableBody.innerHTML = '';
+    let count = 0;
+
+    dataSatwa.forEach(r => {
+      const unit = (r['Nama Unit Penangkar'] || r['Nama Unit Penangkaran'] || '').toString();
+      const key  = normalizeName(unit);
+      const kom  = unitToKomoditas[key] || '';
+      const prov = unitToProvinsi[key]  || '';
+      const spes = unitToSpesies[key]   || '';
+
+      if (provFilter && prov !== provFilter) return;
+      if (spesiesFilter && spes !== spesiesFilter) return;
+
+      const idInd = r['ID_Individu'] || r['ID Individu'] || '';
+      const nmInd = r['Nama_Individu'] || r['Nama Individu'] || '';
+      const jenis = r['Jenis_Individu'] || r['Jenis Individu'] || '';
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${idInd}</td>
+        <td>${nmInd}</td>
+        <td>${jenis}</td>
+        <td>${unit}</td>
+        <td>${kom}</td>
+        <td>${prov}</td>
+      `;
+      satwaTableBody.appendChild(tr);
+      count++;
+    });
+
+    satwaCountBadge.textContent = count.toLocaleString('id-ID') + ' individu';
+  }
+
+  /* ---------------- DATA NATALITAS ---------------- */
+  function populateNatalitasStatusFilter() {
+    const statuses = uniqueValues(dataNatalitas, 'Status_Verifikasi');
+    natalitasStatusFilter.innerHTML = '<option value="">Semua Status Verifikasi</option>';
+    statuses.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s;
+      opt.textContent = s;
+      natalitasStatusFilter.appendChild(opt);
+    });
+  }
+
+  function buildNatalitasChart() {
+    const statusFilter = natalitasStatusFilter.value;
+    const counts = {};
+
+    dataNatalitas.forEach(r => {
+      const status = (r['Status_Verifikasi'] || '').toString();
+      if (statusFilter && status !== statusFilter) return;
+
+      const jenis = (r['Jenis_Induk'] || '').toString() || 'Tidak diketahui';
+      const jml   = Number(r['Jumlah_Anakan'] || 0);
+      if (!isNaN(jml)) {
+        counts[jenis] = (counts[jenis] || 0) + jml;
+      }
+    });
+
+    const labels = Object.keys(counts).sort((a,b)=>a.localeCompare(b,'id-ID'));
+    const values = labels.map(l => counts[l]);
+
+    const ctx = document.getElementById('natalitas-chart').getContext('2d');
+    if (natalitasChart) natalitasChart.destroy();
+
+    natalitasChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Jumlah anakan per jenis induk',
+          data: values
+        }]
+      },
+      options: {
+        plugins: { legend: { display:false } },
+        scales: {
+          x: { ticks:{ autoSkip:false, maxRotation:60, minRotation:0 } },
+          y: { beginAtZero:true }
+        }
+      }
+    });
+  }
+
+  function renderNatalitasTable() {
+    const statusFilter = natalitasStatusFilter.value;
+    natalitasTableBody.innerHTML = '';
+    let count = 0;
+
+    dataNatalitas.forEach(r => {
+      const status = (r['Status_Verifikasi'] || '').toString();
+      if (statusFilter && status !== statusFilter) return;
+
+      const d = toDate(r['Tanggal_Kelahiran']);
+      const tgl = d ? d.toISOString().slice(0,10) : '';
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r['ID_Kelahiran'] || ''}</td>
+        <td>${r['ID_Induk'] || ''}</td>
+        <td>${r['Jenis_Induk'] || ''}</td>
+        <td>${r['Jumlah_Anakan'] || ''}</td>
+        <td>${status}</td>
+        <td>${tgl}</td>
+        <td>${r['Jam_Kelahiran'] || ''}</td>
+      `;
+      natalitasTableBody.appendChild(tr);
+      count++;
+    });
+
+    natalitasCountBadge.textContent = count.toLocaleString('id-ID') + ' catatan';
+  }
+
+  /* ---------------- DATA MORTALITAS ---------------- */
+  function populateMortalitasStatusFilter() {
+    const statuses = uniqueValues(dataMortalitas, 'Status_Verifikasi');
+    mortalitasStatusFilter.innerHTML = '<option value="">Semua Status Verifikasi</option>';
+    statuses.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s;
+      opt.textContent = s;
+      mortalitasStatusFilter.appendChild(opt);
+    });
+  }
+
+  function buildMortalitasChart() {
+    const statusFilter = mortalitasStatusFilter.value;
+    const counts = {};
+
+    dataMortalitas.forEach(r => {
+      const status = (r['Status_Verifikasi'] || '').toString();
+      if (statusFilter && status !== statusFilter) return;
+
+      const jenis = (r['Jenis_Individu'] || '').toString() || 'Tidak diketahui';
+      counts[jenis] = (counts[jenis] || 0) + 1;
+    });
+
+    const labels = Object.keys(counts).sort((a,b)=>a.localeCompare(b,'id-ID'));
+    const values = labels.map(l => counts[l]);
+
+    const ctx = document.getElementById('mortalitas-chart').getContext('2d');
+    if (mortalitasChart) mortalitasChart.destroy();
+
+    mortalitasChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Jumlah kematian per jenis individu',
+          data: values
+        }]
+      },
+      options: {
+        plugins: { legend: { display:false } },
+        scales: {
+          x: { ticks:{ autoSkip:false, maxRotation:60, minRotation:0 } },
+          y: { beginAtZero:true }
+        }
+      }
+    });
+  }
+
+  function renderMortalitasTable() {
+    const statusFilter = mortalitasStatusFilter.value;
+    mortalitasTableBody.innerHTML = '';
+    let count = 0;
+
+    dataMortalitas.forEach(r => {
+      const status = (r['Status_Verifikasi'] || '').toString();
+      if (statusFilter && status !== statusFilter) return;
+
+      const d = toDate(r['Tanggal_Kematian']);
+      const tgl = d ? d.toISOString().slice(0,10) : '';
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r['ID_Kematian'] || ''}</td>
+        <td>${r['ID_Individu'] || ''}</td>
+        <td>${r['Jenis_Individu'] || ''}</td>
+        <td>${status}</td>
+        <td>${tgl}</td>
+        <td>${r['Jam_Kematian'] || ''}</td>
+      `;
+      mortalitasTableBody.appendChild(tr);
+      count++;
+    });
+
+    mortalitasCountBadge.textContent = count.toLocaleString('id-ID') + ' catatan';
+  }
+
+  /* ---------------- DATA PERUSAHAAN ---------------- */
+  function populatePerusahaanFilters() {
+    const koms = uniqueValues(dataPerusahaan, 'Jenis Komoditas');
+    const provs = uniqueValues(dataPerusahaan, 'Provinsi');
+
+    perusahaanKomFilter.innerHTML = '<option value="">Semua Komoditas</option>';
+    koms.forEach(k => {
+      const opt = document.createElement('option');
+      opt.value = k; opt.textContent = k;
+      perusahaanKomFilter.appendChild(opt);
+    });
+
+    perusahaanProvFilter.innerHTML = '<option value="">Semua Provinsi</option>';
+    provs.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p; opt.textContent = p;
+      perusahaanProvFilter.appendChild(opt);
+    });
+  }
+
+  function renderPerusahaanTable() {
+    const komFilter = perusahaanKomFilter.value;
+    const provFilter= perusahaanProvFilter.value;
+    const statusFilter = perusahaanStatusFilter.value;
+
+    perusahaanTableBody.innerHTML = '';
+
+    dataPerusahaan.forEach(r => {
+      const kom  = (r['Jenis Komoditas'] || '').toString();
+      const prov = (r['Provinsi'] || '').toString();
+
+      if (komFilter && kom !== komFilter) return;
+      if (provFilter && prov !== provFilter) return;
+
+      const status = getPermitStatus(r['Tanggal Berakhir']);
+      if (statusFilter && status.type !== statusFilter) return;
+
+      let badgeClass = 'badge';
+      if (status.type === 'green') badgeClass = 'badge-ok';
+      else if (status.type === 'yellow') badgeClass = 'badge-warning';
+      else if (status.type === 'red') badgeClass = 'badge-critical';
+
+      const tTerbit = toDate(r['Tanggal Terbit']);
+      const tExp    = toDate(r['Tanggal Berakhir']);
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r['No.'] || ''}</td>
+        <td>${r['Nomor Sertifikat Standar'] || ''}</td>
+        <td>${r['Nama Unit Penangkar'] || ''}</td>
+        <td>${r['Nama Pemilik'] || ''}</td>
+        <td>${kom}</td>
+        <td>${r['Jenis Spesies'] || ''}</td>
+        <td>${r['Kota / Kabupaten'] || ''}</td>
+        <td>${prov}</td>
+        <td>${r['Jenis Kegiatan Pemanfaatan (Komersial / Non-Komersial)'] || ''}</td>
+        <td>${tTerbit ? tTerbit.toISOString().slice(0,10) : ''}</td>
+        <td>${tExp ? tExp.toISOString().slice(0,10) : ''}</td>
+        <td><span class="${badgeClass}">${status.label}</span></td>
+      `;
+      perusahaanTableBody.appendChild(tr);
+    });
+  }
+
+  /* ---------------- MASA BERLAKU ---------------- */
+  function renderMasaTable() {
+    const filter = masaStatusFilter.value;
+    masaTableBody.innerHTML = '';
+
+    let green = 0, yellow = 0, red = 0;
+    const rows = [];
+
+    dataPerusahaan.forEach(r => {
+      const status = getPermitStatus(r['Tanggal Berakhir']);
+      if (status.type === 'green') green++;
+      else if (status.type === 'yellow') yellow++;
+      else if (status.type === 'red') red++;
+
+      if (filter && status.type !== filter) return;
+
+      rows.push({
+        row: r,
+        status,
+        diffDays: status.diffDays
+      });
+    });
+
+    rows.sort((a,b) => a.diffDays - b.diffDays);
+
+    rows.forEach(item => {
+      const r = item.row;
+      const status = item.status;
+      const tTerbit = toDate(r['Tanggal Terbit']);
+      const tExp    = toDate(r['Tanggal Berakhir']);
+
+      let badgeClass = 'badge';
+      if (status.type === 'green') badgeClass = 'badge-ok';
+      else if (status.type === 'yellow') badgeClass = 'badge-warning';
+      else if (status.type === 'red') badgeClass = 'badge-critical';
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${r['No.'] || ''}</td>
+        <td>${r['Nomor Sertifikat Standar'] || ''}</td>
+        <td>${r['Nama Unit Penangkar'] || ''}</td>
+        <td>${r['Jenis Komoditas'] || ''}</td>
+        <td>${r['Provinsi'] || ''}</td>
+        <td>${tTerbit ? tTerbit.toISOString().slice(0,10) : ''}</td>
+        <td>${tExp ? tExp.toISOString().slice(0,10) : ''}</td>
+        <td>${formatRemaining(status.diffDays)}</td>
+        <td><span class="${badgeClass}">${status.label}</span></td>
+      `;
+      masaTableBody.appendChild(tr);
+    });
+
+    masaGreenCount.textContent  = green.toLocaleString('id-ID');
+    masaYellowCount.textContent = yellow.toLocaleString('id-ID');
+    masaRedCount.textContent    = red.toLocaleString('id-ID');
+  }
+
+  /* ---------------- WIZARD LOGIC ---------------- */
+  const wizardTabs = document.querySelectorAll('.wizard-tab');
+  const wizardPerusahaan = document.getElementById('wizard-perusahaan');
+  const wizardNatalitas  = document.getElementById('wizard-natalitas');
+  const wizardMortalitas = document.getElementById('wizard-mortalitas');
+
+  function showWizard(name) {
+    wizardPerusahaan.style.display = name === 'perusahaan' ? '' : 'none';
+    wizardNatalitas.style.display  = name === 'natalitas' ? '' : 'none';
+    wizardMortalitas.style.display = name === 'mortalitas' ? '' : 'none';
+  }
+
+  wizardTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      wizardTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      showWizard(tab.dataset.wizard);
+    });
+  });
+
+  function setupSimpleWizard(prefix, stepCount, summaryBuilder) {
+    let currentStep = 0;
+    const prevBtn = document.getElementById(prefix + '-prev');
+    const nextBtn = document.getElementById(prefix + '-next');
+
+    function updateSteps() {
+      for (let i=0;i<stepCount;i++) {
+        const stepEl = document.querySelector(`.wizard-step[data-step="${prefix}-${i}"]`);
+        const dotEl  = document.querySelector(`.wizard-step-dot[data-step-dot="${prefix}-${i}"]`);
+        const active = i === currentStep;
+        if (stepEl) stepEl.classList.toggle('active', active);
+        if (dotEl)  dotEl.classList.toggle('active', active);
+      }
+      prevBtn.disabled = currentStep === 0;
+      nextBtn.textContent = currentStep === stepCount-1 ? 'Selesai (contoh)' : 'Berikutnya';
+    }
+
+    prevBtn.addEventListener('click', () => {
+      if (currentStep > 0) {
+        currentStep--;
+        updateSteps();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentStep < stepCount-1) {
+        currentStep++;
+        updateSteps();
+        if (currentStep === stepCount-1 && summaryBuilder) summaryBuilder();
+      } else {
+        alert('Ini hanya contoh alur input. Data belum tersimpan ke database.');
+      }
+    });
+
+    updateSteps();
+  }
+
+  setupSimpleWizard('perusahaan', 2, () => {
+    const summary = {
+      namaPerusahaan: document.getElementById('perusahaan-nama').value,
+      pemilik: document.getElementById('perusahaan-pemilik').value,
+      nomorSertifikat: document.getElementById('perusahaan-nomor-sertifikat').value,
+      jenisKomoditas: document.getElementById('perusahaan-komoditas').value,
+      jenisSpesies: document.getElementById('perusahaan-spesies').value,
+      statusSatwa: document.getElementById('perusahaan-status-satwa').value,
+      jenisKegiatan: document.getElementById('perusahaan-jenis-kegiatan').value,
+      kota: document.getElementById('perusahaan-kota').value,
+      provinsi: document.getElementById('perusahaan-prov').value,
+      investasi: document.getElementById('perusahaan-investasi').value
     };
+    document.getElementById('perusahaan-summary').textContent = JSON.stringify(summary, null, 2);
+  });
 
-    navLinks.forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetId = this.dataset.target;
+  setupSimpleWizard('natalitas', 2, () => {
+    const summary = {
+      idKelahiran: document.getElementById('natalitas-id').value,
+      idInduk: document.getElementById('natalitas-id-induk').value,
+      jenisInduk: document.getElementById('natalitas-jenis-induk').value,
+      kelahiranKe: document.getElementById('natalitas-ke').value,
+      jumlahAnakan: document.getElementById('natalitas-jumlah').value,
+      jamKelahiran: document.getElementById('natalitas-jam').value,
+      tanggalKelahiran: document.getElementById('natalitas-tanggal').value
+    };
+    document.getElementById('natalitas-summary').textContent = JSON.stringify(summary, null, 2);
+  });
 
-            navLinks.forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
+  setupSimpleWizard('mortalitas', 2, () => {
+    const summary = {
+      idKematian: document.getElementById('mortalitas-id').value,
+      idIndividu: document.getElementById('mortalitas-id-individu').value,
+      jenisIndividu: document.getElementById('mortalitas-jenis-individu').value,
+      jamKematian: document.getElementById('mortalitas-jam').value,
+      tanggalKematian: document.getElementById('mortalitas-tanggal').value,
+      linkFotoGeotag: document.getElementById('mortalitas-link-foto').value
+    };
+    document.getElementById('mortalitas-summary').textContent = JSON.stringify(summary, null, 2);
+  });
 
-            sections.forEach(sec => {
-                sec.classList.remove('is-active');
-                if (sec.id === targetId) sec.classList.add('is-active');
-            });
+  /* ---------------- LOAD EXCEL ---------------- */
+  async function loadWorkbook() {
+    try {
+      const resp = await fetch('Data Penangkaran_2025.xlsx');
+      if (!resp.ok) {
+        console.error('Gagal memuat Excel:', resp.status, resp.statusText);
+        return;
+      }
+      const buf = await resp.arrayBuffer();
+      const workbook = XLSX.read(buf, { type: 'array', cellDates: true });
 
-            if (pageInfo[targetId]) {
-                pageTitle.textContent = pageInfo[targetId].title;
-                pageSubtitle.textContent = pageInfo[targetId].subtitle;
-            }
-        });
-    });
+      dataSatwa      = sheetToJson(workbook, 'Data_Satwa');
+      dataNatalitas  = sheetToJson(workbook, 'Data_Natalitas');
+      dataMortalitas = sheetToJson(workbook, 'Data_Mortalitas');
+      dataPerusahaan = sheetToJson(workbook, 'Data_Perusahaan');
 
-    /* ---------------- DATA GLOBAL ---------------- */
-    let dataSatwa = [];
-    let dataNatalitas = [];
-    let dataMortalitas = [];
-    let dataPerusahaan = [];
-    let unitToTaksaMap = {};
+      buildUnitMaps();
 
-    let natalitasChartInstance = null;
-    let perusahaanBarChartInstance = null;
-    let mortalitasChartInstance = null;
-    let natalitasSummaryChartInstance = null;
+      // Satwa
+      populateSatwaFilters();
+      buildSatwaChart();
+      renderSatwaTable();
 
-    const statTotalPerusahaan    = document.getElementById('stat-total-perusahaan');
-    const statMortalitasNasional = document.getElementById('stat-mortalitas-nasional');
-    const statNatalitasNasional  = document.getElementById('stat-natalitas-nasional');
-    const yearSelect             = document.getElementById('year-select');
-    const badgeTahunJenis        = document.getElementById('badge-tahun-jenis');
-    const dataJenisBody          = document.getElementById('data-jenis-body');
+      // Natalitas
+      populateNatalitasStatusFilter();
+      buildNatalitasChart();
+      renderNatalitasTable();
 
-    const natalitasBody  = document.getElementById('natalitas-body');
-    const mortalitasBody = document.getElementById('mortalitas-body');
-    const perusahaanBody = document.getElementById('perusahaan-body');
+      // Mortalitas
+      populateMortalitasStatusFilter();
+      buildMortalitasChart();
+      renderMortalitasTable();
 
-    const chartModeSelect       = document.getElementById('chart-mode-select');
-    const provinsiFilterSelect  = document.getElementById('provinsi-filter-select');
-    const mortalitasModeSelect  = document.getElementById('mortalitas-mode-select');
-    const natalitasModeSelect   = document.getElementById('natalitas-mode-select');
+      // Perusahaan
+      populatePerusahaanFilters();
+      renderPerusahaanTable();
 
-    const taksaFilterSelect     = document.getElementById('taksa-filter-select');
-    const badgeIzinWarning      = document.getElementById('badge-izin-warning');
+      // Masa berlaku
+      renderMasaTable();
 
-    const satwaTaksaSelect      = document.getElementById('satwa-taksa-select');
-    const dataSatwaBody         = document.getElementById('data-satwa-body');
-
-    const masaBody              = document.getElementById('masa-body');
-    const masaFilterSelect      = document.getElementById('masa-filter-select');
-    const masaCountGreen        = document.getElementById('masa-count-green');
-    const masaCountYellow       = document.getElementById('masa-count-yellow');
-    const masaCountRed          = document.getElementById('masa-count-red');
-
-    let currentTaksaFilter = '';
-    let currentSatwaTaksaFilter = '';
-    let currentMasaFilter = '';
-
-    /* ---------------- UTILITAS ---------------- */
-    function toDate(value) {
-        if (!value) return null;
-        if (value instanceof Date) return value;
-        const d = new Date(value);
-        return isNaN(d) ? null : d;
+      // Dashboard ringkas (header stat)
+      // di sini bisa ditambahkan jika ingin ada angka total di atas dashboard
+    } catch (err) {
+      console.error('Error membaca workbook:', err);
     }
-
-    function sheetToJson(workbook, name) {
-        const sheet = workbook.Sheets[name];
-        if (!sheet) return [];
-        return XLSX.utils.sheet_to_json(sheet, { defval: null });
-    }
-
-    function normalizeName(value) {
-        const s = (value || '').toString().trim().toLowerCase();
-        return s.replace(/\./g, '').replace(/\s+/g, ' ');
-    }
-
-    function getYears() {
-        const s = new Set();
-        dataNatalitas.forEach(r => {
-            const d = toDate(r['Tanggal_Verifikasi']);
-            if (d) s.add(d.getFullYear());
-        });
-        dataMortalitas.forEach(r => {
-            const d = toDate(r['Tanggal_Kematian']);
-            if (d) s.add(d.getFullYear());
-        });
-        return Array.from(s).sort();
-    }
-
-    /* ---- Perhitungan dashboard umum ---- */
-    function computeDashboard(selectedYear) {
-        const totalPerusahaan = dataPerusahaan.length;
-
-        let totalNatalitas = 0;
-        dataNatalitas.forEach(r => {
-            const n = Number(r['Jumlah_Anakan'] || 0);
-            if (!isNaN(n)) totalNatalitas += n;
-        });
-
-        const totalMortalitas = dataMortalitas.length;
-        const years = getYears();
-        if (!years.length) {
-            return {
-                totalPerusahaan,
-                totalNatalitas,
-                totalMortalitas,
-                years: [],
-                selectedYear: null,
-                natalitasMonthly: new Array(12).fill(0),
-                jenisStats: []
-            };
-        }
-
-        let year = selectedYear;
-        if (!year || !years.includes(year)) {
-            year = years[years.length - 1];
-        }
-
-        const natalitasMonthly = new Array(12).fill(0);
-        dataNatalitas.forEach(r => {
-            const d = toDate(r['Tanggal_Verifikasi']);
-            if (!d) return;
-            const y = d.getFullYear();
-            const m = d.getMonth();
-            if (y === year && m >= 0 && m < 12) {
-                const n = Number(r['Jumlah_Anakan'] || 0);
-                if (!isNaN(n)) natalitasMonthly[m] += n;
-            }
-        });
-
-        const indivCounts = {};
-        dataSatwa.forEach(r => {
-            const jenis = r['Jenis_Individu'] || r['Jenis Individu'] || 'Tidak Diketahui';
-            indivCounts[jenis] = (indivCounts[jenis] || 0) + 1;
-        });
-
-        const natalitasByJenis = {};
-        dataNatalitas.forEach(r => {
-            const d = toDate(r['Tanggal_Verifikasi']);
-            if (!d) return;
-            const y = d.getFullYear();
-            if (y !== year) return;
-            const jenis = r['Jenis_Induk'] || 'Tidak Diketahui';
-            const n = Number(r['Jumlah_Anakan'] || 0);
-            if (!isNaN(n)) {
-                natalitasByJenis[jenis] = (natalitasByJenis[jenis] || 0) + n;
-            }
-        });
-
-        const mortalitasByJenis = {};
-        dataMortalitas.forEach(r => {
-            const d = toDate(r['Tanggal_Kematian']);
-            if (!d) return;
-            const y = d.getFullYear();
-            if (y !== year) return;
-            const jenis = r['Jenis_Individu'] || 'Tidak Diketahui';
-            mortalitasByJenis[jenis] = (mortalitasByJenis[jenis] || 0) + 1;
-        });
-
-        const jenisSet = new Set([
-            ...Object.keys(indivCounts),
-            ...Object.keys(natalitasByJenis),
-            ...Object.keys(mortalitasByJenis)
-        ]);
-
-        const jenisStats = Array.from(jenisSet)
-            .sort((a, b) => a.localeCompare(b, 'id-ID'))
-            .map(jenis => ({
-                jenis,
-                individu:  indivCounts[jenis]       || 0,
-                natalitas: natalitasByJenis[jenis]  || 0,
-                mortalitas: mortalitasByJenis[jenis]|| 0
-            }));
-
-        return {
-            totalPerusahaan,
-            totalNatalitas,
-            totalMortalitas,
-            years,
-            selectedYear: year,
-            natalitasMonthly,
-            jenisStats
-        };
-    }
-
-    /* ---- Grafik natalitas nasional ---- */
-    function buildNatalitasChart(monthlyData) {
-        const ctx = document.getElementById('natalitas-chart').getContext('2d');
-        const labels = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-
-        if (natalitasChartInstance) natalitasChartInstance.destroy();
-
-        natalitasChartInstance = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels,
-                datasets: [{
-                    label: 'Natalitas',
-                    data: monthlyData,
-                    tension: 0.3,
-                    fill: true
-                }]
-            },
-            options: {
-                plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true } }
-            }
-        });
-    }
-
-    function buildDataJenisTable(jenisStats, year) {
-        dataJenisBody.innerHTML = '';
-        jenisStats.forEach(r => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${r.jenis}</td>
-                <td>${r.individu.toLocaleString('id-ID')}</td>
-                <td>${r.natalitas.toLocaleString('id-ID')}</td>
-                <td>${r.mortalitas.toLocaleString('id-ID')}</td>
-            `;
-            dataJenisBody.appendChild(tr);
-        });
-        badgeTahunJenis.textContent = year ? 'Tahun ' + year : 'Tahun -';
-    }
-
-    function populateYearSelect(years, selectedYear) {
-        yearSelect.innerHTML = '';
-        years.forEach(y => {
-            const opt = document.createElement('option');
-            opt.value = y;
-            opt.textContent = y;
-            if (y === selectedYear) opt.selected = true;
-            yearSelect.appendChild(opt);
-        });
-    }
-
-    function renderDashboard(selectedYear) {
-        const d = computeDashboard(selectedYear);
-
-        statTotalPerusahaan.textContent    = d.totalPerusahaan.toLocaleString('id-ID');
-        statMortalitasNasional.textContent = d.totalMortalitas.toLocaleString('id-ID');
-        statNatalitasNasional.textContent  = d.totalNatalitas.toLocaleString('id-ID');
-
-        populateYearSelect(d.years, d.selectedYear);
-        buildNatalitasChart(d.natalitasMonthly);
-        buildDataJenisTable(d.jenisStats, d.selectedYear);
-    }
-
-    /* ---- Distribusi penangkaran (komoditas/provinsi) ---- */
-    function getUniqueProvinces() {
-        const s = new Set();
-        dataPerusahaan.forEach(r => {
-            const p = (r['Provinsi'] || '').toString().trim();
-            if (p) s.add(p);
-        });
-        return Array.from(s).sort((a, b) => a.localeCompare(b, 'id-ID'));
-    }
-
-    function populateProvinsiFilter() {
-        const provs = getUniqueProvinces();
-        provinsiFilterSelect.innerHTML = '';
-        const optAll = document.createElement('option');
-        optAll.value = '';
-        optAll.textContent = 'Semua Provinsi';
-        provinsiFilterSelect.appendChild(optAll);
-        provs.forEach(p => {
-            const opt = document.createElement('option');
-            opt.value = p;
-            opt.textContent = p;
-            provinsiFilterSelect.appendChild(opt);
-        });
-    }
-
-    function computeCountsPerCommodity(provFilter) {
-        const counts = {};
-        const seen = new Set();
-
-        dataPerusahaan.forEach(r => {
-            const unitRaw = (r['Nama Unit Penangkar'] || '').toString();
-            const komRaw  = (r['Jenis Komoditas'] || '').toString();
-            const provRaw = (r['Provinsi'] || '').toString();
-
-            if (!unitRaw.trim()) return;
-
-            const unitKey = normalizeName(unitRaw);
-            const komKey  = normalizeName(komRaw) || 'tidak diketahui';
-            const provKey = normalizeName(provRaw);
-
-            if (provFilter && provKey !== normalizeName(provFilter)) return;
-
-            const key = unitKey + '|' + komKey + '|' + (provFilter ? provKey : 'all');
-
-            if (seen.has(key)) return;
-            seen.add(key);
-
-            const komLabel = komRaw.trim() || 'Tidak Diketahui';
-            counts[komLabel] = (counts[komLabel] || 0) + 1;
-        });
-
-        const labels = Object.keys(counts).sort((a, b) => a.localeCompare(b, 'id-ID'));
-        const values = labels.map(l => counts[l]);
-        return { labels, values };
-    }
-
-    function computeCountsPerProvince() {
-        const counts = {};
-        const seen = new Set();
-
-        dataPerusahaan.forEach(r => {
-            const unitRaw = (r['Nama Unit Penangkar'] || '').toString();
-            const provRaw = (r['Provinsi'] || '').toString();
-
-            if (!unitRaw.trim()) return;
-
-            const unitKey = normalizeName(unitRaw);
-            const provKey = normalizeName(provRaw) || 'tidak diketahui';
-            const key = unitKey + '|' + provKey;
-
-            if (seen.has(key)) return;
-            seen.add(key);
-
-            const provLabel = provRaw.trim() || 'Tidak Diketahui';
-            counts[provLabel] = (counts[provLabel] || 0) + 1;
-        });
-
-        const labels = Object.keys(counts).sort((a, b) => a.localeCompare(b, 'id-ID'));
-        const values = labels.map(l => counts[l]);
-        return { labels, values };
-    }
-
-    function buildPerusahaanBarChart(mode, provFilter) {
-        const ctx = document.getElementById('perusahaan-bar-chart').getContext('2d');
-        let chartData;
-        let titleLabel;
-
-        if (mode === 'province') {
-            chartData = computeCountsPerProvince();
-            titleLabel = 'Jumlah penangkaran per provinsi (unik per Nama Unit Penangkar)';
-        } else {
-            chartData = computeCountsPerCommodity(provFilter || '');
-            titleLabel = provFilter
-                ? `Jumlah penangkaran per jenis komoditas (Provinsi: ${provFilter}, unik per Nama Unit Penangkar)`
-                : 'Jumlah penangkaran per jenis komoditas (nasional, unik per Nama Unit Penangkar)';
-        }
-
-        if (perusahaanBarChartInstance) perusahaanBarChartInstance.destroy();
-
-        perusahaanBarChartInstance = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: chartData.labels,
-                datasets: [{
-                    label: titleLabel,
-                    data: chartData.values
-                }]
-            },
-            options: {
-                indexAxis: 'x',
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { ticks: { autoSkip: false, maxRotation: 60, minRotation: 0 } },
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-    }
-
-    function refreshPerusahaanBarChart() {
-        const mode = chartModeSelect.value;
-        const provFilter = provinsiFilterSelect.value;
-        if (mode === 'province') buildPerusahaanBarChart('province', '');
-        else buildPerusahaanBarChart('commodity', provFilter);
-    }
-
-    /* ---- Util ringkasan mortalitas & natalitas ---- */
-    function computeCountsByField(dataArr, fieldName) {
-        const counts = {};
-        dataArr.forEach(r => {
-            let raw = r[fieldName];
-            let label = (raw == null ? '' : raw).toString().trim();
-            if (!label) label = 'Tidak Diketahui';
-            counts[label] = (counts[label] || 0) + 1;
-        });
-        const labels = Object.keys(counts).sort((a, b) => a.localeCompare(b, 'id-ID'));
-        const values = labels.map(l => counts[l]);
-        return { labels, values };
-    }
-
-    function buildMortalitasChart(mode) {
-        const ctx = document.getElementById('mortalitas-chart').getContext('2d');
-        let dataField, titleLabel;
-
-        if (mode === 'status') {
-            dataField = 'Status_Verifikasi_UPT';
-            titleLabel = 'Jumlah mortalitas per status verifikasi';
-        } else {
-            dataField = 'Jenis_Individu';
-            titleLabel = 'Jumlah mortalitas per jenis individu';
-        }
-
-        const chartData = computeCountsByField(dataMortalitas, dataField);
-
-        if (mortalitasChartInstance) mortalitasChartInstance.destroy();
-
-        mortalitasChartInstance = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: chartData.labels,
-                datasets: [{
-                    label: titleLabel,
-                    data: chartData.values
-                }]
-            },
-            options: {
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { ticks: { autoSkip: false, maxRotation: 60, minRotation: 0 } },
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-    }
-
-    function buildNatalitasSummaryChart(mode) {
-        const ctx = document.getElementById('natalitas-summary-chart').getContext('2d');
-        let dataField, titleLabel;
-
-        if (mode === 'status') {
-            dataField = 'Status_Kelahiran';
-            titleLabel = 'Jumlah kelahiran per status kelahiran';
-        } else {
-            dataField = 'Jenis_Induk';
-            titleLabel = 'Jumlah kelahiran per jenis induk';
-        }
-
-        const chartData = computeCountsByField(dataNatalitas, dataField);
-
-        if (natalitasSummaryChartInstance) natalitasSummaryChartInstance.destroy();
-
-        natalitasSummaryChartInstance = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: chartData.labels,
-                datasets: [{
-                    label: titleLabel,
-                    data: chartData.values
-                }]
-            },
-            options: {
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { ticks: { autoSkip: false, maxRotation: 60, minRotation: 0 } },
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-    }
-
-    /* ---- Taksa dari Data_Perusahaan ---- */
-    function buildUnitToTaksaMap() {
-        unitToTaksaMap = {};
-        dataPerusahaan.forEach(r => {
-            const unit = (r['Nama Unit Penangkar'] || '').toString();
-            const taksa = (r['Jenis Komoditas'] || '').toString().trim();
-            if (!unit) return;
-            const key = normalizeName(unit);
-            if (!unitToTaksaMap[key]) unitToTaksaMap[key] = taksa;
-        });
-    }
-
-    function getUniqueTaksa() {
-        const s = new Set();
-        dataPerusahaan.forEach(r => {
-            const t = (r['Jenis Komoditas'] || '').toString().trim();
-            if (t) s.add(t);
-        });
-        return Array.from(s).sort((a, b) => a.localeCompare(b, 'id-ID'));
-    }
-
-    function populateTaksaFilter() {
-        const taksa = getUniqueTaksa();
-        taksaFilterSelect.innerHTML = '';
-        const optAll = document.createElement('option');
-        optAll.value = '';
-        optAll.textContent = 'Semua Taksa';
-        taksaFilterSelect.appendChild(optAll);
-        taksa.forEach(t => {
-            const opt = document.createElement('option');
-            opt.value = t;
-            opt.textContent = t;
-            taksaFilterSelect.appendChild(opt);
-        });
-
-        // untuk Data Satwa per Taksa
-        satwaTaksaSelect.innerHTML = '';
-        const optAll2 = document.createElement('option');
-        optAll2.value = '';
-        optAll2.textContent = 'Semua Taksa';
-        satwaTaksaSelect.appendChild(optAll2);
-        taksa.forEach(t => {
-            const opt = document.createElement('option');
-            opt.value = t;
-            opt.textContent = t;
-            satwaTaksaSelect.appendChild(opt);
-        });
-    }
-
-    /* ---- Status izin / masa berlaku ---- */
-    function getPermitStatus(expiryRaw) {
-        const d = toDate(expiryRaw);
-        if (!d) return { label: 'Tidak ada data', type: 'none', diffDays: Infinity };
-
-        const today = new Date();
-        today.setHours(0,0,0,0);
-        const diffDays = Math.round((d - today) / (1000 * 60 * 60 * 24));
-
-        if (diffDays < 0) {
-            return { label: 'Sudah berakhir', type: 'red', diffDays };
-        }
-        if (diffDays <= 90) {
-            return { label: 'Kurang dari 3 bulan', type: 'red', diffDays };
-        }
-        if (diffDays <= 730) {
-            return { label: 'Kurang dari 2 tahun', type: 'yellow', diffDays };
-        }
-        if (diffDays <= 1825) {
-            return { label: '2–5 tahun', type: 'green', diffDays };
-        }
-        return { label: '>5 tahun', type: 'green', diffDays };
-    }
-
-    function formatRemaining(diffDays) {
-        if (!isFinite(diffDays)) return '-';
-        if (diffDays < 0) return `${Math.abs(diffDays)} hari lalu`;
-        const years = Math.floor(diffDays / 365);
-        const remDays = diffDays % 365;
-        const months = Math.floor(remDays / 30);
-        const days = remDays % 30;
-        const parts = [];
-        if (years) parts.push(`${years} thn`);
-        if (months) parts.push(`${months} bln`);
-        if (!years && !months) parts.push(`${days} hari`);
-        return parts.join(' ');
-    }
-
-    /* ---- Render tabel ---- */
-    function renderNatalitasTable() {
-        natalitasBody.innerHTML = '';
-        dataNatalitas.forEach(r => {
-            const d = toDate(r['Tanggal_Verifikasi']);
-            const tanggal = d ? d.toISOString().slice(0,10) : '';
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${r['ID_Kelahiran'] || ''}</td>
-                <td>${r['ID_Induk'] || ''}</td>
-                <td>${r['Jenis_Induk'] || ''}</td>
-                <td>${r['Jumlah_Anakan'] || 0}</td>
-                <td>${r['Status_Kelahiran'] || ''}</td>
-                <td>${tanggal}</td>
-                <td>${r['Nama_Verifikator'] || ''}</td>
-            `;
-            natalitasBody.appendChild(tr);
-        });
-    }
-
-    function renderMortalitasTable() {
-        mortalitasBody.innerHTML = '';
-        dataMortalitas.forEach(r => {
-            const d = toDate(r['Tanggal_Kematian']);
-            const tanggal = d ? d.toISOString().slice(0,10) : '';
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${r['ID_Kematian'] || ''}</td>
-                <td>${r['ID_Individu'] || ''}</td>
-                <td>${r['Jenis_Individu'] || ''}</td>
-                <td>${tanggal}</td>
-                <td>${r['Jam_Kematian'] || ''}</td>
-                <td>${r['Status_Verifikasi_UPT'] || ''}</td>
-                <td>${r['Nama_Verifikator'] || ''}</td>
-            `;
-            mortalitasBody.appendChild(tr);
-        });
-    }
-
-    function renderPerusahaanTable() {
-        perusahaanBody.innerHTML = '';
-        let warningCount = 0;
-
-        dataPerusahaan.forEach(r => {
-            const taksa = (r['Jenis Komoditas'] || '').toString().trim();
-            if (currentTaksaFilter && taksa !== currentTaksaFilter) return;
-
-            const tTerbit   = toDate(r['Tanggal Terbit']);
-            const tBerakhir = r['Tanggal Berakhir'];
-
-            const izinStatus = getPermitStatus(tBerakhir);
-            let statusClass = 'badge';
-            if (izinStatus.type === 'green') statusClass = 'badge-ok';
-            else if (izinStatus.type === 'yellow') statusClass = 'badge-warning';
-            else if (izinStatus.type === 'red') statusClass = 'badge-critical';
-
-            if (izinStatus.type === 'yellow' || izinStatus.type === 'red') warningCount++;
-
-            const tanggalTerbit = tTerbit ? tTerbit.toISOString().slice(0,10) : '';
-            const dExp = toDate(tBerakhir);
-            const tanggalBerakhir = dExp ? dExp.toISOString().slice(0,10) : '';
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${r['No.'] || ''}</td>
-                <td>${r['Nomor Sertifikat Standar'] || ''}</td>
-                <td>${r['Nama Unit Penangkar'] || ''}</td>
-                <td>${r['Nama Pemilik'] || ''}</td>
-                <td>${taksa || ''}</td>
-                <td>${r['Kota / Kabupaten'] || ''}</td>
-                <td>${r['Provinsi'] || ''}</td>
-                <td>${r['UPT KSDA'] || ''}</td>
-                <td>${tanggalTerbit}</td>
-                <td>${tanggalBerakhir}</td>
-                <td><span class="${statusClass}">${izinStatus.label}</span></td>
-                <td>${r['Main_Species'] || ''}</td>
-            `;
-            perusahaanBody.appendChild(tr);
-        });
-
-        if (warningCount > 0) {
-            badgeIzinWarning.textContent =
-                'Izin kuning/merah: ' + warningCount.toLocaleString('id-ID') + ' unit';
-        } else {
-            badgeIzinWarning.textContent = 'Semua izin ≥ 2 tahun dari hari ini';
-        }
-    }
-
-    /* ---- Data Satwa per Taksa ---- */
-    function renderSatwaTable() {
-        dataSatwaBody.innerHTML = '';
-        dataSatwa.forEach(r => {
-            const unit = (r['Nama Unit Penangkar'] || r['Nama Unit Penangkaran'] || '').toString();
-            const unitKey = normalizeName(unit);
-            const taksa = unitToTaksaMap[unitKey] || '';
-
-            if (currentSatwaTaksaFilter && taksa !== currentSatwaTaksaFilter) return;
-
-            const idInd = r['ID_Individu'] || r['ID Individu'] || '';
-            const nmInd = r['Nama_Individu'] || r['Nama Individu'] || '';
-            const jenis = r['Jenis_Individu'] || r['Jenis Individu'] || '';
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${idInd}</td>
-                <td>${nmInd}</td>
-                <td>${jenis}</td>
-                <td>${unit}</td>
-                <td>${taksa}</td>
-            `;
-            dataSatwaBody.appendChild(tr);
-        });
-    }
-
-    /* ---- Masa Berlaku Dokumen ---- */
-    function renderMasaTable() {
-        masaBody.innerHTML = '';
-
-        let countGreen = 0, countYellow = 0, countRed = 0;
-        const rows = [];
-
-        dataPerusahaan.forEach(r => {
-            const tTerbit   = toDate(r['Tanggal Terbit']);
-            const tBerakhir = r['Tanggal Berakhir'];
-            const status    = getPermitStatus(tBerakhir);
-
-            if (currentMasaFilter && status.type !== currentMasaFilter) return;
-            if (status.type === 'green') countGreen++;
-            else if (status.type === 'yellow') countYellow++;
-            else if (status.type === 'red') countRed++;
-
-            const dExp = toDate(tBerakhir);
-            const diffDays = status.diffDays;
-            rows.push({
-                row: r,
-                tTerbit,
-                tBerakhir: dExp,
-                status,
-                diffDays
-            });
-        });
-
-        // sort berdasarkan sisa waktu (paling sedikit dulu)
-        rows.sort((a, b) => a.diffDays - b.diffDays);
-
-        rows.forEach(item => {
-            const r = item.row;
-            const tTerbit = item.tTerbit;
-            const tExp    = item.tBerakhir;
-            const status  = item.status;
-
-            let statusClass = 'badge';
-            if (status.type === 'green') statusClass = 'badge-ok';
-            else if (status.type === 'yellow') statusClass = 'badge-warning';
-            else if (status.type === 'red') statusClass = 'badge-critical';
-
-            const tanggalTerbit   = tTerbit ? tTerbit.toISOString().slice(0,10) : '';
-            const tanggalBerakhir = tExp ? tExp.toISOString().slice(0,10) : '';
-            const sisa            = formatRemaining(status.diffDays);
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${r['No.'] || ''}</td>
-                <td>${r['Nama Unit Penangkar'] || ''}</td>
-                <td>${r['Jenis Komoditas'] || ''}</td>
-                <td>${r['Provinsi'] || ''}</td>
-                <td>${tanggalTerbit}</td>
-                <td>${tanggalBerakhir}</td>
-                <td>${sisa}</td>
-                <td><span class="${statusClass}">${status.label}</span></td>
-            `;
-            masaBody.appendChild(tr);
-        });
-
-        masaCountGreen.textContent  = countGreen.toLocaleString('id-ID');
-        masaCountYellow.textContent = countYellow.toLocaleString('id-ID');
-        masaCountRed.textContent    = countRed.toLocaleString('id-ID');
-    }
-
-    /* ---- Load Excel ---- */
-    async function loadWorkbook() {
-        try {
-            const resp = await fetch('Contoh_Format_Data_Penangkaran_dummy.xlsx');
-            if (!resp.ok) {
-                console.error('Gagal memuat Excel:', resp.status, resp.statusText);
-                return;
-            }
-            const arrayBuffer = await resp.arrayBuffer();
-            const data = new Uint8Array(arrayBuffer);
-            const workbook = XLSX.read(data, { type: 'array', cellDates: true });
-
-            dataSatwa      = sheetToJson(workbook, 'Data_Satwa');
-            dataNatalitas  = sheetToJson(workbook, 'Data_Natalitas');
-            dataMortalitas = sheetToJson(workbook, 'Data_Mortalitas');
-            dataPerusahaan = sheetToJson(workbook, 'Data_Perusahaan');
-
-            buildUnitToTaksaMap();
-
-            renderDashboard();
-            renderNatalitasTable();
-            renderMortalitasTable();
-
-            populateTaksaFilter();
-            renderPerusahaanTable();
-            renderSatwaTable();
-
-            populateProvinsiFilter();
-            refreshPerusahaanBarChart();
-
-            buildMortalitasChart('jenis');
-            buildNatalitasSummaryChart('jenis');
-
-            renderMasaTable();
-        } catch (err) {
-            console.error('Error saat membaca Excel:', err);
-        }
-    }
-
-    /* ---- Event listeners ---- */
-    yearSelect.addEventListener('change', () => {
-        const y = Number(yearSelect.value);
-        if (!isNaN(y)) renderDashboard(y);
-    });
-
-    chartModeSelect.addEventListener('change', refreshPerusahaanBarChart);
-    provinsiFilterSelect.addEventListener('change', refreshPerusahaanBarChart);
-
-    mortalitasModeSelect.addEventListener('change', () => {
-        buildMortalitasChart(mortalitasModeSelect.value);
-    });
-
-    natalitasModeSelect.addEventListener('change', () => {
-        buildNatalitasSummaryChart(natalitasModeSelect.value);
-    });
-
-    taksaFilterSelect.addEventListener('change', () => {
-        currentTaksaFilter = taksaFilterSelect.value;
-        renderPerusahaanTable();
-    });
-
-    satwaTaksaSelect.addEventListener('change', () => {
-        currentSatwaTaksaFilter = satwaTaksaSelect.value;
-        renderSatwaTable();
-    });
-
-    masaFilterSelect.addEventListener('change', () => {
-        currentMasaFilter = masaFilterSelect.value;
-        renderMasaTable();
-    });
-
-    loadWorkbook();
+  }
+
+  satwaProvFilter.addEventListener('change', () => {
+    buildSatwaChart();
+    renderSatwaTable();
+  });
+  satwaSpesiesFilter.addEventListener('change', () => {
+    buildSatwaChart();
+    renderSatwaTable();
+  });
+
+  natalitasStatusFilter.addEventListener('change', () => {
+    buildNatalitasChart();
+    renderNatalitasTable();
+  });
+
+  mortalitasStatusFilter.addEventListener('change', () => {
+    buildMortalitasChart();
+    renderMortalitasTable();
+  });
+
+  perusahaanKomFilter.addEventListener('change', renderPerusahaanTable);
+  perusahaanProvFilter.addEventListener('change', renderPerusahaanTable);
+  perusahaanStatusFilter.addEventListener('change', renderPerusahaanTable);
+
+  masaStatusFilter.addEventListener('change', renderMasaTable);
+
+  loadWorkbook();
 </script>
 </body>
 </html>
