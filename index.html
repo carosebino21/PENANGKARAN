@@ -15,10 +15,7 @@
       color: #111827;
     }
 
-    .app {
-      display: flex;
-      min-height: 100vh;
-    }
+    .app { display: flex; min-height: 100vh; }
 
     /* SIDEBAR */
     .sidebar {
@@ -37,7 +34,6 @@
       color: #111827;
       margin-bottom: 24px;
     }
-
     .sidebar-header span {
       display: block;
       font-size: 0.85rem;
@@ -54,7 +50,6 @@
     }
 
     .nav-list { list-style: none; }
-
     .nav-item { margin-bottom: 4px; }
 
     .nav-link {
@@ -77,11 +72,7 @@
       border: 1.5px solid #e5e7eb;
     }
 
-    .nav-link.active {
-      background: #2563eb;
-      color: #ffffff;
-    }
-
+    .nav-link.active { background: #2563eb; color: #ffffff; }
     .nav-link.active .nav-link-icon {
       border-color: #bfdbfe;
       background: #1d4ed8;
@@ -112,11 +103,7 @@
       transition: background 0.15s ease, color 0.15s ease;
       cursor: pointer;
     }
-
-    .footer-link:hover {
-      background: #f3f4ff;
-      color: #1d4ed8;
-    }
+    .footer-link:hover { background: #f3f4ff; color: #1d4ed8; }
 
     .footer-icon {
       width: 18px;
@@ -126,25 +113,11 @@
     }
 
     /* CONTENT */
-    .content {
-      flex: 1;
-      padding: 24px 28px;
-    }
+    .content { flex: 1; padding: 24px 28px; }
 
-    .content-header {
-      margin-bottom: 24px;
-    }
-
-    .content-header h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .content-header p {
-      font-size: 0.9rem;
-      color: #6b7280;
-    }
+    .content-header { margin-bottom: 24px; }
+    .content-header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; }
+    .content-header p { font-size: 0.9rem; color: #6b7280; }
 
     .page-section { display: none; }
     .page-section.is-active { display: block; }
@@ -164,42 +137,17 @@
       border: 1px solid #e5e7eb;
       padding: 16px 18px;
     }
+    .stat-label { font-size: 0.85rem; color: #6b7280; margin-bottom: 8px; }
+    .stat-value { font-size: 1.6rem; font-weight: 700; margin-bottom: 2px; }
+    .stat-footnote { font-size: 0.8rem; color: #9ca3af; }
 
-    .stat-label {
-      font-size: 0.85rem;
-      color: #6b7280;
-      margin-bottom: 8px;
+    .chart-card, .table-card, .wizard-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      padding: 18px 20px;
+      margin-bottom: 24px;
     }
-
-    .stat-value {
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-bottom: 2px;
-    }
-
-    .stat-footnote {
-      font-size: 0.8rem;
-      color: #9ca3af;
-    }
-
-    /* CARD UNTUK GRAFIK – DIBUAT LEBIH SEMPIT & DITENGAHKAN */
-.chart-card {
-  background: #ffffff;
-  border-radius: 16px;
-  border: 1px solid #e5e7eb;
-  padding: 18px 20px;
-  margin: 0 auto 24px;      /* auto = center */
-  max-width: 1000px;        /* atur lebar maksimum grafik di sini */
-}
-
-/* CARD LAIN (TABEL, WIZARD) TETAP FULL WIDTH */
-.table-card, .wizard-card {
-  background: #ffffff;
-  border-radius: 16px;
-  border: 1px solid #e5e7eb;
-  padding: 18px 20px;
-  margin-bottom: 24px;
-}
 
     .chart-header, .table-card-header, .wizard-header {
       display: flex;
@@ -210,11 +158,7 @@
       flex-wrap: wrap;
     }
 
-    .chart-header h2,
-    .table-card-header h2,
-    .wizard-header h2 {
-      font-size: 1rem;
-    }
+    .chart-header h2, .table-card-header h2, .wizard-header h2 { font-size: 1rem; }
 
     .chart-header-controls {
       display: flex;
@@ -240,59 +184,41 @@
       font-size: 0.75rem;
     }
 
-    .badge-ok {
-      background: #dcfce7;
-      color: #166534;
-    }
+    .badge-ok { background: #dcfce7; color: #166534; }
+    .badge-warning { background: #fef3c7; color: #92400e; }
+    .badge-critical { background: #fee2e2; color: #b91c1c; }
 
-    .badge-warning {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .badge-critical {
-      background: #fee2e2;
-      color: #b91c1c;
-    }
-
-    .table-wrapper {
-      max-height: 390px;
-      overflow: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.85rem;
-    }
-
+    .table-wrapper { max-height: 390px; overflow: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
     thead { background: #f3f4f6; }
-
-    th, td {
-      padding: 8px 10px;
-      border-bottom: 1px solid #e5e7eb;
-      text-align: left;
-    }
-
-    th {
-      font-weight: 600;
-      color: #4b5563;
-    }
-
+    th, td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; text-align: left; }
+    th { font-weight: 600; color: #4b5563; }
     tbody tr:nth-child(even) { background: #f9fafb; }
 
-    .placeholder-box {
-      background: #ffffff;
-      border-radius: 16px;
-      border: 1px solid #e5e7eb;
-      padding: 24px;
-      color: #6b7280;
-      font-size: 0.95rem;
+    /* ====== KUNCI PERBAIKAN UKURAN GRAFIK ====== */
+    .chart-area {
+      position: relative;
+      width: 100%;
+    }
+    /* Satwa: tidak terlalu lebar & tinggi sedang */
+    .chart-card-satwa {
+      max-width: 980px;
+      margin: 0 auto 24px;
+    }
+    .chart-area-satwa {
+      height: 320px; /* ubah ini jika mau lebih tinggi/rendah */
     }
 
-    /* batasi tinggi grafik */
-    .chart-card canvas {
-      max-height: 320px;
+    /* Natalitas & Mortalitas: lebih tinggi agar label jelas */
+    .chart-area-tall {
+      height: 420px; /* ini yang bikin tulisan/label jadi terbaca */
+    }
+
+    /* Pastikan canvas mengikuti container */
+    .chart-area canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
     }
 
     /* WIZARD */
@@ -311,12 +237,7 @@
       background: #f9fafb;
       cursor: pointer;
     }
-
-    .wizard-tab.active {
-      background: #2563eb;
-      color: #ffffff;
-      border-color: #2563eb;
-    }
+    .wizard-tab.active { background: #2563eb; color: #ffffff; border-color: #2563eb; }
 
     .wizard-steps {
       display: flex;
@@ -337,15 +258,9 @@
       font-size: 0.7rem;
       margin-right: 4px;
     }
-
-    .wizard-step-dot.active {
-      background: #2563eb;
-      color: #ffffff;
-      border-color: #2563eb;
-    }
+    .wizard-step-dot.active { background: #2563eb; color: #ffffff; border-color: #2563eb; }
 
     .wizard-body { margin-top: 4px; }
-
     .wizard-step { display: none; }
     .wizard-step.active { display: block; }
 
@@ -393,16 +308,8 @@
       color: #ffffff;
     }
 
-    .btn-secondary {
-      background: #e5e7eb;
-      color: #111827;
-      border-color: #d1d5db;
-    }
-
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: default;
-    }
+    .btn-secondary { background: #e5e7eb; color: #111827; border-color: #d1d5db; }
+    .btn:disabled { opacity: 0.5; cursor: default; }
 
     .wizard-summary {
       background: #f9fafb;
@@ -412,39 +319,30 @@
       margin-top: 8px;
       max-height: 180px;
       overflow: auto;
+      white-space: pre-wrap;
     }
 
     @media (max-width: 900px) {
       .app { flex-direction: column; }
-
       .sidebar {
         width: 100%;
         flex-direction: row;
         overflow-x: auto;
         padding: 12px;
       }
-
-      .sidebar-header {
-        margin-bottom: 0;
-        margin-right: 16px;
-        white-space: nowrap;
-      }
-
-      .nav-section-title,
-      .sidebar-footer { display: none; }
-
-      .nav-list {
-        display: flex;
-        flex-direction: row;
-        gap: 4px;
-      }
-
+      .sidebar-header { margin-bottom: 0; margin-right: 16px; white-space: nowrap; }
+      .nav-section-title, .sidebar-footer { display: none; }
+      .nav-list { display: flex; flex-direction: row; gap: 4px; }
       .nav-link { white-space: nowrap; }
-
       .content { padding: 16px; }
+
+      /* di HP: grafik tall jangan terlalu tinggi */
+      .chart-area-tall { height: 340px; }
+      .chart-area-satwa { height: 280px; }
     }
   </style>
 </head>
+
 <body>
 <div class="app">
 
@@ -515,14 +413,12 @@
   <main class="content">
     <div class="content-header">
       <h1 id="page-title">Data Satwa</h1>
-      <p id="page-subtitle">
-        Ringkasan distribusi penangkaran dan daftar satwa per jenis komoditas.
-      </p>
+      <p id="page-subtitle">Ringkasan distribusi penangkaran dan daftar satwa per jenis komoditas.</p>
     </div>
 
     <!-- DATA SATWA -->
     <section id="section-data-satwa" class="page-section is-active">
-      <div class="chart-card">
+      <div class="chart-card chart-card-satwa">
         <div class="chart-header">
           <h2>Distribusi Penangkaran per Jenis Komoditas</h2>
           <div class="chart-header-controls">
@@ -534,7 +430,9 @@
             </select>
           </div>
         </div>
-        <canvas id="satwa-distribusi-chart" height="80"></canvas>
+        <div class="chart-area chart-area-satwa">
+          <canvas id="satwa-distribusi-chart"></canvas>
+        </div>
       </div>
 
       <div class="table-card">
@@ -545,14 +443,14 @@
         <div class="table-wrapper">
           <table>
             <thead>
-            <tr>
-              <th>ID Individu</th>
-              <th>Nama Individu</th>
-              <th>Jenis Individu</th>
-              <th>Nama Unit Penangkar</th>
-              <th>Jenis Komoditas</th>
-              <th>Provinsi</th>
-            </tr>
+              <tr>
+                <th>ID Individu</th>
+                <th>Nama Individu</th>
+                <th>Jenis Individu</th>
+                <th>Nama Unit Penangkar</th>
+                <th>Jenis Komoditas</th>
+                <th>Provinsi</th>
+              </tr>
             </thead>
             <tbody id="satwa-table-body"></tbody>
           </table>
@@ -571,7 +469,9 @@
             </select>
           </div>
         </div>
-        <canvas id="natalitas-chart" height="80"></canvas>
+        <div class="chart-area chart-area-tall">
+          <canvas id="natalitas-chart"></canvas>
+        </div>
       </div>
 
       <div class="table-card">
@@ -582,15 +482,15 @@
         <div class="table-wrapper">
           <table>
             <thead>
-            <tr>
-              <th>ID Kelahiran</th>
-              <th>ID Induk</th>
-              <th>Jenis Induk</th>
-              <th>Jumlah Anakan</th>
-              <th>Status Verifikasi</th>
-              <th>Tanggal Kelahiran</th>
-              <th>Jam Kelahiran</th>
-            </tr>
+              <tr>
+                <th>ID Kelahiran</th>
+                <th>ID Induk</th>
+                <th>Jenis Induk</th>
+                <th>Jumlah Anakan</th>
+                <th>Status Verifikasi</th>
+                <th>Tanggal Kelahiran</th>
+                <th>Jam Kelahiran</th>
+              </tr>
             </thead>
             <tbody id="natalitas-table-body"></tbody>
           </table>
@@ -609,7 +509,9 @@
             </select>
           </div>
         </div>
-        <canvas id="mortalitas-chart" height="80"></canvas>
+        <div class="chart-area chart-area-tall">
+          <canvas id="mortalitas-chart"></canvas>
+        </div>
       </div>
 
       <div class="table-card">
@@ -620,14 +522,14 @@
         <div class="table-wrapper">
           <table>
             <thead>
-            <tr>
-              <th>ID Kematian</th>
-              <th>ID Individu</th>
-              <th>Jenis Individu</th>
-              <th>Status Verifikasi</th>
-              <th>Tanggal Kematian</th>
-              <th>Jam Kematian</th>
-            </tr>
+              <tr>
+                <th>ID Kematian</th>
+                <th>ID Individu</th>
+                <th>Jenis Individu</th>
+                <th>Status Verifikasi</th>
+                <th>Tanggal Kematian</th>
+                <th>Jam Kematian</th>
+              </tr>
             </thead>
             <tbody id="mortalitas-table-body"></tbody>
           </table>
@@ -658,20 +560,20 @@
         <div class="table-wrapper">
           <table>
             <thead>
-            <tr>
-              <th>No.</th>
-              <th>Nomor Sertifikat Standar</th>
-              <th>Nama Unit Penangkar</th>
-              <th>Nama Pemilik</th>
-              <th>Jenis Komoditas</th>
-              <th>Jenis Spesies</th>
-              <th>Kota/Kabupaten</th>
-              <th>Provinsi</th>
-              <th>Jenis Kegiatan</th>
-              <th>Tanggal Terbit</th>
-              <th>Tanggal Berakhir</th>
-              <th>Status Izin</th>
-            </tr>
+              <tr>
+                <th>No.</th>
+                <th>Nomor Sertifikat Standar</th>
+                <th>Nama Unit Penangkar</th>
+                <th>Nama Pemilik</th>
+                <th>Jenis Komoditas</th>
+                <th>Jenis Spesies</th>
+                <th>Kota/Kabupaten</th>
+                <th>Provinsi</th>
+                <th>Jenis Kegiatan</th>
+                <th>Tanggal Terbit</th>
+                <th>Tanggal Berakhir</th>
+                <th>Status Izin</th>
+              </tr>
             </thead>
             <tbody id="perusahaan-table-body"></tbody>
           </table>
@@ -711,20 +613,21 @@
             </select>
           </div>
         </div>
+
         <div class="table-wrapper">
           <table>
             <thead>
-            <tr>
-              <th>No.</th>
-              <th>Nomor Sertifikat Standar</th>
-              <th>Nama Unit Penangkar</th>
-              <th>Jenis Komoditas</th>
-              <th>Provinsi</th>
-              <th>Tanggal Terbit</th>
-              <th>Tanggal Berakhir</th>
-              <th>Sisa Waktu</th>
-              <th>Status</th>
-            </tr>
+              <tr>
+                <th>No.</th>
+                <th>Nomor Sertifikat Standar</th>
+                <th>Nama Unit Penangkar</th>
+                <th>Jenis Komoditas</th>
+                <th>Provinsi</th>
+                <th>Tanggal Terbit</th>
+                <th>Tanggal Berakhir</th>
+                <th>Sisa Waktu</th>
+                <th>Status</th>
+              </tr>
             </thead>
             <tbody id="masa-table-body"></tbody>
           </table>
@@ -732,7 +635,7 @@
       </div>
     </section>
 
-    <!-- PENGISIAN DATA (WIZARD) -->
+    <!-- PENGISIAN DATA -->
     <section id="section-pengisian" class="page-section">
       <div class="wizard-card">
         <div class="wizard-header">
@@ -752,6 +655,7 @@
             <div class="wizard-step-dot active" data-step-dot="perusahaan-0">1</div>
             <div class="wizard-step-dot" data-step-dot="perusahaan-1">2</div>
           </div>
+
           <div class="wizard-body">
             <div class="wizard-step active" data-step="perusahaan-0">
               <div class="form-grid">
@@ -807,6 +711,7 @@
               <div class="wizard-summary" id="perusahaan-summary"></div>
             </div>
           </div>
+
           <div class="wizard-footer">
             <button class="btn-secondary btn" id="perusahaan-prev" disabled>Sebelumnya</button>
             <button class="btn" id="perusahaan-next">Berikutnya</button>
@@ -910,13 +815,13 @@
             <button class="btn" id="mortalitas-next">Berikutnya</button>
           </div>
         </div>
+
       </div>
     </section>
 
   </main>
 </div>
 
-<!-- LIBRARY -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -962,14 +867,19 @@
       navLinks.forEach(l => l.classList.remove('active'));
       link.classList.add('active');
 
-      sections.forEach(sec => {
-        sec.classList.toggle('is-active', sec.id === targetId);
-      });
+      sections.forEach(sec => sec.classList.toggle('is-active', sec.id === targetId));
 
       if (pageInfo[targetId]) {
         pageTitle.textContent = pageInfo[targetId].title;
         pageSubtitle.textContent = pageInfo[targetId].subtitle;
       }
+
+      // Penting: resize chart saat pindah tab (biar Chart.js recalculates canvas)
+      setTimeout(() => {
+        if (satwaChart) satwaChart.resize();
+        if (natalitasChart) natalitasChart.resize();
+        if (mortalitasChart) mortalitasChart.resize();
+      }, 150);
     });
   });
 
@@ -986,29 +896,29 @@
   let natalitasChart = null;
   let mortalitasChart = null;
 
-  const satwaProvFilter   = document.getElementById('satwa-provinsi-filter');
-  const satwaSpesiesFilter= document.getElementById('satwa-spesies-filter');
-  const satwaTableBody    = document.getElementById('satwa-table-body');
-  const satwaCountBadge   = document.getElementById('satwa-count-badge');
+  const satwaProvFilter    = document.getElementById('satwa-provinsi-filter');
+  const satwaSpesiesFilter = document.getElementById('satwa-spesies-filter');
+  const satwaTableBody     = document.getElementById('satwa-table-body');
+  const satwaCountBadge    = document.getElementById('satwa-count-badge');
 
   const natalitasStatusFilter = document.getElementById('natalitas-status-filter');
   const natalitasTableBody    = document.getElementById('natalitas-table-body');
   const natalitasCountBadge   = document.getElementById('natalitas-count-badge');
 
-  const mortalitasStatusFilter= document.getElementById('mortalitas-status-filter');
-  const mortalitasTableBody   = document.getElementById('mortalitas-table-body');
-  const mortalitasCountBadge  = document.getElementById('mortalitas-count-badge');
+  const mortalitasStatusFilter = document.getElementById('mortalitas-status-filter');
+  const mortalitasTableBody    = document.getElementById('mortalitas-table-body');
+  const mortalitasCountBadge   = document.getElementById('mortalitas-count-badge');
 
-  const perusahaanKomFilter = document.getElementById('perusahaan-komoditas-filter');
-  const perusahaanProvFilter= document.getElementById('perusahaan-provinsi-filter');
+  const perusahaanKomFilter    = document.getElementById('perusahaan-komoditas-filter');
+  const perusahaanProvFilter   = document.getElementById('perusahaan-provinsi-filter');
   const perusahaanStatusFilter = document.getElementById('perusahaan-status-filter');
-  const perusahaanTableBody = document.getElementById('perusahaan-table-body');
+  const perusahaanTableBody    = document.getElementById('perusahaan-table-body');
 
-  const masaStatusFilter   = document.getElementById('masa-status-filter');
-  const masaTableBody      = document.getElementById('masa-table-body');
-  const masaGreenCount     = document.getElementById('masa-green-count');
-  const masaYellowCount    = document.getElementById('masa-yellow-count');
-  const masaRedCount       = document.getElementById('masa-red-count');
+  const masaStatusFilter = document.getElementById('masa-status-filter');
+  const masaTableBody    = document.getElementById('masa-table-body');
+  const masaGreenCount   = document.getElementById('masa-green-count');
+  const masaYellowCount  = document.getElementById('masa-yellow-count');
+  const masaRedCount     = document.getElementById('masa-red-count');
 
   function toDate(v) {
     if (!v) return null;
@@ -1037,15 +947,15 @@
     const diffDays = Math.round((d - today) / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0 || diffDays <= 90) {
-      return { type: 'red', label: 'Merah (&lt;3 bulan / habis)', diffDays };
+      return { type: 'red', label: 'Merah (<3 bulan / habis)', diffDays };
     }
     if (diffDays <= 730) {
-      return { type: 'yellow', label: 'Kuning (&lt;2 tahun)', diffDays };
+      return { type: 'yellow', label: 'Kuning (<2 tahun)', diffDays };
     }
     if (diffDays <= 1825) {
       return { type: 'green', label: 'Hijau (5–2 tahun)', diffDays };
     }
-    return { type: 'green', label: 'Hijau (&gt;5 tahun)', diffDays };
+    return { type: 'green', label: 'Hijau (>5 tahun)', diffDays };
   }
 
   function formatRemaining(diffDays) {
@@ -1069,6 +979,32 @@
       if (v) s.add(v);
     });
     return Array.from(s).sort((a,b)=>a.localeCompare(b,'id-ID'));
+  }
+
+  /* ------------- CHART DEFAULT OPTIONS (BIAR JELAS) ------------- */
+  function chartBaseOptions() {
+    return {
+      responsive: true,
+      maintainAspectRatio: false, // penting: ikut tinggi container .chart-area-*
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: true }
+      },
+      scales: {
+        x: {
+          ticks: {
+            autoSkip: false,
+            maxRotation: 60,
+            minRotation: 0,
+            font: { size: 12 } // bikin label lebih terbaca
+          }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: { font: { size: 12 } }
+        }
+      }
+    };
   }
 
   /* ---------------- DATA SATWA ---------------- */
@@ -1125,8 +1061,7 @@
       if (spesiesFilter && spes !== spesiesFilter) return;
 
       const unitKey = normalizeName(unit);
-      const key = unitKey + '|' + kom;
-
+      const key = unitKey + '|' + kom; // no double count per (unit,komoditas)
       if (seen.has(key)) return;
       seen.add(key);
 
@@ -1143,19 +1078,9 @@
       type: 'bar',
       data: {
         labels,
-        datasets: [{
-          label: 'Jumlah penangkar per jenis komoditas',
-          data: values
-        }]
+        datasets: [{ label: 'Jumlah penangkar per jenis komoditas', data: values }]
       },
-      options: {
-        aspectRatio: 4,
-        plugins: { legend: { display:false } },
-        scales: {
-          x: { ticks: { autoSkip:false, maxRotation:60, minRotation:0 } },
-          y: { beginAtZero:true }
-        }
-      }
+      options: chartBaseOptions()
     });
   }
 
@@ -1217,9 +1142,7 @@
 
       const jenis = (r['Jenis_Induk'] || '').toString() || 'Tidak diketahui';
       const jml   = Number(r['Jumlah_Anakan'] || 0);
-      if (!isNaN(jml)) {
-        counts[jenis] = (counts[jenis] || 0) + jml;
-      }
+      if (!isNaN(jml)) counts[jenis] = (counts[jenis] || 0) + jml;
     });
 
     const labels = Object.keys(counts).sort((a,b)=>a.localeCompare(b,'id-ID'));
@@ -1230,21 +1153,8 @@
 
     natalitasChart = new Chart(ctx, {
       type: 'bar',
-      data: {
-        labels,
-        datasets: [{
-          label: 'Jumlah anakan per jenis induk',
-          data: values
-        }]
-      },
-      options: {
-        aspectRatio: 4,
-        plugins: { legend: { display:false } },
-        scales: {
-          x: { ticks:{ autoSkip:false, maxRotation:60, minRotation:0 } },
-          y: { beginAtZero:true }
-        }
-      }
+      data: { labels, datasets: [{ label: 'Jumlah anakan per jenis induk', data: values }] },
+      options: chartBaseOptions()
     });
   }
 
@@ -1309,21 +1219,8 @@
 
     mortalitasChart = new Chart(ctx, {
       type: 'bar',
-      data: {
-        labels,
-        datasets: [{
-          label: 'Jumlah kematian per jenis individu',
-          data: values
-        }]
-      },
-      options: {
-        aspectRatio: 4,
-        plugins: { legend: { display:false } },
-        scales: {
-          x: { ticks:{ autoSkip:false, maxRotation:60, minRotation:0 } },
-          y: { beginAtZero:true }
-        }
-      }
+      data: { labels, datasets: [{ label: 'Jumlah kematian per jenis individu', data: values }] },
+      options: chartBaseOptions()
     });
   }
 
@@ -1434,12 +1331,7 @@
       else if (status.type === 'red') red++;
 
       if (filter && status.type !== filter) return;
-
-      rows.push({
-        row: r,
-        status,
-        diffDays: status.diffDays
-      });
+      rows.push({ row: r, status, diffDays: status.diffDays });
     });
 
     rows.sort((a,b) => a.diffDays - b.diffDays);
@@ -1475,7 +1367,7 @@
     masaRedCount.textContent    = red.toLocaleString('id-ID');
   }
 
-  /* ---------------- WIZARD LOGIC ---------------- */
+  /* ---------------- WIZARD ---------------- */
   const wizardTabs = document.querySelectorAll('.wizard-tab');
   const wizardPerusahaan = document.getElementById('wizard-perusahaan');
   const wizardNatalitas  = document.getElementById('wizard-natalitas');
@@ -1513,16 +1405,12 @@
     }
 
     prevBtn.addEventListener('click', () => {
-      if (currentStep > 0) {
-        currentStep--;
-        updateSteps();
-      }
+      if (currentStep > 0) { currentStep--; updateSteps(); }
     });
 
     nextBtn.addEventListener('click', () => {
       if (currentStep < stepCount-1) {
-        currentStep++;
-        updateSteps();
+        currentStep++; updateSteps();
         if (currentStep === stepCount-1 && summaryBuilder) summaryBuilder();
       } else {
         alert('Ini hanya contoh alur input. Data belum tersimpan ke database.');
@@ -1612,24 +1500,11 @@
     }
   }
 
-  satwaProvFilter.addEventListener('change', () => {
-    buildSatwaChart();
-    renderSatwaTable();
-  });
-  satwaSpesiesFilter.addEventListener('change', () => {
-    buildSatwaChart();
-    renderSatwaTable();
-  });
+  satwaProvFilter.addEventListener('change', () => { buildSatwaChart(); renderSatwaTable(); });
+  satwaSpesiesFilter.addEventListener('change', () => { buildSatwaChart(); renderSatwaTable(); });
 
-  natalitasStatusFilter.addEventListener('change', () => {
-    buildNatalitasChart();
-    renderNatalitasTable();
-  });
-
-  mortalitasStatusFilter.addEventListener('change', () => {
-    buildMortalitasChart();
-    renderMortalitasTable();
-  });
+  natalitasStatusFilter.addEventListener('change', () => { buildNatalitasChart(); renderNatalitasTable(); });
+  mortalitasStatusFilter.addEventListener('change', () => { buildMortalitasChart(); renderMortalitasTable(); });
 
   perusahaanKomFilter.addEventListener('change', renderPerusahaanTable);
   perusahaanProvFilter.addEventListener('change', renderPerusahaanTable);
